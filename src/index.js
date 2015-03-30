@@ -112,7 +112,7 @@ module.exports = {
 
       if (_debug) {
         log('called ga(\'send\', \'pageview\', path);');
-        log('with path:', path);
+        log('with path: ' + path);
       }
     }
   },
@@ -131,7 +131,7 @@ module.exports = {
 
       if (_debug) {
         log('called ga(\'send\', \'pageview\', path);');
-        log('with path:', path);
+        log('with path: ' + path);
       }
     }
   },
@@ -187,7 +187,7 @@ module.exports = {
 
       if (_debug) {
         log('called ga(\'send\', fieldObject);');
-        log('with fieldObject:', fieldObject);
+        log('with fieldObject: ' + fieldObject);
       }
     }
   }
