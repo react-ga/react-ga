@@ -135,7 +135,7 @@ module.exports = {
     }
 
     if (typeof ga === 'function') {
-      path = trim(path);
+      modalName = trim(modalName);
       path = '/modal/' + modalName;
       ga('send', 'pageview', path);
 
