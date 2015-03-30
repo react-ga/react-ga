@@ -82,6 +82,7 @@ module.exports = {
     }
 
     // https://developers.google.com/analytics/devguides/collection/analyticsjs/
+    /* jshint ignore:start */
     (function(i, s, o, g, r, a, m) {
       i['GoogleAnalyticsObject'] = r;
       i[r] = i[r] || function() {
@@ -94,6 +95,7 @@ module.exports = {
       m.parentNode.insertBefore(a, m)
     })(window, document, 'script',
        '//www.google-analytics.com/analytics.js', 'ga');
+    /* jshint ignore:end */
 
     ga('create', gaTrackingID, 'auto');
   },

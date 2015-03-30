@@ -11,13 +11,22 @@ var LINT_DIRS = [
     'test/**/*.js'
 ];
 
+var TEST_TASKS = [
+    'jshint'
+];
+
+var BUILD_TASKS = [
+    'jshint',
+    'package'
+];
+
 gulp.task('jshint', function() {
   return gulp.src(LINT_DIRS)
       .pipe(jshint({ lookup: 'node_modules/mofo-style/linters/.jshintrc' }))
       .pipe(jshint.reporter('default'));
 });
 
-gulp.task('build', function() {
+gulp.task('package', function() {
   return gulp.src('src/index.js')
     // This will output the non-minified version
     .pipe(gulp.dest(DEST))
@@ -26,3 +35,6 @@ gulp.task('build', function() {
     .pipe(rename({ extname: '.min.js' }))
     .pipe(gulp.dest(DEST));
 });
+
+gulp.task('test', TEST_TASKS);
+gulp.task('build', BUILD_TASKS);
