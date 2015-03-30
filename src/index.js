@@ -71,7 +71,7 @@ function format(s) {
 module.exports = {
   initialize: function(gaTrackingID, options) {
     if (!gaTrackingID) {
-      warn('gaTrackingID in required in initialize()');
+      warn('gaTrackingID is required in initialize()');
       return;
     }
 
@@ -136,7 +136,7 @@ module.exports = {
 
     if (typeof ga === 'function') {
       modalName = trim(modalName);
-      path = '/modal/' + modalName;
+      var path = '/modal/' + modalName;
       ga('send', 'pageview', path);
 
       if (_debug) {
