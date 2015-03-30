@@ -197,7 +197,7 @@ module.exports = {
 
       if (_debug) {
         log('called ga(\'send\', fieldObject);');
-        log('with fieldObject: ' + fieldObject);
+        log('with fieldObject: ' + JSON.stringify(fieldObject));
       }
     }
   }
