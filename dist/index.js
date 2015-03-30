@@ -106,13 +106,18 @@ module.exports = {
    * @param  {String} path - the current page page e.g. '/about'
    */
   pageview: function (path) {
+    if (!path) {
+      warn('path is required in .pageview(path)');
+      return;
+    }
+
     if (typeof ga === 'function') {
       path = trim(path);
       ga('send', 'pageview', path);
 
       if (_debug) {
         log('called ga(\'send\', \'pageview\', path);');
-        log('with path:', path);
+        log('with path: ' + path);
       }
     }
   },
@@ -124,6 +129,11 @@ module.exports = {
    * @param  {String} modalName e.g. 'add-or-edit-club'
    */
   modalview: function (modalName) {
+    if (!modalName) {
+      warn('modalName is required in .modalview(modalName)');
+      return;
+    }
+
     if (typeof ga === 'function') {
       path = trim(path);
       path = '/modal/' + modalName;
@@ -131,7 +141,7 @@ module.exports = {
 
       if (_debug) {
         log('called ga(\'send\', \'pageview\', path);');
-        log('with path:', path);
+        log('with path: ' + path);
       }
     }
   },
@@ -187,7 +197,7 @@ module.exports = {
 
       if (_debug) {
         log('called ga(\'send\', fieldObject);');
-        log('with fieldObject:', fieldObject);
+        log('with fieldObject: ' + fieldObject);
       }
     }
   }
