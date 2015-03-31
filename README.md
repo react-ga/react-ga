@@ -142,6 +142,15 @@ npm run build
 npm test
 ```
 
+### To Ship
+```bash
+gulp build
+mversion patch
+git commit...
+git push...
+npm publish
+```
+
 ---
 
 #### Acknowledgements
