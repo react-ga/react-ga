@@ -164,6 +164,7 @@ npm test
 ```bash
 gulp build
 mversion patch
+git add .
 git commit...
 git push...
 npm publish

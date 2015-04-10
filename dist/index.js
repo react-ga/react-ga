@@ -253,11 +253,11 @@ module.exports = {
         log('called ga(\'send\', fieldObject);');
         log('with fieldObject: ' + JSON.stringify(fieldObject));
       }
+    } else {
+      // if ga is not defined, return the callback so the application
+      // continues to work as expected
+      return hitCallback();
     }
-
-    // if ga is not defined, return the callback so the application
-    // continues to work as expected
-    return hitCallback();
   }
 };
 
