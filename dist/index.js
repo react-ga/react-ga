@@ -174,11 +174,11 @@ module.exports = {
       };
 
       // Optional Fields
-      if (args.eventLabel) {
+      if (args.label) {
         fieldObject.eventLabel = format(args.label);
       }
 
-      if (args.eventValue) {
+      if (args.value) {
         if(typeof args.eventValue !== 'number') {
           warn('Expected `args.eventValue` arg to be a Number.');
         } else {
@@ -202,6 +202,62 @@ module.exports = {
         log('with fieldObject: ' + JSON.stringify(fieldObject));
       }
     }
+  },
+
+  /**
+   * outboundLink:
+   * GA outboundLink tracking
+   * @param args.label {String} e.g. url, or 'Create an Account'
+   * @param {function} hitCallback - Called after processing a hit.
+   */
+  outboundLink: function (args, hitCallback) {
+    if (typeof ga === 'function') {
+
+      // Simple Validation
+      if (!args.label) {
+        warn('args.label is required in outboundLink()');
+        return;
+      }
+
+      // Required Fields
+      var fieldObject = {
+        'hitType': 'event',
+        'eventCategory': 'Outbound',
+        'eventAction': 'Click',
+        'eventLabel': format(args.label)
+      };
+
+      if (typeof hitCallback !== 'function') {
+        hitCallback = function () {};
+      }
+
+      // Use a timeout to ensure the execution of critical application code.
+      // in the case when the GA server might be down
+      // or an ad blocker prevents sending the data
+
+      // register safety net timeout:
+      var t = setTimeout(hitCallback, 250);
+
+      var clearableCallback = function () {
+          clearTimeout(t);
+          // redirect:
+          hitCallback();
+      };
+
+      fieldObject.hitCallback = clearableCallback();
+
+      // Send to GA
+      ga('send', fieldObject);
+
+      if (_debug) {
+        log('called ga(\'send\', fieldObject);');
+        log('with fieldObject: ' + JSON.stringify(fieldObject));
+      }
+    }
+
+    // if ga is not defined, return the callback so the application
+    // continues to work as expected
+    return hitCallback();
   }
 };
 
