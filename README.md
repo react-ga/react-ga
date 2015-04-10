@@ -122,6 +122,24 @@ ga.event( { category: 'Promotion',
 |args.value|`Int`. Optional. A means of recording a numerical value against an event. E.g. a rating, a score, etc.|
 |args.nonInteraction|`Int`. 1 = true, 0 = false. If an event is not triggered by a user interaction, but instead by our code (e.g. on page load, it should be flagged as a nonInteraction event to avoid skewing bounce rate data.|
 
+#### ga.outboundLink(args, hitCallback)
+
+Tracking links out to external URLs (including id.webmaker.org for oAuth2 login flow).
+
+###### Examples
+
+```js
+ga.outboundLink( { label: 'Clicked Create an Account' },
+                    function () {
+                      console.log('redirect here');
+                    } );
+```
+
+|Value|Notes|
+|------|-----|
+|args.label|`String`. Required. Description of where the outbound link points to. Either as a URL, or a string|
+|hitCallback|`function`. The react-ga implementation accounts for the possibility that GA servers are down, or GA is blocked, by using a fallback 250ms timeout. See [notes in GA Dev Guide](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#hitCallback)|
+
 ---
 
 ## Development
