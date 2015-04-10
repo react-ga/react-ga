@@ -179,8 +179,8 @@ module.exports = {
       }
 
       if (args.value) {
-        if(typeof args.eventValue !== 'number') {
-          warn('Expected `args.eventValue` arg to be a Number.');
+        if(typeof args.value !== 'number') {
+          warn('Expected `args.value` arg to be a Number.');
         } else {
           fieldObject.eventValue = args.value;
         }
