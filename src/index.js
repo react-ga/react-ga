@@ -231,6 +231,11 @@ module.exports = {
    * @param {function} hitCallback - Called after processing a hit.
    */
   outboundLink: function (args, hitCallback) {
+    if (typeof hitCallback !== 'function') {
+      warn('hitCallback function is required');
+      return;
+    }
+
     if (typeof ga === 'function') {
 
       // Simple Validation
@@ -246,11 +251,6 @@ module.exports = {
         'eventAction': 'Click',
         'eventLabel': format(args.label)
       };
-
-      if (typeof hitCallback !== 'function') {
-        warn('hitCallback function is required');
-        return;
-      }
 
       // Use a timeout to ensure the execution of critical application code.
       // in the case when the GA server might be down
@@ -277,7 +277,7 @@ module.exports = {
     } else {
       // if ga is not defined, return the callback so the application
       // continues to work as expected
-      return hitCallback();
+      setTimeout(hitCallback, 0);
     }
   }
 };

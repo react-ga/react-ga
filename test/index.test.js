@@ -300,11 +300,11 @@ describe('react-ga', function() {
   describe('outboundLink()', function() {
 
     it('should record an outboundLink event', function() {
-      var callbackSuccess = false;
+
       ga.initialize('foo');
       ga.outboundLink( { label: 'Test Click' }, function () {
-        callbackSuccess = true;
       } );
+
       getGaCalls().should.eql([ [ 'create', 'foo', 'auto' ],
                                 [ 'send', { eventAction: 'Click',
                                             eventCategory: 'Outbound',
@@ -313,20 +313,22 @@ describe('react-ga', function() {
                                             hitType: 'event'
                                           }]
                                 ]);
-      callbackSuccess.should.eql(true);
+
     });
 
-    it('should warn if args object is missing', function() {
+    it('should warn if all args are missing', function() {
       ga.initialize('foo');
-      ga.outboundLink( );
+      ga.outboundLink();
       console.warn.args.should.eql([[
-        '[react-ga]', 'args.label is required in outboundLink()'
+        '[react-ga]', 'hitCallback function is required'
       ]]);
     });
 
     it('should warn if label arg is missing', function() {
       ga.initialize('foo');
-      ga.outboundLink( { missing: 'labelarg' } );
+      ga.outboundLink( { missing: 'labelarg' }, function () {
+        // do nothing on callback
+      } );
       console.warn.args.should.eql([[
         '[react-ga]', 'args.label is required in outboundLink()'
       ]]);
@@ -339,6 +341,24 @@ describe('react-ga', function() {
         '[react-ga]', 'hitCallback function is required'
       ]]);
     });
+
+    it('should fire hitCallback even if ga is not defined', function(done) {
+      ga.outboundLink( { label: 'http://www.google.com' }, function () {
+        done();
+      });
+    });
+
+    // TODO: solve how to simulate lack of response from GA
+    // it('should fire hitCallback if ga is unavailable', function(done) {
+    //   // use fake timers to simulate lack of response from GA
+    //   this.clock = sinon.useFakeTimers();
+
+    //   ga.initialize('foo');
+    //   ga.outboundLink( { label: 'http://www.google.com' }, function () {
+    //     done();
+    //   });
+    //   this.clock.restore();
+    // });
   });
 
 });
