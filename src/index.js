@@ -252,20 +252,31 @@ module.exports = {
         'eventLabel': format(args.label)
       };
 
-      // Use a timeout to ensure the execution of critical application code.
+      var safetyCallbackCalled = false;
+      var safetyCallback = function () {
+
+        // This prevents a delayed response from GA
+        // causing hitCallback from being fired twice
+        safetyCallbackCalled = true;
+
+        hitCallback();
+      };
+
+      // Using a timeout to ensure the execution of critical application code
       // in the case when the GA server might be down
       // or an ad blocker prevents sending the data
 
       // register safety net timeout:
-      var t = setTimeout(hitCallback, 250);
+      var t = setTimeout(safetyCallback, 250);
 
-      var clearableCallback = function () {
+      var clearableCallbackForGA = function () {
           clearTimeout(t);
-          // redirect:
-          hitCallback();
+          if (!safetyCallbackCalled) {
+            hitCallback();
+          }
       };
 
-      fieldObject.hitCallback = clearableCallback();
+      fieldObject.hitCallback = clearableCallbackForGA;
 
       // Send to GA
       ga('send', fieldObject);

@@ -299,20 +299,26 @@ describe('react-ga', function() {
 
   describe('outboundLink()', function() {
 
-    it('should record an outboundLink event', function() {
+    it('should record an outboundLink event', function(done) {
 
       ga.initialize('foo');
       ga.outboundLink( { label: 'Test Click' }, function () {
-      } );
 
-      getGaCalls().should.eql([ [ 'create', 'foo', 'auto' ],
+        // we need a reference to the function to compare in the
+        // getGaCalls() test below
+        var functionCalledBack = getGaCalls()[1][1].hitCallback;
+        functionCalledBack.should.be.a.Function; // jshint ignore:line
+
+        getGaCalls().should.eql([ [ 'create', 'foo', 'auto' ],
                                 [ 'send', { eventAction: 'Click',
                                             eventCategory: 'Outbound',
                                             eventLabel: 'Test Click',
-                                            hitCallback: undefined,
+                                            hitCallback: functionCalledBack,
                                             hitType: 'event'
                                           }]
                                 ]);
+        done();
+      } );
 
     });
 
@@ -342,23 +348,68 @@ describe('react-ga', function() {
       ]]);
     });
 
-    it('should fire hitCallback even if ga is not defined', function(done) {
+    it('should fire hitCallback if ga is defined', function(done) {
+      ga.initialize('foo');
       ga.outboundLink( { label: 'http://www.google.com' }, function () {
         done();
       });
     });
 
-    // TODO: solve how to simulate lack of response from GA
-    // it('should fire hitCallback if ga is unavailable', function(done) {
-    //   // use fake timers to simulate lack of response from GA
-    //   this.clock = sinon.useFakeTimers();
+    it('should fire hitCallback if ga is not defined', function(done) {
+      ga.outboundLink( { label: 'http://www.google.com' }, function () {
+        done();
+      });
+    });
 
-    //   ga.initialize('foo');
-    //   ga.outboundLink( { label: 'http://www.google.com' }, function () {
-    //     done();
-    //   });
-    //   this.clock.restore();
-    // });
+    it('should fire hitCallback if ga is available and responds in less than 250ms', function(done) {
+
+      // use fake timers to simulate response time from GA
+      this.clock = sinon.useFakeTimers();
+
+      ga.initialize('foo');
+      var simulateGACallback = function () {
+        done();
+      };
+      ga.outboundLink( { label: 'http://www.google.com' }, simulateGACallback);
+
+      this.clock.tick(125);
+      var functionCalledBack = getGaCalls()[1][1].hitCallback;
+      functionCalledBack();
+      this.clock.restore();
+    });
+
+    it('should not fire hitCallback twice if ga responds after 250mss', function(done) {
+
+      // use fake timers to simulate response time from GA
+      this.clock = sinon.useFakeTimers();
+
+      ga.initialize('foo');
+      var simulateGACallback = function () {
+        done();
+      };
+      ga.outboundLink( { label: 'http://www.google.com' }, simulateGACallback);
+
+      this.clock.tick(260);
+      var functionCalledBack = getGaCalls()[1][1].hitCallback;
+      functionCalledBack();
+      this.clock.restore();
+    });
+
+    it('should fire hitCallback if ga is not available after 250ms', function(done) {
+      ga.initialize('foo');
+      var simulateGACallback = function () {
+        done();
+      };
+      ga.outboundLink( { label: 'http://www.google.com' }, simulateGACallback);
+
+      var simulatedResponseTime = 275;
+      setTimeout(function () {
+        should.fail('no response '+simulatedResponseTime+' ms', 'repsonse after 250 ms', 'message', 'operator');
+      }, simulatedResponseTime);
+
+    });
+
+
   });
 
 });
