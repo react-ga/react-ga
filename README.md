@@ -111,7 +111,7 @@ ga.event( { category: 'Editing',
 ga.event( { category: 'Promotion',
             action: 'Displayed Promotional Widget',
             label: 'Homepage Thing',
-            nonInteraction: 1 } );
+            nonInteraction: true } );
 ```
 
 |Value|Notes|
@@ -120,7 +120,7 @@ ga.event( { category: 'Promotion',
 |args.action|`String`. Required. A description of the behaviour. E.g. 'Clicked Delete', 'Added a component', 'Deleted account', etc.|
 |args.label|`String`. Optional. More precise labelling of the related action. E.g. alongside the 'Added a component' action, we could add the name of a component as the label. E.g. 'Survey', 'Heading', 'Button', etc.|
 |args.value|`Int`. Optional. A means of recording a numerical value against an event. E.g. a rating, a score, etc.|
-|args.nonInteraction|`Int`. 1 = true, 0 = false. If an event is not triggered by a user interaction, but instead by our code (e.g. on page load, it should be flagged as a nonInteraction event to avoid skewing bounce rate data.|
+|args.nonInteraction|`Boolean`. If an event is not triggered by a user interaction, but instead by our code (e.g. on page load, it should be flagged as a nonInteraction event to avoid skewing bounce rate data.|
 
 #### ga.outboundLink(args, hitCallback)
 
@@ -150,18 +150,28 @@ ga.outboundLink( { label: 'Clicked Create an Account' },
 * npm
 * `npm install --global gulp`
 
-### To Build
-```bash
-npm run build
-```
-
 ### To Test
 ```bash
 npm test
 ```
 
-### To Ship
+### Submitting a PR
+
+* Always work on a new branch
+* Submit Pull Requests against `master`
+
+1. Open a PR
+1. Request code review
+1. Complete code review with fixes
+1. Merge the PR
+1. Then, bump the version as below
+
+The regenerated dist files should not be committed until the review has been R+'d and merged, since it's much easier to do the code review without the dist clutter getting in the way.
+
+### To Ship (i.e bump the version number)
+
 ```bash
+git pull...
 gulp build
 mversion patch
 git add .

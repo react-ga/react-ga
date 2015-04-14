@@ -27,6 +27,13 @@ function trim(s) {
   return s.replace(/^\s+|\s+$/g, '');
 }
 
+function removeLeadingSlash (s) {
+  if (s.substring(0, 1) === '/') {
+    s = s.substring(1);
+  }
+  return s;
+}
+
 /**
  * To Title Case 2.1 - http://individed.com/code/to-title-case/
  * Copyright 2008-2013 David Gouch. Licensed under the MIT License.
@@ -109,12 +116,17 @@ module.exports = {
    */
   pageview: function (path) {
     if (!path) {
-      warn('path is required in .pageview(path)');
+      warn('path is required in .pageview()');
+      return;
+    }
+
+    path = trim(path);
+    if (path === '') {
+      warn('path cannot be an empty string in .pageview()');
       return;
     }
 
     if (typeof ga === 'function') {
-      path = trim(path);
       ga('send', 'pageview', path);
 
       if (_debug) {
@@ -133,6 +145,14 @@ module.exports = {
   modalview: function (modalName) {
     if (!modalName) {
       warn('modalName is required in .modalview(modalName)');
+      return;
+    }
+
+    modalName = trim(modalName);
+    modalName = removeLeadingSlash(modalName);
+
+    if (modalName === '') {
+      warn('modalName cannot be an empty string or a single / in .modalview()');
       return;
     }
 
@@ -155,14 +175,14 @@ module.exports = {
    * @param args.action {String} required
    * @param args.label {String} optional
    * @param args.value {Int} optional
-   * @param args.nonInteraction {Int} 1 = true, 0 = false
+   * @param args.nonInteraction {boolean} optional
    */
   event: function (args) {
     if (typeof ga === 'function') {
 
       // Simple Validation
-      if (!args.category || !args.action) {
-        warn('args.category AND args.action are required');
+      if (!args || !args.category || !args.action) {
+        warn('args.category AND args.action are required in event()');
         return;
       }
 
@@ -187,8 +207,8 @@ module.exports = {
       }
 
       if (args.nonInteraction) {
-        if(typeof nonInteraction !== 'boolean') {
-          warn('Expected `args.nonInteraction` arg to be a Boolean.');
+        if(typeof args.nonInteraction !== 'boolean') {
+          warn('`args.nonInteraction` must be a boolean.');
         } else {
           fieldObject.nonInteraction = args.nonInteraction;
         }
@@ -211,10 +231,15 @@ module.exports = {
    * @param {function} hitCallback - Called after processing a hit.
    */
   outboundLink: function (args, hitCallback) {
+    if (typeof hitCallback !== 'function') {
+      warn('hitCallback function is required');
+      return;
+    }
+
     if (typeof ga === 'function') {
 
       // Simple Validation
-      if (!args.label) {
+      if (!args || !args.label) {
         warn('args.label is required in outboundLink()');
         return;
       }
@@ -227,24 +252,31 @@ module.exports = {
         'eventLabel': format(args.label)
       };
 
-      if (typeof hitCallback !== 'function') {
-        hitCallback = function () {};
-      }
+      var safetyCallbackCalled = false;
+      var safetyCallback = function () {
 
-      // Use a timeout to ensure the execution of critical application code.
+        // This prevents a delayed response from GA
+        // causing hitCallback from being fired twice
+        safetyCallbackCalled = true;
+
+        hitCallback();
+      };
+
+      // Using a timeout to ensure the execution of critical application code
       // in the case when the GA server might be down
       // or an ad blocker prevents sending the data
 
       // register safety net timeout:
-      var t = setTimeout(hitCallback, 250);
+      var t = setTimeout(safetyCallback, 250);
 
-      var clearableCallback = function () {
+      var clearableCallbackForGA = function () {
           clearTimeout(t);
-          // redirect:
-          hitCallback();
+          if (!safetyCallbackCalled) {
+            hitCallback();
+          }
       };
 
-      fieldObject.hitCallback = clearableCallback();
+      fieldObject.hitCallback = clearableCallbackForGA;
 
       // Send to GA
       ga('send', fieldObject);
@@ -256,7 +288,7 @@ module.exports = {
     } else {
       // if ga is not defined, return the callback so the application
       // continues to work as expected
-      return hitCallback();
+      setTimeout(hitCallback, 0);
     }
   }
 };
