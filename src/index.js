@@ -103,7 +103,7 @@ module.exports = {
       a.src = g;
       m.parentNode.insertBefore(a, m)
     })(window, document, 'script',
-       '//www.google-analytics.com/analytics.js', 'ga');
+       'https://www.google-analytics.com/analytics.js', 'ga');
     /* jshint ignore:end */
 
     ga('create', gaTrackingID, 'auto');
