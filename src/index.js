@@ -77,9 +77,8 @@ function format(s) {
   return s;
 }
 
-module.exports = {
+var reactGA = {
   initialize: function(gaTrackingID, options) {
-
     if (!gaTrackingID) {
       warn('gaTrackingID is required in initialize()');
       return;
@@ -291,7 +290,12 @@ module.exports = {
       // continues to work as expected
       setTimeout(hitCallback, 0);
     }
-  },
-
-  OutboundLink: require('./components/OutboundLink')
+  }
 };
+
+var OutboundLink = require('./components/OutboundLink');
+OutboundLink.outboundTrackingFunction = reactGA.outboundLink;
+reactGA.OutboundLink = OutboundLink;
+
+module.exports = reactGA;
+
