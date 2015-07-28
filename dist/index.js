@@ -79,6 +79,7 @@ function format(s) {
 
 module.exports = {
   initialize: function(gaTrackingID, options) {
+
     if (!gaTrackingID) {
       warn('gaTrackingID is required in initialize()');
       return;
@@ -290,6 +291,7 @@ module.exports = {
       // continues to work as expected
       setTimeout(hitCallback, 0);
     }
-  }
-};
+  },
 
+  OutboundLink: require('./components/OutboundLink')
+};
