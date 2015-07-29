@@ -294,7 +294,7 @@ var reactGA = {
 };
 
 var OutboundLink = require('./components/OutboundLink');
-OutboundLink.outboundTrackingFunction = reactGA.outboundLink;
+OutboundLink.trackLink = reactGA.outboundLink;
 reactGA.OutboundLink = OutboundLink;
 
 module.exports = reactGA;

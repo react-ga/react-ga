@@ -14,7 +14,7 @@ describe('<OutboundLink> React component', function() {
   var renderedOutboundLink, anchor;
 
   beforeEach(function() {
-    renderedOutboundLink = TestUtils.renderIntoDocument( React.createElement(OutboundLink) );
+    renderedOutboundLink = TestUtils.renderIntoDocument( React.createElement(OutboundLink, {eventLabel: ''}) );
   });
 
   afterEach(function() {
@@ -31,7 +31,8 @@ describe('<OutboundLink> React component', function() {
   it('should have `href` set in the underlying <a> DOM node', function() {
     var destinationUrl = "http://example.com/";
     renderedOutboundLink = TestUtils.renderIntoDocument( React.createElement(OutboundLink, {
-      to: destinationUrl
+      to: destinationUrl,
+      eventLabel: ''
     }));
     anchor = TestUtils.findRenderedDOMComponentWithTag(renderedOutboundLink,'a');
     anchor.getDOMNode().href.should.equal(destinationUrl);
@@ -39,7 +40,7 @@ describe('<OutboundLink> React component', function() {
 
   it('should raise warning if ga module is not available', function() {
     sinon.stub(console,'warn');
-    var OutboundLinkComponent = React.createElement(OutboundLink);
+    var OutboundLinkComponent = React.createElement(OutboundLink, {eventLabel: ''});
     console.warn.callCount.should.equal(0);
     OutboundLinkComponent.type.trackLink();
     console.warn.callCount.should.equal(1);
@@ -51,7 +52,7 @@ describe('<OutboundLink> React component', function() {
 
   it('should not raise warning if ga module is available', function() {
     sinon.stub(console,'warn');
-    var OutboundLinkComponent = React.createElement(OutboundLink);
+    var OutboundLinkComponent = React.createElement(OutboundLink, {eventLabel: ''});
     console.warn.callCount.should.equal(0);
     OutboundLinkComponent.type.trackLink = require('../../src/index').outboundLink;
     console.warn.callCount.should.equal(0);
@@ -61,7 +62,7 @@ describe('<OutboundLink> React component', function() {
   it('should call ga.outboundLink in its onClick event handler', function() {
     var fakeOutboundLinkFunc = sinon.spy();
     var fakeGA = { outboundLink: fakeOutboundLinkFunc };
-    var OutboundLinkComponent = React.createElement(OutboundLink);
+    var OutboundLinkComponent = React.createElement(OutboundLink, {eventLabel: ''});
     OutboundLinkComponent.type.trackLink = fakeGA.outboundLink;
     renderedOutboundLink = TestUtils.renderIntoDocument(OutboundLinkComponent);
     anchor = TestUtils.findRenderedDOMComponentWithTag(renderedOutboundLink,'a');
@@ -70,10 +71,10 @@ describe('<OutboundLink> React component', function() {
     fakeOutboundLinkFunc.callCount.should.eql(1);
   });
 
-  it('should pass args to ga.outboundLink', function() {
+  it('should pass eventLabel prop to ga.outboundLink', function() {
     var fakeOutboundLinkFunc = sinon.spy();
     var fakeGA = { outboundLink: fakeOutboundLinkFunc };
-    var OutboundLinkComponent = React.createElement(OutboundLink, {args: {label: "helloworld"}});
+    var OutboundLinkComponent = React.createElement(OutboundLink, {eventLabel: "helloworld"});
     OutboundLinkComponent.type.trackLink = fakeGA.outboundLink;
     renderedOutboundLink = TestUtils.renderIntoDocument(OutboundLinkComponent);
     anchor = TestUtils.findRenderedDOMComponentWithTag(renderedOutboundLink,'a');
@@ -84,7 +85,8 @@ describe('<OutboundLink> React component', function() {
   it('should call preserve onClick prop in onClick event handler', function() {
     var onComponentClick = sinon.spy();
     renderedOutboundLink = TestUtils.renderIntoDocument( React.createElement(OutboundLink, {
-      onClick: onComponentClick
+      onClick: onComponentClick,
+      eventLabel: ''
     }));
     anchor = TestUtils.findRenderedDOMComponentWithTag(renderedOutboundLink,'a');
     onComponentClick.callCount.should.eql(0);
