@@ -1,6 +1,6 @@
 {
   "name": "react-ga",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "React Google Analytics Module.",
   "main": "src/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:adamlofting/react-ga"
+    "url": "git@github.com:mozilla/react-ga"
   },
   "keywords": [
     "React",
@@ -23,9 +23,9 @@
   ],
   "license": "Apache",
   "bugs": {
-    "url": "https://github.com/adamlofting/react-ga/issues"
+    "url": "https://github.com/mozilla/react-ga/issues"
   },
-  "homepage": "https://github.com/adamlofting/react-ga",
+  "homepage": "https://github.com/mozilla/react-ga",
   "dependencies": {},
   "devDependencies": {
     "gulp": "~3.8.11",
