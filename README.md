@@ -1,7 +1,7 @@
 # react-ga
 ### React Google Analytics Module
 
-[![Build Status](https://travis-ci.org/adamlofting/react-ga.svg?branch=master)](https://travis-ci.org/adamlofting/react-ga)
+[![Build Status](https://travis-ci.org/mozilla/react-ga.svg?branch=master)](https://travis-ci.org/mozilla/react-ga)
 
 This is a JavaScript module that can be used to include Google Analytics tracking code in a website or app that uses [React](http://facebook.github.io/react/) for it's front-end codebase. It does not currently use any React code internally, but has been written for use with a number of Mozilla Foundation websites that are using React, as a way to standardize our GA Instrumentation across projects.
 
@@ -9,7 +9,7 @@ It is designed to work with the latest version of Google Analytics, [Univeral An
 
 This module is mildly opinionated in how we instrument tracking within our front-end code. Our API is slightly more verbose than the core Google Analytics library, in the hope that the code is easier to read and understand for our engineers. See examples below.
 
-If you use `react-ga` too, we'd love your feedback. Feel free to file [issues, ideas and pull requests against this repo](https://github.com/adamlofting/react-ga/issues).
+If you use `react-ga` too, we'd love your feedback. Feel free to file [issues, ideas and pull requests against this repo](https://github.com/mozilla/react-ga/issues).
 
 ## Installation
 ```bash
