@@ -27,7 +27,7 @@ gulp.task('jshint', function() {
 });
 
 gulp.task('package', function() {
-  return gulp.src('src/index.js')
+  return gulp.src('src/**/*.js')
     // This will output the non-minified version
     .pipe(gulp.dest(DEST))
     // This will minify and rename to foo.min.js

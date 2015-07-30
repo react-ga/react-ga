@@ -4,7 +4,7 @@
   "description": "React Google Analytics Module.",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha test/*.test.js && gulp test",
+    "test": "mocha test/*.test.js && mocha test/components/*.test.js && gulp test",
     "build": "gulp build"
   },
   "repository": {
@@ -32,8 +32,11 @@
     "gulp-jshint": "~1.9.4",
     "gulp-rename": "~1.2.0",
     "gulp-uglify": "~1.1.0",
+    "jsdom": "^3.0.0",
     "mocha": "^2.2.1",
+    "mocha-jsdom": "~1.0.0",
     "mofo-style": "~1.0.1",
+    "react": "^0.13.1",
     "should": "^5.2.0",
     "sinon": "^1.14.1"
   }

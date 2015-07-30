@@ -1,5 +1,7 @@
 var should = require('should');
 var sinon = require('sinon');
+var React = require('react/addons');
+var TestUtils = React.addons.TestUtils;
 
 var ga = require('../src/index');
 
@@ -409,6 +411,23 @@ describe('react-ga', function() {
 
     });
 
+
+  });
+
+
+  /**
+   * OutboundLink()
+   */
+
+  describe('OutboundLink()', function() {
+
+    it('should create a React component <OutboundLink>', function() {
+      ga.initialize();
+
+      var OutboundLinkComponent = ga.OutboundLink;
+      TestUtils.isElement(OutboundLinkComponent);
+      OutboundLinkComponent.displayName.should.equal('OutboundLink');
+    });
 
   });
 
