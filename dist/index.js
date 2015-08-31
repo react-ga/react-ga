@@ -298,4 +298,3 @@ OutboundLink.trackLink = reactGA.outboundLink;
 reactGA.OutboundLink = OutboundLink;
 
 module.exports = reactGA;
-
