@@ -140,6 +140,22 @@ ga.outboundLink( { label: 'Clicked Create an Account' },
 |args.label|`String`. Required. Description of where the outbound link points to. Either as a URL, or a string|
 |hitCallback|`function`. The react-ga implementation accounts for the possibility that GA servers are down, or GA is blocked, by using a fallback 250ms timeout. See [notes in GA Dev Guide](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#hitCallback)|
 
+#### ga.customtracker(key, value)
+
+Custom dimensions and metrics are a powerful way to send custom data to Google Analytics. Web developers can use custom dimensions and metrics to segment and measure differences between: logged in and logged out users, authors of pages, levels in games, or any other business data you have on a page.
+
+###### Example
+
+```js
+ga.customtracker('dimension1', '10001');
+```
+
+|Value|Notes|
+|------|-----|
+|key|`String`. Custom dimension/metric name e.g. "dimension1"|
+|value|`Number|String`. The value for the custom dimension/metric e.g. "10001"|
+
+
 ---
 
 ## Development
