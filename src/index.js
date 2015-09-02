@@ -144,16 +144,16 @@ var reactGA = {
    */
   customtracker: function (key, value) {
     if (!key) {
-      warn('key is required in .setCustomMetric()');
+      warn('key is required in .customtracker()');
       return;
     } else if (!value) {
-      warn('value is required in .setCustomMetric()');
+      warn('value is required in .customtracker()');
       return;
     }
 
     key = trim(key);
     if (key === '') {
-      warn('key cannot be an empty string in .setCustomMetric()');
+      warn('key cannot be an empty string in .customtracker()');
       return;
     }
 
@@ -165,7 +165,7 @@ var reactGA = {
       }
       value = trim(value);
       if (value === '') {
-        warn('value cannot be an empty string in .setCustomMetric()');
+        warn('value cannot be an empty string in .customtracker()');
         return;
       }
     } else if (key.indexOf('metric') === 0) { // custom metric handling
