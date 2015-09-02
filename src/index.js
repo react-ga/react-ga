@@ -137,7 +137,7 @@ var reactGA = {
   },
 
   /**
-   * setCustomTracker:
+   * customtracker:
    * send custom dimensions and metrics with GA
    * @param  {String} key - custom dimension/metric name e.g. "dimension1"
    * @param  {String|Number} value - the value for the custom dimension/metric
