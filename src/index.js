@@ -137,6 +137,60 @@ var reactGA = {
   },
 
   /**
+   * customtracker:
+   * send custom dimensions and metrics with GA
+   * @param  {String} key - custom dimension/metric name e.g. "dimension1"
+   * @param  {String|Number} value - the value for the custom dimension/metric
+   */
+  customtracker: function (key, value) {
+    if (!key) {
+      warn('key is required in .customtracker()');
+      return;
+    } else if (!value) {
+      warn('value is required in .customtracker()');
+      return;
+    }
+
+    key = trim(key);
+    if (key === '') {
+      warn('key cannot be an empty string in .customtracker()');
+      return;
+    }
+
+    // https://developers.google.com/analytics/devguides/collection/analyticsjs/custom-dims-mets
+    if (key.indexOf('dimension') === 0) {     // custom dimension handling
+      if (typeof value !== 'string') {
+        warn('A dimension\'s value must be a string');
+        return;
+      }
+      value = trim(value);
+      if (value === '') {
+        warn('value cannot be an empty string in .customtracker()');
+        return;
+      }
+    } else if (key.indexOf('metric') === 0) { // custom metric handling
+      if (typeof value !== 'number') {
+        warn('A metric\'s value must be a number');
+        return;
+      }
+    } else {
+      // TODO: max index handling
+      warn('Key must satisfy the regex of dimension[0-9]+ or metric[0-9]+');
+      return;
+    }
+
+    if (typeof ga === 'function') {
+      ga('set', key, value);
+      ga('send');
+
+      if (_debug) {
+        log('called ga(\'set\', key, value);');
+        log('with: {' + key + ', ' + value + '}');
+      }
+    }
+  },
+
+  /**
    * modalview:
    * a proxy to basic GA pageview tracking to consistently track
    * modal views that are an equivalent UX to a traditional pageview
