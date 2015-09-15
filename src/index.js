@@ -115,6 +115,10 @@ var reactGA = {
 
   },
 
+  set: function(name, value) {
+    ga('set', name, value);
+  },
+
   /**
    * pageview:
    * Basic GA pageview tracking
