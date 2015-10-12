@@ -411,7 +411,6 @@ describe('react-ga', function() {
 
     });
 
-
   });
 
 
@@ -430,5 +429,43 @@ describe('react-ga', function() {
     });
 
   });
+
+  /**
+   * plugin()
+   */
+
+   describe('Plugin', function() {
+     it('should require the plugin: ecommerce', function() {
+       ga.initialize('plugin');
+       ga.plugin.require('ecommerce');
+
+       getGaCalls().should.eql([
+         ['create', 'plugin', 'auto'],
+         ['require', 'ecommerce']
+       ]);
+     });
+
+     it('should execute ecommerce:addItem', function() {
+       ga.initialize('plugin');
+       ga.plugin.execute('ecommerce', 'addItem', {
+         id: 1,
+         name: 'Product'
+       });
+
+       getGaCalls().should.eql([
+         ['create', 'plugin', 'auto'],
+         ['ecommerce:addItem', { id: 1, name: 'Product'}]
+       ]);
+     });
+
+     it('should execute ecommerce:send', function() {
+       ga.initialize('plugin');
+       ga.plugin.execute('ecommerce', 'send');
+       getGaCalls().should.eql([
+         ['create', 'plugin', 'auto'],
+         ['ecommerce:send']
+       ]);
+     });
+   });
 
 });
