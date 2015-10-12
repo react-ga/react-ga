@@ -140,6 +140,29 @@ ga.outboundLink( { label: 'Clicked Create an Account' },
 |args.label|`String`. Required. Description of where the outbound link points to. Either as a URL, or a string|
 |hitCallback|`function`. The react-ga implementation accounts for the possibility that GA servers are down, or GA is blocked, by using a fallback 250ms timeout. See [notes in GA Dev Guide](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#hitCallback)|
 
+
+#### ga.plugin.require(name)
+
+Require GA plugins.
+
+##### Example
+```js
+ga.plugin.require('ecommerce');
+```
+
+
+#### ga.plugin.execute(pluginName, action, payload)
+
+Execute the `action` for the `pluginName` with the payload.
+
+#### Example
+
+```js
+ga.plugin.execute('ecommerce', 'addTransaction', {
+  'id': "jd38je31j",
+  'revenue': "3.50"
+});
+```
 ---
 
 ## Development
