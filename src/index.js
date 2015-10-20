@@ -225,15 +225,21 @@ var reactGA = {
   },
 
   plugin: {
+    /**
+     * require:
+     * GA requires a plugin
+     * @param name {String} e.g. 'ecommerce' or 'myplugin'
+     */
     require: function(name) {
       if (typeof ga === 'function') {
         ga('require', name);
       }
 
       if (_debug) {
-        log('called ga(\'require\', \'ecommerce\');');
+        log('called ga(\'require\', \'' + name + '\');');
       }
     },
+
     /**
      * execute:
      * GA execute action for plugin
