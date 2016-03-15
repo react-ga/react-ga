@@ -28,6 +28,7 @@ var routes = require('./routes');
 
 ...
 var ga = require('react-ga');
+ga.initialize(process.env.GA_TRACKING_ID);
 ...
 
 function logPageView() {
