@@ -62,6 +62,7 @@ function toTitleCase(s){
 }
 
 // See if s could be an email address. We don't want to send personal data like email.
+// https://support.google.com/analytics/answer/2795983?hl=en
 function mightBeEmail(s) {
   // There's no point trying to validate rfc822 fully, just look for ...@...
   return (/[^@]+@[^@]+/).test(s);
@@ -106,7 +107,16 @@ var reactGA = {
        '//www.google-analytics.com/analytics.js', 'ga');
     /* jshint ignore:end */
 
-    ga('create', gaTrackingID, 'auto');
+    if (options && options.gaOptions) {
+      ga('create', gaTrackingID, options.gaOptions);
+    } else {
+      ga('create', gaTrackingID, 'auto');
+    }
+
+  },
+
+  set: function(name, value) {
+    ga('set', name, value);
   },
 
   /**

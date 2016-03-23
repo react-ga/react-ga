@@ -50,7 +50,7 @@ GA must be initialized using this function before any of the other tracking func
 ###### Example
 
 ```js
-var options = { debug: true };
+var options = { debug: true, gaOptions: {userId: 123} };
 ga.initialize('UA-000000-01', options);
 ```
 
@@ -58,6 +58,7 @@ ga.initialize('UA-000000-01', options);
 |------|-----|
 |gaTrackingID| `String`. GA Tracking ID like 'UA-000000-01'|
 |options.debug| `Boolean`. Optional. If set to `true`, will output additional feedback to the console|
+|options.gaOptions| `Object`. Optional. [GA configurable fields.](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference)|
 
 See example above for use with `react-router`.
 
