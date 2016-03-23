@@ -22,22 +22,21 @@ npm install react-ga
 
 ```js
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Router = require('react-router');
-var Route = Router.Route;
+var routes = require('./routes');
 
 ...
-
 var ga = require('react-ga');
-
+ga.initialize(process.env.GA_TRACKING_ID);
 ...
 
-exports.run = function(location, el) {
-  ga.initialize(process.env.GA_TRACKING_ID);
-  Router.run(routes, location, function(Handler, state) {
-    ga.pageview(state.pathname);
-    React.render(<Handler/>, el);
-  });
-};
+function logPageView() {
+    ga.pageview(this.state.location.pathname);
+}
+
+var app = document.getElementById('app');
+ReactDOM.render(<Router routes={routes} onUpdate={logPageView} />, app);
 
 ```
 
