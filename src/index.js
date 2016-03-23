@@ -224,6 +224,43 @@ var reactGA = {
     }
   },
 
+  /**
+   * exception:
+   * GA exception tracking
+   * @param args.description {String} optional
+   * @param args.fatal {boolean} optional
+   */
+  exception: function (args) {
+    if (typeof ga === 'function') {
+
+      // Required Fields
+      var fieldObject = {
+        'hitType': 'exception'
+      };
+
+      // Optional Fields
+      if (args.description) {
+        fieldObject.exDescription = format(args.description);
+      }
+
+      if (typeof args.fatal !== 'undefined') {
+        if(typeof args.fatal !== 'boolean') {
+          warn('`args.fatal` must be a boolean.');
+        } else {
+          fieldObject.exFatal = args.fatal;
+        }
+      }
+
+      // Send to GA
+      ga('send', fieldObject);
+
+      if (_debug) {
+        log('called ga(\'send\', fieldObject);');
+        log('with fieldObject: ' + JSON.stringify(fieldObject));
+      }
+    }
+  },
+
   plugin: {
     /**
      * require:

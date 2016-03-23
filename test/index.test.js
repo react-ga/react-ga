@@ -174,6 +174,56 @@ describe('react-ga', function() {
   });
 
   /**
+   * exception()
+   */
+
+  describe('exception()', function() {
+
+    it('should record an exception', function() {
+      ga.initialize('foo');
+      ga.exception( {} );
+      getGaCalls().should.eql([ [ 'create', 'foo', 'auto' ],
+                                [ 'send', {
+                                            hitType: 'exception'
+                                          }]
+                                ]);
+    });
+
+    it('should record a description value', function() {
+      ga.initialize('foo');
+      ga.exception( { description: 'This is an exception!' } );
+      getGaCalls().should.eql([ [ 'create', 'foo', 'auto' ],
+                                [ 'send', { exDescription: 'This Is an Exception!',
+                                            hitType: 'exception'
+                                          }]
+                                ]);
+    });
+
+    it('should record a fatal value', function() {
+      ga.initialize('foo');
+      ga.exception( { fatal: true } );
+      getGaCalls().should.eql([ [ 'create', 'foo', 'auto' ],
+                                [ 'send', { exFatal: true,
+                                            hitType: 'exception'
+                                          }]
+                                ]);
+    });
+
+    it('should reject a non-boolean fatal value', function() {
+      ga.initialize('foo');
+      ga.exception( { fatal: 'this-is-fatal' } );
+      console.warn.args.should.eql([[
+        '[react-ga]', '`args.fatal` must be a boolean.'
+      ]]);
+      getGaCalls().should.eql([ [ 'create', 'foo', 'auto' ],
+                                [ 'send', {
+                                            hitType: 'exception'
+                                          }]
+                                ]);
+    });
+  });
+
+  /**
    * event()
    */
 
