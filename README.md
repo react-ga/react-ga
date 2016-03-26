@@ -62,6 +62,18 @@ ga.initialize('UA-000000-01', options);
 
 See example above for use with `react-router`.
 
+#### ga.set(fieldsObject)
+
+###### Example
+
+```js
+ga.set({ userId: 123 });
+```
+
+|Value|Notes|
+|------|-----|
+|fieldsObject|`Object`. e.g. `{ userId: 123 }`|
+
 #### ga.pageview(path)
 
 ###### Example

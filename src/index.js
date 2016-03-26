@@ -115,8 +115,34 @@ var reactGA = {
 
   },
 
-  set: function(name, value) {
-    ga('set', name, value);
+  /**
+   * set:
+   * GA tracker set method
+   * @param {Object} fieldsObject - a field/value pair or a group of field/value pairs on the tracker
+   */
+  set: function(fieldsObject) {
+    if (typeof ga === 'function') {
+      if (!fieldsObject) {
+        warn('`fieldsObject` is required in .set()');
+        return;
+      }
+
+      if (typeof fieldsObject !== 'object') {
+        warn('Expected `fieldsObject` arg to be an Object');
+        return;
+      }
+
+      if (Object.keys(fieldsObject).length === 0) {
+        warn('empty `fieldsObject` given to .set()');
+      }
+
+      ga('set', fieldsObject);
+
+      if (_debug) {
+        log('called ga(\'set\', fieldsObject);');
+        log('with fieldsObject: ' + JSON.stringify(fieldsObject));
+      }
+    }
   },
 
   /**
