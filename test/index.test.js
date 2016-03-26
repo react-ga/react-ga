@@ -53,6 +53,11 @@ describe('react-ga', function() {
       getGaCalls().should.eql([['create', 'foo', 'auto']]);
     });
 
+    it('should call window.ga() with ga options if they are given', function() {
+      ga.initialize('foo', { gaOptions: { userId: 123 } });
+      getGaCalls().should.eql([['create', 'foo', { userId: 123 }]]);
+    });
+
     it('should abort, log warning if tracking ID is not given', function() {
       ga.initialize();
       console.warn.args.should.eql([[
@@ -68,7 +73,7 @@ describe('react-ga', function() {
 
   describe('pageview()', function() {
 
-    it('should output degug info, if debug is on', function() {
+    it('should output debug info, if debug is on', function() {
       var options = { debug: true };
       ga.initialize('foo', options);
       ga.pageview('/valid');
@@ -116,7 +121,7 @@ describe('react-ga', function() {
 
   describe('modalview()', function() {
 
-    it('should output degug info, if debug is on', function() {
+    it('should output debug info, if debug is on', function() {
       var options = { debug: true };
       ga.initialize('foo', options);
       ga.modalview('valid');
