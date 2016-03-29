@@ -152,6 +152,21 @@ ga.outboundLink( { label: 'Clicked Create an Account' },
 |args.label|`String`. Required. Description of where the outbound link points to. Either as a URL, or a string|
 |hitCallback|`function`. The react-ga implementation accounts for the possibility that GA servers are down, or GA is blocked, by using a fallback 250ms timeout. See [notes in GA Dev Guide](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#hitCallback)|
 
+#### ga.exception(args, hitCallback)
+
+[GA exception tracking](https://developers.google.com/analytics/devguides/collection/analyticsjs/exceptions)
+
+###### Example
+
+```js
+ga.exception( { description: 'An error ocurred', fatal: true } );
+```
+
+|Value|Notes|
+|------|-----|
+|args.description|`String`. Optional. Description of what happened.|
+|args.fatal|`String`. Optional. Set to true if it was a fatal exception.|
+
 
 #### ga.plugin.require(name)
 
