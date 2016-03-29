@@ -53,6 +53,11 @@ describe('react-ga', function() {
       getGaCalls().should.eql([['create', 'foo', 'auto']]);
     });
 
+    it('should call window.ga() with ga options if they are given', function() {
+      ga.initialize('foo', { gaOptions: { userId: 123 } });
+      getGaCalls().should.eql([['create', 'foo', { userId: 123 }]]);
+    });
+
     it('should abort, log warning if tracking ID is not given', function() {
       ga.initialize();
       console.warn.args.should.eql([[
@@ -63,12 +68,61 @@ describe('react-ga', function() {
   });
 
   /**
+   * set()
+   */
+
+  describe('set()', function() {
+
+    it('should output debug info, if debug is on', function() {
+      var options = { debug: true };
+      ga.initialize('foo', options);
+      ga.set( { userId: 123 } );
+      console.info.args.should.eql([
+        [ "[react-ga]", "called ga('set', fieldsObject);" ],
+        [ "[react-ga]", "with fieldsObject: {\"userId\":123}" ]
+      ]);
+    });
+
+    it('should warn if fieldsObject object is missing', function() {
+      ga.initialize('foo');
+      ga.set();
+      console.warn.args.should.eql([[
+        '[react-ga]', '`fieldsObject` is required in .set()'
+      ]]);
+    });
+
+    it('should warn if fieldsObject is not an Object', function() {
+      ga.initialize('foo');
+      ga.set(123);
+      console.warn.args.should.eql([[
+        '[react-ga]', 'Expected `fieldsObject` arg to be an Object'
+      ]]);
+    });
+
+    it('should warn if fieldsObject object is an empty object', function() {
+      ga.initialize('foo');
+      ga.set( {} );
+      console.warn.args.should.eql([[
+        '[react-ga]', 'empty `fieldsObject` given to .set()'
+      ]]);
+    });
+
+    it('should set the field values', function() {
+      ga.initialize('foo');
+      ga.set( { userId: 123 } );
+      getGaCalls().should.eql([ [ 'create', 'foo', 'auto' ],
+                                [ 'set', { userId: 123 }]
+                                ]);
+    });
+  });
+
+  /**
    * pageview()
    */
 
   describe('pageview()', function() {
 
-    it('should output degug info, if debug is on', function() {
+    it('should output debug info, if debug is on', function() {
       var options = { debug: true };
       ga.initialize('foo', options);
       ga.pageview('/valid');
@@ -116,7 +170,7 @@ describe('react-ga', function() {
 
   describe('modalview()', function() {
 
-    it('should output degug info, if debug is on', function() {
+    it('should output debug info, if debug is on', function() {
       var options = { debug: true };
       ga.initialize('foo', options);
       ga.modalview('valid');
