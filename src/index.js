@@ -317,11 +317,25 @@ var reactGA = {
     /**
      * execute:
      * GA execute action for plugin
-     * @param pluginName {String} e.g. 'ecommerce' or 'myplugin'
-     * @param action {String} e.g. 'addItem' or 'myCustomAction'
-     * @param payload {Object} optional e.g { id: '1x5e', name : 'My product to track' }
+     * @param var_args {...*} Variable number of arguments
+     * @param var_args[0] {String} Plugin name, e.g. 'ecommerce' or 'myplugin'
+     * @param var_args[1] {String} Action name, e.g. 'addItem' or 'myCustomAction'
+     * @param var_args[2] {Object} optional Action type e.g 'detail' OR Payload e.g { id: '1x5e', name : 'My product to track' }
+     * @param var_args[3] {Object} optional Payload e.g { id: '1x5e', name : 'My product to track' }
      */
-    execute: function (pluginName, action, payload) {
+    execute: function (var_args) {
+      var args = Array.prototype.slice.call(arguments);
+      var pluginName = args[0];
+      var action = args[1];
+      var payload, actionType;
+
+      if (args.length === 3) {
+        payload = args[2]
+      } else {
+        actionType = args[2]
+        payload = args[3]
+      }
+
       if (typeof ga === 'function') {
         if (typeof pluginName !== 'string') {
           warn('Expected `pluginName` arg to be a String.');
@@ -330,7 +344,13 @@ var reactGA = {
         } else {
           var command = pluginName + ':' + action;
           payload = payload || null;
-          if (payload) {
+          if (actionType && payload) {
+            ga(command, actionType, payload);
+            if (_debug) {
+              log('called ga(\'' + command + '\');');
+              log('actionType: ' + actionType + ' with payload: ' + JSON.stringify(payload));
+            }
+          } else if (payload) {
             ga(command, payload);
             if (_debug) {
               log('called ga(\'' + command + '\');');
