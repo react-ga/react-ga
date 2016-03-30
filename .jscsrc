@@ -4,10 +4,11 @@
     "node_modules/**"
   ],
   "maximumLineLength": {
-    "value": 80,
+    "value": 100,
     "allowComments": true,
     "allowRegex": true
   },
   "disallowMultipleVarDecl": true,
+  "requireTrailingComma": false,
   "requireMultipleVarDecl": null
 }
