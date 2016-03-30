@@ -5,11 +5,11 @@
 
 This is a JavaScript module that can be used to include Google Analytics tracking code in a website or app that uses [React](http://facebook.github.io/react/) for its front-end codebase. It does not currently use any React code internally, but has been written for use with a number of Mozilla Foundation websites that are using React, as a way to standardize our GA Instrumentation across projects.
 
-It is designed to work with the latest version of Google Analytics, [Universal Analytics](https://support.google.com/analytics/answer/2790010?hl%3Den). At this point, all Google Analytics projects are being upgraded to Universal Analytics, so this module will not support the older `ga.js` implementation.
+It is designed to work with the latest version of Google Analytics, [Universal Analytics](https://support.google.com/analytics/answer/2790010). At this point, all Google Analytics projects are being upgraded to Universal Analytics, so this module will not support the older `ga.js` implementation.
 
 This module is mildly opinionated in how we instrument tracking within our front-end code. Our API is slightly more verbose than the core Google Analytics library, in the hope that the code is easier to read and understand for our engineers. See examples below.
 
-If you use `react-ga` too, we'd love your feedback. Feel free to file [issues, ideas and pull requests against this repo](https://github.com/mozilla/react-ga/issues).
+If you use `react-ga` too, we'd love your feedback. Feel free to file [issues, ideas and pull requests against this repo](https://github.com/react-ga/react-ga/issues).
 
 ## Installation
 ```bash
@@ -18,7 +18,7 @@ npm install react-ga
 
 ## Use
 
-### Initializing GA  and Tracking Pageviews with `react-router`
+### Initializing GA and Tracking Pageviews with `react-router`
 
 ```js
 var React = require('react');
@@ -32,7 +32,7 @@ ga.initialize(process.env.GA_TRACKING_ID);
 ...
 
 function logPageView() {
-    ga.pageview(this.state.location.pathname);
+  ga.pageview(this.state.location.pathname);
 }
 
 var app = document.getElementById('app');
@@ -56,8 +56,8 @@ ga.initialize('UA-000000-01', options);
 
 |Value|Notes|
 |------|-----|
-|gaTrackingID| `String`. GA Tracking ID like 'UA-000000-01'|
-|options.debug| `Boolean`. Optional. If set to `true`, will output additional feedback to the console|
+|gaTrackingID| `String`. GA Tracking ID like 'UA-000000-01'.|
+|options.debug| `Boolean`. Optional. If set to `true`, will output additional feedback to the console.|
 |options.gaOptions| `Object`. Optional. [GA configurable fields.](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference)|
 
 See example above for use with `react-router`.
@@ -90,7 +90,7 @@ See example above for use with `react-router`.
 
 #### ga.modalview(modalName)
 
-A modal view is often an equivilent to a pageview in our UX, but without a change in URL that would record a standard GA pageview. For example, a 'contact us' modal may be accessible from any page in a site, even if we don't have a standalone 'contact us' page on it's own URL. In this scenario, the modalview should be recorded using this function.
+A modal view is often an equivalent to a pageview in our UX, but without a change in URL that would record a standard GA pageview. For example, a 'contact us' modal may be accessible from any page in a site, even if we don't have a standalone 'contact us' page on its own URL. In this scenario, the modalview should be recorded using this function.
 
 ###### Example
 
@@ -128,15 +128,15 @@ ga.event( { category: 'Promotion',
 
 |Value|Notes|
 |------|-----|
-|args.category|`String`. Required. A top level category for these events. E.g. 'User', 'Navigation', 'App Editing', etc|
+|args.category|`String`. Required. A top level category for these events. E.g. 'User', 'Navigation', 'App Editing', etc.|
 |args.action|`String`. Required. A description of the behaviour. E.g. 'Clicked Delete', 'Added a component', 'Deleted account', etc.|
 |args.label|`String`. Optional. More precise labelling of the related action. E.g. alongside the 'Added a component' action, we could add the name of a component as the label. E.g. 'Survey', 'Heading', 'Button', etc.|
 |args.value|`Int`. Optional. A means of recording a numerical value against an event. E.g. a rating, a score, etc.|
-|args.nonInteraction|`Boolean`. If an event is not triggered by a user interaction, but instead by our code (e.g. on page load, it should be flagged as a nonInteraction event to avoid skewing bounce rate data.|
+|args.nonInteraction|`Boolean`. If an event is not triggered by a user interaction, but instead by our code (e.g. on page load, it should be flagged as a `nonInteraction` event to avoid skewing bounce rate data.|
 
 #### ga.outboundLink(args, hitCallback)
 
-Tracking links out to external URLs (including id.webmaker.org for oAuth2 login flow).
+Tracking links out to external URLs (including id.webmaker.org for OAuth 2.0 login flow).
 
 ###### Examples
 
@@ -149,7 +149,7 @@ ga.outboundLink( { label: 'Clicked Create an Account' },
 
 |Value|Notes|
 |------|-----|
-|args.label|`String`. Required. Description of where the outbound link points to. Either as a URL, or a string|
+|args.label|`String`. Required. Description of where the outbound link points to. Either as a URL, or a string.|
 |hitCallback|`function`. The react-ga implementation accounts for the possibility that GA servers are down, or GA is blocked, by using a fallback 250ms timeout. See [notes in GA Dev Guide](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#hitCallback)|
 
 #### ga.exception(args, hitCallback)
@@ -165,7 +165,7 @@ ga.exception( { description: 'An error ocurred', fatal: true } );
 |Value|Notes|
 |------|-----|
 |args.description|`String`. Optional. Description of what happened.|
-|args.fatal|`String`. Optional. Set to true if it was a fatal exception.|
+|args.fatal|`String`. Optional. Set to `true` if it was a fatal exception.|
 
 
 #### ga.plugin.require(name)
@@ -186,8 +186,8 @@ Execute the `action` for the `pluginName` with the payload.
 
 ```js
 ga.plugin.execute('ecommerce', 'addTransaction', {
-  'id': "jd38je31j",
-  'revenue': "3.50"
+  id: 'jd38je31j',
+  revenue: '3.50'
 });
 ```
 ---
@@ -216,7 +216,7 @@ npm test
 1. Merge the PR
 1. Then, bump the version as below
 
-The regenerated dist files should not be committed until the review has been R+'d and merged, since it's much easier to do the code review without the dist clutter getting in the way.
+The regenerated `dist` files should not be committed until the review has been R+'d and merged, since it's much easier to do the code review without the `dist` clutter getting in the way.
 
 ### To Ship (i.e bump the version number)
 
@@ -234,4 +234,4 @@ npm publish
 
 #### Acknowledgements
 
-* Quite a lot of the code in this repo, came from [webmaker-analytics](https://github.com/mozilla/webmaker-analytics)
+* Quite a lot of the code in this repo, came from [webmaker-analytics](https://github.com/mozilla/webmaker-analytics).
