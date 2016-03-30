@@ -12,6 +12,7 @@
 
 var _redacted = 'REDACTED (Potential Email Address)';
 var _debug = false;
+var _capitalize = true;
 
 function warn (s) {
   console.warn('[react-ga]', s);
@@ -74,7 +75,11 @@ function format(s) {
     s = _redacted;
     return s;
   }
-  s = toTitleCase(s);
+
+  if (_capitalize) {
+    s = toTitleCase(s);
+  }
+
   return s;
 }
 
@@ -88,6 +93,10 @@ var reactGA = {
     if (options) {
       if (options.debug && options.debug === true) {
         _debug = true;
+      }
+
+      if (options.capitalize === false) {
+        _capitalize = false;
       }
     }
 
@@ -235,7 +244,7 @@ var reactGA = {
       }
 
       if (args.value) {
-        if(typeof args.value !== 'number') {
+        if (typeof args.value !== 'number') {
           warn('Expected `args.value` arg to be a Number.');
         } else {
           fieldObject.eventValue = args.value;
@@ -243,7 +252,7 @@ var reactGA = {
       }
 
       if (args.nonInteraction) {
-        if(typeof args.nonInteraction !== 'boolean') {
+        if (typeof args.nonInteraction !== 'boolean') {
           warn('`args.nonInteraction` must be a boolean.');
         } else {
           fieldObject.nonInteraction = args.nonInteraction;
