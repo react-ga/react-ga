@@ -168,14 +168,19 @@ ga.exception( { description: 'An error ocurred', fatal: true } );
 |args.fatal|`String`. Optional. Set to `true` if it was a fatal exception.|
 
 
-#### ga.plugin.require(name)
+#### ga.plugin.require(name, options)
 
 Require GA plugins.
 
 ##### Example
 ```js
-ga.plugin.require('ecommerce');
+ga.plugin.require('localHitSender', {path: '/log', debug: true});
 ```
+
+|Value|Notes|
+|------|-----|
+|name|`String`. Required. The name of the plugin to be required. Note: if the plugin is not an official analytics.js plugin, it must be provided elsewhere on the page.|
+|options|`Object`. Optional. An initialization object that will be passed to the plugin constructor upon instantiation.|
 
 
 #### ga.plugin.execute(pluginName, action, payload)
