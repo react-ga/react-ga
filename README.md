@@ -190,7 +190,7 @@ ga.plugin.require('ecommerce');
 ```
 
 
-#### ga.plugin.execute(pluginName, action, payload)
+#### ga.plugin.execute(pluginName, action, [actionType], [payload])
 
 Execute the `action` for the `pluginName` with the payload.
 
@@ -202,6 +202,18 @@ ga.plugin.execute('ecommerce', 'addTransaction', {
   revenue: '3.50'
 });
 ```
+
+You can use this function with four arguments to pass `actionType` and `payload` along with executed action
+
+#### Example
+
+```js
+ga.plugin.execute('ec', 'setAction', 'purchase', {
+  id: 'jd38je31j',
+  revenue: '3.50'
+});
+```
+
 ---
 
 ## Development
