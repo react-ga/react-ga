@@ -317,14 +317,15 @@ var reactGA = {
     /**
      * execute:
      * GA execute action for plugin
-     * @param var_args {...*} Variable number of arguments
-     * @param var_args[0] {String} Plugin name, e.g. 'ecommerce' or 'myplugin'
-     * @param var_args[1] {String} Action name, e.g. 'addItem' or 'myCustomAction'
-     * @param var_args[2] {Object} optional Action type e.g 'detail' OR Payload e.g { id: '1x5e', name : 'My product to track' }
-     * @param var_args[3] {Object} optional Payload e.g { id: '1x5e', name : 'My product to track' }
+     * Takes variable number of arguments
+     * @param pluginName {String} e.g. 'ecommerce' or 'myplugin'
+     * @param action {String} e.g. 'addItem' or 'myCustomAction'
+     * @param actionType {String} optional e.g. 'detail'
+     * @param payload {Object} optional e.g { id: '1x5e', name : 'My product to track' }
      */
-    execute: function (var_args) {
+    execute: function () {
       var args = Array.prototype.slice.call(arguments);
+
       var pluginName = args[0];
       var action = args[1];
       var payload, actionType;
