@@ -330,10 +330,10 @@ var reactGA = {
       var payload, actionType;
 
       if (args.length === 3) {
-        payload = args[2]
+        payload = args[2];
       } else {
-        actionType = args[2]
-        payload = args[3]
+        actionType = args[2];
+        payload = args[3];
       }
 
       if (typeof ga === 'function') {
