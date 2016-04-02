@@ -349,7 +349,7 @@ var reactGA = {
             ga(command, actionType, payload);
             if (_debug) {
               log('called ga(\'' + command + '\');');
-              log('actionType: ' + actionType + ' with payload: ' + JSON.stringify(payload));
+              log('actionType: "' + actionType + '" with payload: ' + JSON.stringify(payload));
             }
           } else if (payload) {
             ga(command, payload);
