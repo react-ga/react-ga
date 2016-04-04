@@ -306,11 +306,44 @@ var reactGA = {
      */
     require: function(name, options) {
       if (typeof ga === 'function') {
-        ga('require', name, options);
-      }
 
-      if (_debug) {
-        log('called ga(\'require\', \'' + name + '\', ' + JSON.stringify(options) + ');');
+        // Required Fields
+        if (!name) {
+          warn('name is required in .require()');
+          return;
+        }
+
+        name = trim(name);
+        if (path === '') {
+          warn('name cannot be an empty string in .require()');
+          return;
+        }
+
+        // Optional Fields
+        if (options) {
+          if (typeof options !== 'object') {
+            warn('Expected `options` arg to be an Object');
+            return;
+          }
+
+          if (Object.keys(options).length === 0) {
+            warn('empty `options` given to .require()');
+          }
+
+          ga('require', name, options);
+
+          if (_debug) {
+            log('called ga(\'require\', \'' + name + '\', ' + JSON.stringify(options) + ');');
+          }
+          return;
+        } else {
+          ga('require', name);
+
+          if (_debug) {
+            log('called ga(\'require\', \'' + name + '\');');
+          }
+          return;
+        }
       }
     },
 

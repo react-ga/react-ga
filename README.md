@@ -168,7 +168,7 @@ ga.exception( { description: 'An error ocurred', fatal: true } );
 |args.fatal|`String`. Optional. Set to `true` if it was a fatal exception.|
 
 
-#### ga.plugin.require(name, options)
+#### ga.plugin.require(name, [options])
 
 Require GA plugins.
 
