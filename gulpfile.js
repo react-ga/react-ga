@@ -1,35 +1,36 @@
 var gulp = require('gulp');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
-var jshint = require('gulp-jshint');
+var jscs = require('gulp-jscs');
 
 var DEST = 'dist/';
 
-
 var LINT_DIRS = [
-    'src/**/*.js',
-    'test/**/*.js'
+  'src/**/*.js',
+  'test/**/*.js'
 ];
 
 var TEST_TASKS = [
-    'jshint'
+  'jscs'
 ];
 
 var BUILD_TASKS = [
-    'jshint',
-    'package'
+  'jscs',
+  'package'
 ];
 
-gulp.task('jshint', function() {
+gulp.task('jscs', function () {
   return gulp.src(LINT_DIRS)
-      .pipe(jshint({ lookup: 'node_modules/mofo-style/linters/.jshintrc' }))
-      .pipe(jshint.reporter('default'));
+    .pipe(jscs())
+    .pipe(jscs.reporter());
 });
 
-gulp.task('package', function() {
+gulp.task('package', function () {
   return gulp.src('src/**/*.js')
+
     // This will output the non-minified version
     .pipe(gulp.dest(DEST))
+
     // This will minify and rename to foo.min.js
     .pipe(uglify())
     .pipe(rename({ extname: '.min.js' }))
