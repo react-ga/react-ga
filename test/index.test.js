@@ -582,7 +582,7 @@ describe('react-ga', function () {
 
        getGaCalls().should.eql([
          ['create', 'plugin', 'auto'],
-         ['require', 'ecommerce', {path: '/log', debug: true}]
+         ['require', 'localHitSender', {path: '/log', debug: true}]
        ]);
      });
    });

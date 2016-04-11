@@ -305,7 +305,6 @@ var reactGA = {
      * @param name {String} e.g. 'ecommerce' or 'myplugin'
      * @param options {Object} optional e.g {path: '/log', debug: true}
      */
-<<<<<<< HEAD
     require: function (name, options) {
       if (typeof ga === 'function') {
 
