@@ -13,11 +13,11 @@
 var _redacted = 'REDACTED (Potential Email Address)';
 var _debug = false;
 
-function warn (s) {
+function warn(s) {
   console.warn('[react-ga]', s);
 }
 
-function log (s) {
+function log(s) {
   console.info('[react-ga]', s);
 }
 
@@ -27,10 +27,11 @@ function trim(s) {
   return s.replace(/^\s+|\s+$/g, '');
 }
 
-function removeLeadingSlash (s) {
+function removeLeadingSlash(s) {
   if (s.substring(0, 1) === '/') {
     s = s.substring(1);
   }
+
   return s;
 }
 
@@ -39,15 +40,15 @@ function removeLeadingSlash (s) {
  * Copyright 2008-2013 David Gouch. Licensed under the MIT License.
  * https://github.com/gouch/to-title-case
  */
-function toTitleCase(s){
+function toTitleCase(s) {
   var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
   s = trim(s);
 
-  return s.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function(match, index, title){
+  return s.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function (match, index, title) {
     if (index > 0 &&
         index + match.length !== title.length &&
         match.search(smallWords) > -1 &&
-        title.charAt(index - 2) !== ":" &&
+        title.charAt(index - 2) !== ':' &&
         (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') &&
         title.charAt(index - 1).search(/[^\s-]/) < 0) {
       return match.toLowerCase();
@@ -70,16 +71,17 @@ function mightBeEmail(s) {
 
 function format(s) {
   if (mightBeEmail(s)) {
-    warn("This arg looks like an email address, redacting.");
+    warn('This arg looks like an email address, redacting.');
     s = _redacted;
     return s;
   }
+
   s = toTitleCase(s);
   return s;
 }
 
 var reactGA = {
-  initialize: function(gaTrackingID, options) {
+  initialize: function (gaTrackingID, options) {
     if (!gaTrackingID) {
       warn('gaTrackingID is required in initialize()');
       return;
@@ -92,20 +94,19 @@ var reactGA = {
     }
 
     // https://developers.google.com/analytics/devguides/collection/analyticsjs/
-    /* jshint ignore:start */
-    (function(i, s, o, g, r, a, m) {
+    // jscs:disable
+    (function (i, s, o, g, r, a, m) {
       i['GoogleAnalyticsObject'] = r;
-      i[r] = i[r] || function() {
-        (i[r].q = i[r].q || []).push(arguments)
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments);
       }, i[r].l = 1 * new Date();
       a = s.createElement(o),
           m = s.getElementsByTagName(o)[0];
       a.async = 1;
       a.src = g;
-      m.parentNode.insertBefore(a, m)
-    })(window, document, 'script',
-       '//www.google-analytics.com/analytics.js', 'ga');
-    /* jshint ignore:end */
+      m.parentNode.insertBefore(a, m);
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    // jscs:enable
 
     if (options && options.gaOptions) {
       ga('create', gaTrackingID, options.gaOptions);
@@ -120,7 +121,7 @@ var reactGA = {
    * GA tracker set method
    * @param {Object} fieldsObject - a field/value pair or a group of field/value pairs on the tracker
    */
-  set: function(fieldsObject) {
+  set: function (fieldsObject) {
     if (typeof ga === 'function') {
       if (!fieldsObject) {
         warn('`fieldsObject` is required in .set()');
@@ -224,9 +225,9 @@ var reactGA = {
 
       // Required Fields
       var fieldObject = {
-        'hitType': 'event',
-        'eventCategory': format(args.category),
-        'eventAction': format(args.action)
+        hitType: 'event',
+        eventCategory: format(args.category),
+        eventAction: format(args.action)
       };
 
       // Optional Fields
@@ -235,7 +236,7 @@ var reactGA = {
       }
 
       if (args.value) {
-        if(typeof args.value !== 'number') {
+        if (typeof args.value !== 'number') {
           warn('Expected `args.value` arg to be a Number.');
         } else {
           fieldObject.eventValue = args.value;
@@ -243,7 +244,7 @@ var reactGA = {
       }
 
       if (args.nonInteraction) {
-        if(typeof args.nonInteraction !== 'boolean') {
+        if (typeof args.nonInteraction !== 'boolean') {
           warn('`args.nonInteraction` must be a boolean.');
         } else {
           fieldObject.nonInteraction = args.nonInteraction;
@@ -271,7 +272,7 @@ var reactGA = {
 
       // Required Fields
       var fieldObject = {
-        'hitType': 'exception'
+        hitType: 'exception'
       };
 
       // Optional Fields
@@ -280,7 +281,7 @@ var reactGA = {
       }
 
       if (typeof args.fatal !== 'undefined') {
-        if(typeof args.fatal !== 'boolean') {
+        if (typeof args.fatal !== 'boolean') {
           warn('`args.fatal` must be a boolean.');
         } else {
           fieldObject.exFatal = args.fatal;
@@ -304,7 +305,8 @@ var reactGA = {
      * @param name {String} e.g. 'ecommerce' or 'myplugin'
      * @param options {Object} optional e.g {path: '/log', debug: true}
      */
-    require: function(name, options) {
+<<<<<<< HEAD
+    require: function (name, options) {
       if (typeof ga === 'function') {
 
         // Required Fields
@@ -354,7 +356,7 @@ var reactGA = {
      * @param action {String} e.g. 'addItem' or 'myCustomAction'
      * @param payload {Object} optional e.g { id: '1x5e', name : 'My product to track' }
      */
-    execute: function(pluginName, action, payload) {
+    execute: function (pluginName, action, payload) {
       if (typeof ga === 'function') {
         if (typeof pluginName !== 'string') {
           warn('Expected `pluginName` arg to be a String.');
@@ -403,10 +405,10 @@ var reactGA = {
 
       // Required Fields
       var fieldObject = {
-        'hitType': 'event',
-        'eventCategory': 'Outbound',
-        'eventAction': 'Click',
-        'eventLabel': format(args.label)
+        hitType: 'event',
+        eventCategory: 'Outbound',
+        eventAction: 'Click',
+        eventLabel: format(args.label)
       };
 
       var safetyCallbackCalled = false;
@@ -427,10 +429,10 @@ var reactGA = {
       var t = setTimeout(safetyCallback, 250);
 
       var clearableCallbackForGA = function () {
-          clearTimeout(t);
-          if (!safetyCallbackCalled) {
-            hitCallback();
-          }
+        clearTimeout(t);
+        if (!safetyCallbackCalled) {
+          hitCallback();
+        }
       };
 
       fieldObject.hitCallback = clearableCallbackForGA;

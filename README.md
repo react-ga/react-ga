@@ -109,21 +109,29 @@ Tracking in-page `event` interactions is key to understanding the use of any int
 ###### Examples
 
 ```js
-ga.event( { category: 'User',
-            action: 'Created an Account' } );
+ga.event({
+  category: 'User',
+  action: 'Created an Account'
+});
 
-ga.event( { category: 'Social',
-            action: 'Rated an App',
-            value: 3 } );
+ga.event({
+  category: 'Social',
+  action: 'Rated an App',
+  value: 3
+});
 
-ga.event( { category: 'Editing',
-            action: 'Deleted Component',
-            label: 'Game Widget' } );
+ga.event({
+  category: 'Editing',
+  action: 'Deleted Component',
+  label: 'Game Widget'
+});
 
-ga.event( { category: 'Promotion',
-            action: 'Displayed Promotional Widget',
-            label: 'Homepage Thing',
-            nonInteraction: true } );
+ga.event({
+  category: 'Promotion',
+  action: 'Displayed Promotional Widget',
+  label: 'Homepage Thing',
+  nonInteraction: true
+});
 ```
 
 |Value|Notes|
@@ -141,10 +149,11 @@ Tracking links out to external URLs (including id.webmaker.org for OAuth 2.0 log
 ###### Examples
 
 ```js
-ga.outboundLink( { label: 'Clicked Create an Account' },
-                    function () {
-                      console.log('redirect here');
-                    } );
+ga.outboundLink({
+  label: 'Clicked Create an Account'
+}, function () {
+  console.log('redirect here');
+});
 ```
 
 |Value|Notes|
@@ -159,7 +168,10 @@ ga.outboundLink( { label: 'Clicked Create an Account' },
 ###### Example
 
 ```js
-ga.exception( { description: 'An error ocurred', fatal: true } );
+ga.exception({
+  description: 'An error ocurred',
+  fatal: true
+});
 ```
 
 |Value|Notes|
