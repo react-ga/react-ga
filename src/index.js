@@ -87,11 +87,20 @@ var reactGA = {
       return;
     }
 
+    var gaUrl = '//www.google-analytics.com/analytics.js';
+
     if (options) {
       if (options.debug && options.debug === true) {
         _debug = true;
       }
+      
+      if (options.gaUrl)
+      {
+        gaUrl = options.gaUrl;
+      }
     }
+    
+    
 
     // https://developers.google.com/analytics/devguides/collection/analyticsjs/
     // jscs:disable
@@ -105,7 +114,7 @@ var reactGA = {
       a.async = 1;
       a.src = g;
       m.parentNode.insertBefore(a, m);
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    })(window, document, 'script', gaUrl, 'ga');
     // jscs:enable
 
     if (options && options.gaOptions) {
