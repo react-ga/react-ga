@@ -570,6 +570,16 @@ describe('react-ga', function() {
          ['ecommerce:send']
        ]);
      });
+
+     it('should require plugin: localHitSender', function() {
+       ga.initialize('plugin');
+       ga.plugin.require('localHitSender', {path: '/log', debug: true});
+
+       getGaCalls().should.eql([
+         ['create', 'plugin', 'auto'],
+         ['require', 'ecommerce', {path: '/log', debug: true}]
+       ]);
+     });
    });
 
 });
