@@ -26,6 +26,9 @@
     "url": "https://github.com/react-ga/react-ga/issues"
   },
   "homepage": "https://github.com/react-ga/react-ga",
+  "peerDependencies": {
+    "react": ">= 0.14.0"
+  },
   "dependencies": {
     "object-assign": "^4.0.1"
   },
@@ -37,7 +40,9 @@
     "jsdom": "^3.0.0",
     "mocha": "^2.2.1",
     "mocha-jsdom": "~1.0.0",
-    "react": "^15.0.0",
+    "react": "^15.0.1",
+    "react-addons-test-utils": "^15.0.1",
+    "react-dom": "^15.0.1",
     "should": "^5.2.0",
     "sinon": "^1.14.1"
   }
