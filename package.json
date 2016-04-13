@@ -26,7 +26,9 @@
     "url": "https://github.com/react-ga/react-ga/issues"
   },
   "homepage": "https://github.com/react-ga/react-ga",
-  "dependencies": {},
+  "dependencies": {
+    "object-assign": "^4.0.1"
+  },
   "devDependencies": {
     "gulp": "~3.8.11",
     "gulp-jscs": "^3.0.2",
