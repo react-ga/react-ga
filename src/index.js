@@ -310,13 +310,13 @@ var reactGA = {
 
         // Required Fields
         if (!name) {
-          warn('name is required in .require()');
+          warn('`name` is required in .require()');
           return;
         }
 
         name = trim(name);
-        if (path === '') {
-          warn('name cannot be an empty string in .require()');
+        if (name === '') {
+          warn('`name` cannot be an empty string in .require()');
           return;
         }
 
@@ -328,7 +328,7 @@ var reactGA = {
           }
 
           if (Object.keys(options).length === 0) {
-            warn('empty `options` given to .require()');
+            warn('Empty `options` given to .require()');
           }
 
           ga('require', name, options);
