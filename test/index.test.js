@@ -576,13 +576,13 @@ describe('react-ga', function () {
        ]);
      });
 
-     it('should require plugin: localHitSender', function() {
+     it('should require plugin: localHitSender', function () {
        ga.initialize('plugin');
-       ga.plugin.require('localHitSender', {path: '/log', debug: true});
+       ga.plugin.require('localHitSender', { path: '/log', debug: true });
 
        getGaCalls().should.eql([
          ['create', 'plugin', 'auto'],
-         ['require', 'localHitSender', {path: '/log', debug: true}]
+         ['require', 'localHitSender', { path: '/log', debug: true }]
        ]);
      });
    });

@@ -336,6 +336,7 @@ var reactGA = {
           if (_debug) {
             log('called ga(\'require\', \'' + name + '\', ' + JSON.stringify(options) + ');');
           }
+
           return;
         } else {
           ga('require', name);
@@ -343,6 +344,7 @@ var reactGA = {
           if (_debug) {
             log('called ga(\'require\', \'' + name + '\');');
           }
+          
           return;
         }
       }
