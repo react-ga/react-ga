@@ -344,7 +344,7 @@ var reactGA = {
           if (_debug) {
             log('called ga(\'require\', \'' + name + '\');');
           }
-          
+
           return;
         }
       }
