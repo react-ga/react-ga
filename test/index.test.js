@@ -576,7 +576,7 @@ describe('react-ga', function () {
        ]);
      });
 
-     it('should execute ec:setAction \'checkout\' with payload { \'step\': 1 }', function() {
+     it('should execute ec:setAction \'checkout\' with payload { \'step\': 1 }', function () {
        ga.initialize('plugin');
        ga.plugin.execute('ec', 'setAction', 'checkout', { step: 1 });
        getGaCalls().should.eql([

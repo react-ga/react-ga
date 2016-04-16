@@ -328,7 +328,8 @@ var reactGA = {
 
       var pluginName = args[0];
       var action = args[1];
-      var payload, actionType;
+      var payload;
+      var actionType;
 
       if (args.length === 3) {
         payload = args[2];
