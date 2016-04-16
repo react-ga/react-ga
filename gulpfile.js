@@ -4,10 +4,12 @@ var uglify = require('gulp-uglify');
 var jscs = require('gulp-jscs');
 
 var DEST = 'dist/';
+var SRC = 'src/**/*.js';
+var TEST = 'test/**/*.js';
 
 var LINT_DIRS = [
-  'src/**/*.js',
-  'test/**/*.js'
+  SRC,
+  TEST
 ];
 
 var TEST_TASKS = [
@@ -26,8 +28,7 @@ gulp.task('jscs', function () {
 });
 
 gulp.task('package', function () {
-  return gulp.src('src/**/*.js')
-
+  return gulp.src(SRC)
     // This will output the non-minified version
     .pipe(gulp.dest(DEST))
 

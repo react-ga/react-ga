@@ -4,7 +4,7 @@
   "description": "React Google Analytics Module.",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha test/*.test.js && mocha test/components/*.test.js && gulp test",
+    "test": "mocha test/*.test.js && mocha test/**/*.test.js && gulp test",
     "build": "gulp build"
   },
   "repository": {
