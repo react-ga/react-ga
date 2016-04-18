@@ -1,8 +1,9 @@
 var should = require('should');
 var sinon = require('sinon');
-var React = require('react/addons');
+var React = require('react');
+var findDOMNode = require('react-dom').findDOMNode;
+var TestUtils = require('react-addons-test-utils');
 var jsdom = require('mocha-jsdom');
-var TestUtils = React.addons.TestUtils;
 
 var OutboundLink = require('../../src/components/OutboundLink');
 
@@ -37,7 +38,7 @@ describe('<OutboundLink> React component', function () {
       eventLabel: ''
     }));
     anchor = TestUtils.findRenderedDOMComponentWithTag(renderedOutboundLink, 'a');
-    anchor.getDOMNode().href.should.equal(destinationUrl);
+    findDOMNode(anchor).href.should.equal(destinationUrl);
   });
 
   it('should raise warning if ga module is not available', function () {

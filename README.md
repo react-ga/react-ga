@@ -1,9 +1,9 @@
 # react-ga
 ### React Google Analytics Module
 
-[![Build Status](https://travis-ci.org/mozilla/react-ga.svg?branch=master)](https://travis-ci.org/mozilla/react-ga)
+[![Build Status](https://travis-ci.org/react-ga/react-ga.svg?branch=master)](https://travis-ci.org/react-ga/react-ga)
 
-This is a JavaScript module that can be used to include Google Analytics tracking code in a website or app that uses [React](http://facebook.github.io/react/) for its front-end codebase. It does not currently use any React code internally, but has been written for use with a number of Mozilla Foundation websites that are using React, as a way to standardize our GA Instrumentation across projects.
+This is a JavaScript module that can be used to include Google Analytics tracking code in a website or app that uses [React](https://facebook.github.io/react/) for its front-end codebase. It does not currently use any React code internally, but has been written for use with a number of Mozilla Foundation websites that are using React, as a way to standardize our GA Instrumentation across projects.
 
 It is designed to work with the latest version of Google Analytics, [Universal Analytics](https://support.google.com/analytics/answer/2790010). At this point, all Google Analytics projects are being upgraded to Universal Analytics, so this module will not support the older `ga.js` implementation.
 
@@ -195,7 +195,7 @@ ga.plugin.require('localHitSender', {path: '/log', debug: true});
 |options|`Object`. Optional. An initialization object that will be passed to the plugin constructor upon instantiation.|
 
 
-#### ga.plugin.execute(pluginName, action, payload)
+#### ga.plugin.execute(pluginName, action, [actionType], [payload])
 
 Execute the `action` for the `pluginName` with the payload.
 
@@ -207,6 +207,18 @@ ga.plugin.execute('ecommerce', 'addTransaction', {
   revenue: '3.50'
 });
 ```
+
+You can use this function with four arguments to pass `actionType` and `payload` along with executed action
+
+#### Example
+
+```js
+ga.plugin.execute('ec', 'setAction', 'purchase', {
+  id: 'jd38je31j',
+  revenue: '3.50'
+});
+```
+
 ---
 
 ## Development

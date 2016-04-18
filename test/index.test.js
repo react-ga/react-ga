@@ -1,7 +1,7 @@
 var should = require('should');
 var sinon = require('sinon');
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var TestUtils = require('react-addons-test-utils');
 
 var ga = require('../src/index');
 
@@ -567,22 +567,12 @@ describe('react-ga', function () {
        ]);
      });
 
-     it('should execute ecommerce:send', function () {
+     it('should execute ec:setAction \'checkout\' with payload { \'step\': 1 }', function () {
        ga.initialize('plugin');
-       ga.plugin.execute('ecommerce', 'send');
+       ga.plugin.execute('ec', 'setAction', 'checkout', { step: 1 });
        getGaCalls().should.eql([
          ['create', 'plugin', 'auto'],
-         ['ecommerce:send']
-       ]);
-     });
-
-     it('should require plugin: localHitSender', function () {
-       ga.initialize('plugin');
-       ga.plugin.require('localHitSender', { path: '/log', debug: true });
-
-       getGaCalls().should.eql([
-         ['create', 'plugin', 'auto'],
-         ['require', 'localHitSender', { path: '/log', debug: true }]
+         ['ec:setAction', 'checkout', { step: 1 }]
        ]);
      });
    });

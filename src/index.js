@@ -105,7 +105,7 @@ var reactGA = {
       a.async = 1;
       a.src = g;
       m.parentNode.insertBefore(a, m);
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
     // jscs:enable
 
     if (options && options.gaOptions) {
@@ -353,11 +353,27 @@ var reactGA = {
     /**
      * execute:
      * GA execute action for plugin
+     * Takes variable number of arguments
      * @param pluginName {String} e.g. 'ecommerce' or 'myplugin'
      * @param action {String} e.g. 'addItem' or 'myCustomAction'
+     * @param actionType {String} optional e.g. 'detail'
      * @param payload {Object} optional e.g { id: '1x5e', name : 'My product to track' }
      */
-    execute: function (pluginName, action, payload) {
+    execute: function () {
+      var args = Array.prototype.slice.call(arguments);
+
+      var pluginName = args[0];
+      var action = args[1];
+      var payload;
+      var actionType;
+
+      if (args.length === 3) {
+        payload = args[2];
+      } else {
+        actionType = args[2];
+        payload = args[3];
+      }
+
       if (typeof ga === 'function') {
         if (typeof pluginName !== 'string') {
           warn('Expected `pluginName` arg to be a String.');
@@ -366,7 +382,13 @@ var reactGA = {
         } else {
           var command = pluginName + ':' + action;
           payload = payload || null;
-          if (payload) {
+          if (actionType && payload) {
+            ga(command, actionType, payload);
+            if (_debug) {
+              log('called ga(\'' + command + '\');');
+              log('actionType: "' + actionType + '" with payload: ' + JSON.stringify(payload));
+            }
+          } else if (payload) {
             ga(command, payload);
             if (_debug) {
               log('called ga(\'' + command + '\');');
