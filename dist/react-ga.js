@@ -105,6 +105,11 @@ var warn = require('./utils/console/warn');
 var log = require('./utils/console/log');
 
 var _debug = false;
+var _titleCase = true;
+
+var _format = function (s) {
+  return format(s, _titleCase);
+};
 
 var ReactGA = {
   initialize: function (gaTrackingID, options) {
@@ -116,6 +121,10 @@ var ReactGA = {
     if (options) {
       if (options.debug && options.debug === true) {
         _debug = true;
+      }
+
+      if (options.titleCase === false) {
+        _titleCase = false;
       }
     }
 
@@ -252,13 +261,13 @@ var ReactGA = {
       // Required Fields
       var fieldObject = {
         hitType: 'event',
-        eventCategory: format(args.category),
-        eventAction: format(args.action)
+        eventCategory: _format(args.category),
+        eventAction: _format(args.action)
       };
 
       // Optional Fields
       if (args.label) {
-        fieldObject.eventLabel = format(args.label);
+        fieldObject.eventLabel = _format(args.label);
       }
 
       if (args.value) {
@@ -303,7 +312,7 @@ var ReactGA = {
 
       // Optional Fields
       if (args.description) {
-        fieldObject.exDescription = format(args.description);
+        fieldObject.exDescription = _format(args.description);
       }
 
       if (typeof args.fatal !== 'undefined') {
@@ -457,7 +466,7 @@ var ReactGA = {
         hitType: 'event',
         eventCategory: 'Outbound',
         eventAction: 'Click',
-        eventLabel: format(args.label)
+        eventLabel: _format(args.label)
       };
 
       var safetyCallbackCalled = false;
@@ -529,14 +538,16 @@ var warn = require('./console/warn');
 
 var _redacted = 'REDACTED (Potential Email Address)';
 
-function format(s) {
+function format(s, titleCase) {
   if (mightBeEmail(s)) {
     warn('This arg looks like an email address, redacting.');
-    s = _redacted;
-    return s;
+    return _redacted;
   }
 
-  s = toTitleCase(s);
+  if (titleCase) {
+    return toTitleCase(s);
+  }
+
   return s;
 }
 
