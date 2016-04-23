@@ -28,11 +28,11 @@ var routes = require('./routes');
 
 ...
 var ga = require('react-ga');
-ga.initialize(process.env.GA_TRACKING_ID);
+ga.initialize('UA-000000-01');
 ...
 
 function logPageView() {
-  ga.pageview(this.state.location.pathname);
+  ga.pageview(window.location.pathname);
 }
 
 var app = document.getElementById('app');
