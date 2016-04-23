@@ -184,7 +184,7 @@ ga.exception({
 
 Require GA plugins.
 
-##### Example
+###### Example
 ```js
 ga.plugin.require('localHitSender', {path: '/log', debug: true});
 ```
@@ -199,7 +199,7 @@ ga.plugin.require('localHitSender', {path: '/log', debug: true});
 
 Execute the `action` for the `pluginName` with the payload.
 
-#### Example
+###### Example
 
 ```js
 ga.plugin.execute('ecommerce', 'addTransaction', {
@@ -210,7 +210,7 @@ ga.plugin.execute('ecommerce', 'addTransaction', {
 
 You can use this function with four arguments to pass `actionType` and `payload` along with executed action
 
-#### Example
+###### Example
 
 ```js
 ga.plugin.execute('ec', 'setAction', 'purchase', {
