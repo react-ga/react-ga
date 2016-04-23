@@ -283,7 +283,6 @@ describe('react-ga', function () {
    */
 
   describe('event()', function () {
-
     it('should record an event', function () {
       ga.initialize('foo');
       ga.event({ category: 'Test', action: 'Send Test' });
@@ -405,12 +404,9 @@ describe('react-ga', function () {
    */
 
   describe('outboundLink()', function () {
-
     it('should record an outboundLink event', function (done) {
-
       ga.initialize('foo');
       ga.outboundLink({ label: 'Test Click' }, function () {
-
         // we need a reference to the function to compare in the
         // getGaCalls() test below
         var functionCalledBack = getGaCalls()[1][1].hitCallback;
@@ -470,7 +466,6 @@ describe('react-ga', function () {
     });
 
     it('should fire hitCallback if ga is available and responds in under 250ms', function (done) {
-
       // use fake timers to simulate response time from GA
       this.clock = sinon.useFakeTimers();
 
@@ -487,8 +482,7 @@ describe('react-ga', function () {
       this.clock.restore();
     });
 
-    it('should not fire hitCallback twice if ga responds after 250mss', function (done) {
-
+    it('should not fire hitCallback twice if ga responds after 250ms', function (done) {
       // use fake timers to simulate response time from GA
       this.clock = sinon.useFakeTimers();
 
@@ -518,9 +512,7 @@ describe('react-ga', function () {
         should.fail('no response ' + simulatedResponseTime + ' ms', 'response after 250 ms',
                     'message', 'operator');
       }, simulatedResponseTime);
-
     });
-
   });
 
   /**
@@ -528,7 +520,6 @@ describe('react-ga', function () {
    */
 
   describe('OutboundLink()', function () {
-
     it('should create a React component <OutboundLink>', function () {
       ga.initialize();
 
@@ -544,37 +535,65 @@ describe('react-ga', function () {
    */
 
   describe('Plugin', function () {
-     it('should require the plugin: ecommerce', function () {
-       ga.initialize('plugin');
-       ga.plugin.require('ecommerce');
 
-       getGaCalls().should.eql([
-         ['create', 'plugin', 'auto'],
-         ['require', 'ecommerce']
-       ]);
-     });
+    it('should require the plugin: ecommerce', function () {
+      ga.initialize('plugin');
+      ga.plugin.require('ecommerce');
 
-     it('should execute ecommerce:addItem', function () {
-       ga.initialize('plugin');
-       ga.plugin.execute('ecommerce', 'addItem', {
-         id: 1,
-         name: 'Product'
-       });
+      getGaCalls().should.eql([
+        ['create', 'plugin', 'auto'],
+        ['require', 'ecommerce']
+      ]);
+    });
 
-       getGaCalls().should.eql([
-         ['create', 'plugin', 'auto'],
-         ['ecommerce:addItem', { id: 1, name: 'Product' }]
-       ]);
-     });
+    it('should execute ecommerce:addItem', function () {
+      ga.initialize('plugin');
+      ga.plugin.execute('ecommerce', 'addItem', { id: 1, name: 'Product' });
 
-     it('should execute ec:setAction \'checkout\' with payload { \'step\': 1 }', function () {
-       ga.initialize('plugin');
-       ga.plugin.execute('ec', 'setAction', 'checkout', { step: 1 });
-       getGaCalls().should.eql([
-         ['create', 'plugin', 'auto'],
-         ['ec:setAction', 'checkout', { step: 1 }]
-       ]);
-     });
-   });
+      getGaCalls().should.eql([
+        ['create', 'plugin', 'auto'],
+        ['ecommerce:addItem', { id: 1, name: 'Product' }]
+      ]);
+    });
 
+    it('should execute ec:setAction \'checkout\' with payload { \'step\': 1 }', function () {
+      ga.initialize('plugin');
+      ga.plugin.execute('ec', 'setAction', 'checkout', { step: 1 });
+      getGaCalls().should.eql([
+        ['create', 'plugin', 'auto'],
+        ['ec:setAction', 'checkout', { step: 1 }]
+      ]);
+    });
+
+    it('should execute ecommerce:addItem', function () {
+      ga.initialize('plugin');
+      ga.plugin.execute('ecommerce', 'addItem', {
+        id: 1,
+        name: 'Product'
+      });
+
+      getGaCalls().should.eql([
+        ['create', 'plugin', 'auto'],
+        ['ecommerce:addItem', { id: 1, name: 'Product' }]
+      ]);
+    });
+
+    it('should execute ecommerce:send', function () {
+      ga.initialize('plugin');
+      ga.plugin.execute('ecommerce', 'send');
+      getGaCalls().should.eql([
+        ['create', 'plugin', 'auto'],
+        ['ecommerce:send']
+      ]);
+    });
+
+    it('should execute ec:setAction \'checkout\' with payload { \'step\': 1 }', function () {
+      ga.initialize('plugin');
+      ga.plugin.execute('ec', 'setAction', 'checkout', { step: 1 });
+      getGaCalls().should.eql([
+        ['create', 'plugin', 'auto'],
+        ['ec:setAction', 'checkout', { step: 1 }]
+      ]);
+    });
+  });
 });

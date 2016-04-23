@@ -1,3 +1,91 @@
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.ReactGA = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/* eslint-disable no-unused-vars */
+'use strict';
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+module.exports = Object.assign || function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (Object.getOwnPropertySymbols) {
+			symbols = Object.getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
+};
+
+},{}],2:[function(require,module,exports){
+(function (global){
+var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
+var assign = require('object-assign');
+
+var NEWTAB = '_blank';
+
+var OutboundLink = React.createClass({
+  displayName: 'OutboundLink',
+  propTypes: {
+    eventLabel: React.PropTypes.string.isRequired
+  },
+  statics: {
+    trackLink: function () {
+      console.warn('ga tracking not enabled');
+    }
+  },
+  handleClick: function (e) {
+    e.preventDefault();
+    var props = this.props;
+    var eventMeta = { label: props.eventLabel };
+    OutboundLink.trackLink(eventMeta, function () {
+      if (props.target === NEWTAB) {
+        window.open(props.to, NEWTAB);
+      } else {
+        window.location.href = props.to;
+      }
+    });
+
+    if (props.onClick) {
+      props.onClick(e);
+    }
+  },
+
+  render: function () {
+    var props = assign({}, this.props, {
+      href: this.props.to,
+      onClick: this.handleClick
+    });
+    return React.createElement('a', props);
+  }
+});
+
+module.exports = OutboundLink;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"object-assign":1}],3:[function(require,module,exports){
 /**
  * React Google Analytics Module
  *
@@ -9,78 +97,16 @@
 /**
  * Utilities
  */
+var format = require('./utils/format');
+var removeLeadingSlash = require('./utils/removeLeadingSlash');
+var trim = require('./utils/trim');
 
-var _redacted = 'REDACTED (Potential Email Address)';
+var warn = require('./utils/console/warn');
+var log = require('./utils/console/log');
+
 var _debug = false;
 
-function warn(s) {
-  console.warn('[react-ga]', s);
-}
-
-function log(s) {
-  console.info('[react-ga]', s);
-}
-
-// GA strings need to have leading/trailing whitespace trimmed, and not all
-// browsers have String.prototoype.trim().
-function trim(s) {
-  return s.replace(/^\s+|\s+$/g, '');
-}
-
-function removeLeadingSlash(s) {
-  if (s.substring(0, 1) === '/') {
-    s = s.substring(1);
-  }
-
-  return s;
-}
-
-/**
- * To Title Case 2.1 - http://individed.com/code/to-title-case/
- * Copyright 2008-2013 David Gouch. Licensed under the MIT License.
- * https://github.com/gouch/to-title-case
- */
-function toTitleCase(s) {
-  var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
-  s = trim(s);
-
-  return s.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function (match, index, title) {
-    if (index > 0 &&
-        index + match.length !== title.length &&
-        match.search(smallWords) > -1 &&
-        title.charAt(index - 2) !== ':' &&
-        (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') &&
-        title.charAt(index - 1).search(/[^\s-]/) < 0) {
-      return match.toLowerCase();
-    }
-
-    if (match.substr(1).search(/[A-Z]|\../) > -1) {
-      return match;
-    }
-
-    return match.charAt(0).toUpperCase() + match.substr(1);
-  });
-}
-
-// See if s could be an email address. We don't want to send personal data like email.
-// https://support.google.com/analytics/answer/2795983?hl=en
-function mightBeEmail(s) {
-  // There's no point trying to validate rfc822 fully, just look for ...@...
-  return (/[^@]+@[^@]+/).test(s);
-}
-
-function format(s) {
-  if (mightBeEmail(s)) {
-    warn('This arg looks like an email address, redacting.');
-    s = _redacted;
-    return s;
-  }
-
-  s = toTitleCase(s);
-  return s;
-}
-
-var reactGA = {
+var ReactGA = {
   initialize: function (gaTrackingID, options) {
     if (!gaTrackingID) {
       warn('gaTrackingID is required in initialize()');
@@ -105,7 +131,7 @@ var reactGA = {
       a.async = 1;
       a.src = g;
       m.parentNode.insertBefore(a, m);
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
     // jscs:enable
 
     if (options && options.gaOptions) {
@@ -303,25 +329,77 @@ var reactGA = {
      * require:
      * GA requires a plugin
      * @param name {String} e.g. 'ecommerce' or 'myplugin'
+     * @param options {Object} optional e.g {path: '/log', debug: true}
      */
-    require: function (name) {
+    require: function (name, options) {
       if (typeof ga === 'function') {
-        ga('require', name);
-      }
 
-      if (_debug) {
-        log('called ga(\'require\', \'' + name + '\');');
+        // Required Fields
+        if (!name) {
+          warn('`name` is required in .require()');
+          return;
+        }
+
+        name = trim(name);
+        if (name === '') {
+          warn('`name` cannot be an empty string in .require()');
+          return;
+        }
+
+        // Optional Fields
+        if (options) {
+          if (typeof options !== 'object') {
+            warn('Expected `options` arg to be an Object');
+            return;
+          }
+
+          if (Object.keys(options).length === 0) {
+            warn('Empty `options` given to .require()');
+          }
+
+          ga('require', name, options);
+
+          if (_debug) {
+            log('called ga(\'require\', \'' + name + '\', ' + JSON.stringify(options) + ');');
+          }
+
+          return;
+        } else {
+          ga('require', name);
+
+          if (_debug) {
+            log('called ga(\'require\', \'' + name + '\');');
+          }
+
+          return;
+        }
       }
     },
 
     /**
      * execute:
      * GA execute action for plugin
+     * Takes variable number of arguments
      * @param pluginName {String} e.g. 'ecommerce' or 'myplugin'
      * @param action {String} e.g. 'addItem' or 'myCustomAction'
+     * @param actionType {String} optional e.g. 'detail'
      * @param payload {Object} optional e.g { id: '1x5e', name : 'My product to track' }
      */
-    execute: function (pluginName, action, payload) {
+    execute: function () {
+      var args = Array.prototype.slice.call(arguments);
+
+      var pluginName = args[0];
+      var action = args[1];
+      var payload;
+      var actionType;
+
+      if (args.length === 3) {
+        payload = args[2];
+      } else {
+        actionType = args[2];
+        payload = args[3];
+      }
+
       if (typeof ga === 'function') {
         if (typeof pluginName !== 'string') {
           warn('Expected `pluginName` arg to be a String.');
@@ -330,7 +408,13 @@ var reactGA = {
         } else {
           var command = pluginName + ':' + action;
           payload = payload || null;
-          if (payload) {
+          if (actionType && payload) {
+            ga(command, actionType, payload);
+            if (_debug) {
+              log('called ga(\'' + command + '\');');
+              log('actionType: "' + actionType + '" with payload: ' + JSON.stringify(payload));
+            }
+          } else if (payload) {
             ga(command, payload);
             if (_debug) {
               log('called ga(\'' + command + '\');');
@@ -418,7 +502,109 @@ var reactGA = {
 };
 
 var OutboundLink = require('./components/OutboundLink');
-OutboundLink.trackLink = reactGA.outboundLink;
-reactGA.OutboundLink = OutboundLink;
+OutboundLink.origTrackLink = OutboundLink.trackLink;
+OutboundLink.trackLink = ReactGA.outboundLink;
+ReactGA.OutboundLink = OutboundLink;
 
-module.exports = reactGA;
+module.exports = ReactGA;
+
+},{"./components/OutboundLink":2,"./utils/console/log":4,"./utils/console/warn":5,"./utils/format":6,"./utils/removeLeadingSlash":8,"./utils/trim":10}],4:[function(require,module,exports){
+function log(s) {
+  console.info('[react-ga]', s);
+}
+
+module.exports = log;
+
+},{}],5:[function(require,module,exports){
+function warn(s) {
+  console.warn('[react-ga]', s);
+}
+
+module.exports = warn;
+
+},{}],6:[function(require,module,exports){
+var mightBeEmail = require('./mightBeEmail');
+var toTitleCase = require('./toTitleCase');
+var warn = require('./console/warn');
+
+var _redacted = 'REDACTED (Potential Email Address)';
+
+function format(s) {
+  if (mightBeEmail(s)) {
+    warn('This arg looks like an email address, redacting.');
+    s = _redacted;
+    return s;
+  }
+
+  s = toTitleCase(s);
+  return s;
+}
+
+module.exports = format;
+
+},{"./console/warn":5,"./mightBeEmail":7,"./toTitleCase":9}],7:[function(require,module,exports){
+// See if s could be an email address. We don't want to send personal data like email.
+// https://support.google.com/analytics/answer/2795983?hl=en
+function mightBeEmail(s) {
+  // There's no point trying to validate rfc822 fully, just look for ...@...
+  return (/[^@]+@[^@]+/).test(s);
+}
+
+module.exports = mightBeEmail;
+
+},{}],8:[function(require,module,exports){
+function removeLeadingSlash(s) {
+  if (s.substring(0, 1) === '/') {
+    s = s.substring(1);
+  }
+
+  return s;
+}
+
+module.exports = removeLeadingSlash;
+
+},{}],9:[function(require,module,exports){
+/**
+ * To Title Case 2.1 - http://individed.com/code/to-title-case/
+ * Copyright 2008-2013 David Gouch. Licensed under the MIT License.
+ * https://github.com/gouch/to-title-case
+ */
+
+var trim = require('./trim');
+
+function toTitleCase(s) {
+  var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
+  s = trim(s);
+
+  return s.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function (match, index, title) {
+    if (index > 0 &&
+        index + match.length !== title.length &&
+        match.search(smallWords) > -1 &&
+        title.charAt(index - 2) !== ':' &&
+        (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') &&
+        title.charAt(index - 1).search(/[^\s-]/) < 0) {
+      return match.toLowerCase();
+    }
+
+    if (match.substr(1).search(/[A-Z]|\../) > -1) {
+      return match;
+    }
+
+    return match.charAt(0).toUpperCase() + match.substr(1);
+  });
+}
+
+module.exports = toTitleCase;
+
+},{"./trim":10}],10:[function(require,module,exports){
+// GA strings need to have leading/trailing whitespace trimmed, and not all
+// browsers have String.prototoype.trim().
+
+function trim(s) {
+  return s.replace(/^\s+|\s+$/g, '');
+}
+
+module.exports = trim;
+
+},{}]},{},[3])(3)
+});

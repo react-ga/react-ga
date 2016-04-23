@@ -45,7 +45,14 @@ describe('<OutboundLink> React component', function () {
     sinon.stub(console, 'warn');
     var OutboundLinkComponent = React.createElement(OutboundLink, { eventLabel: '' });
     console.warn.callCount.should.equal(0);
-    OutboundLinkComponent.type.trackLink();
+    if (OutboundLink.origTrackLink) {
+      // OutboundLink.trackLink has already been replaced in react-ga
+      OutboundLinkComponent.type.trackLink = OutboundLink.origTrackLink;
+    }
+
+    OutboundLinkComponent.type.trackLink({}, function () {
+    });
+
     console.warn.callCount.should.equal(1);
     console.warn.getCall(0).args.should.eql([
       'ga tracking not enabled'
@@ -58,6 +65,9 @@ describe('<OutboundLink> React component', function () {
     var OutboundLinkComponent = React.createElement(OutboundLink, { eventLabel: '' });
     console.warn.callCount.should.equal(0);
     OutboundLinkComponent.type.trackLink = require('../../src/index').outboundLink;
+    OutboundLinkComponent.type.trackLink({}, function () {
+    });
+
     console.warn.callCount.should.equal(0);
     console.warn.restore();
   });

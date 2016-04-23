@@ -9,78 +9,16 @@
 /**
  * Utilities
  */
+var format = require('./utils/format');
+var removeLeadingSlash = require('./utils/removeLeadingSlash');
+var trim = require('./utils/trim');
 
-var _redacted = 'REDACTED (Potential Email Address)';
+var warn = require('./utils/console/warn');
+var log = require('./utils/console/log');
+
 var _debug = false;
 
-function warn(s) {
-  console.warn('[react-ga]', s);
-}
-
-function log(s) {
-  console.info('[react-ga]', s);
-}
-
-// GA strings need to have leading/trailing whitespace trimmed, and not all
-// browsers have String.prototoype.trim().
-function trim(s) {
-  return s.replace(/^\s+|\s+$/g, '');
-}
-
-function removeLeadingSlash(s) {
-  if (s.substring(0, 1) === '/') {
-    s = s.substring(1);
-  }
-
-  return s;
-}
-
-/**
- * To Title Case 2.1 - http://individed.com/code/to-title-case/
- * Copyright 2008-2013 David Gouch. Licensed under the MIT License.
- * https://github.com/gouch/to-title-case
- */
-function toTitleCase(s) {
-  var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
-  s = trim(s);
-
-  return s.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function (match, index, title) {
-    if (index > 0 &&
-        index + match.length !== title.length &&
-        match.search(smallWords) > -1 &&
-        title.charAt(index - 2) !== ':' &&
-        (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') &&
-        title.charAt(index - 1).search(/[^\s-]/) < 0) {
-      return match.toLowerCase();
-    }
-
-    if (match.substr(1).search(/[A-Z]|\../) > -1) {
-      return match;
-    }
-
-    return match.charAt(0).toUpperCase() + match.substr(1);
-  });
-}
-
-// See if s could be an email address. We don't want to send personal data like email.
-// https://support.google.com/analytics/answer/2795983?hl=en
-function mightBeEmail(s) {
-  // There's no point trying to validate rfc822 fully, just look for ...@...
-  return (/[^@]+@[^@]+/).test(s);
-}
-
-function format(s) {
-  if (mightBeEmail(s)) {
-    warn('This arg looks like an email address, redacting.');
-    s = _redacted;
-    return s;
-  }
-
-  s = toTitleCase(s);
-  return s;
-}
-
-var reactGA = {
+var ReactGA = {
   initialize: function (gaTrackingID, options) {
     if (!gaTrackingID) {
       warn('gaTrackingID is required in initialize()');
@@ -476,7 +414,8 @@ var reactGA = {
 };
 
 var OutboundLink = require('./components/OutboundLink');
-OutboundLink.trackLink = reactGA.outboundLink;
-reactGA.OutboundLink = OutboundLink;
+OutboundLink.origTrackLink = OutboundLink.trackLink;
+OutboundLink.trackLink = ReactGA.outboundLink;
+ReactGA.OutboundLink = OutboundLink;
 
-module.exports = reactGA;
+module.exports = ReactGA;
