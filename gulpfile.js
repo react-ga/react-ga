@@ -1,11 +1,17 @@
 var gulp = require('gulp');
 var rename = require('gulp-rename');
+var source = require('vinyl-source-stream');
+var streamify = require('gulp-streamify');
 var uglify = require('gulp-uglify');
 var jscs = require('gulp-jscs');
+var del = require('del');
+var browserify = require('browserify');
+var shim = require('browserify-shim');
 
 var DEST = 'dist/';
 var SRC = 'src/**/*.js';
 var TEST = 'test/**/*.js';
+var PKG = 'react-ga';
 
 var LINT_DIRS = [
   SRC,
@@ -18,6 +24,7 @@ var TEST_TASKS = [
 
 var BUILD_TASKS = [
   'jscs',
+  'clean',
   'package'
 ];
 
@@ -27,15 +34,21 @@ gulp.task('jscs', function () {
     .pipe(jscs.reporter());
 });
 
-gulp.task('package', function () {
-  return gulp.src(SRC)
-    // This will output the non-minified version
-    .pipe(gulp.dest(DEST))
+gulp.task('clean', function () {
+  return del([DEST]);
+});
 
-    // This will minify and rename to foo.min.js
-    .pipe(uglify())
-    .pipe(rename({ extname: '.min.js' }))
-    .pipe(gulp.dest(DEST));
+gulp.task('package', function () {
+    return browserify('./src/index.js', {
+              standalone: 'ReactGA'
+            })
+            .transform(shim)
+            .bundle()
+            .pipe(source(PKG + '.js'))
+            .pipe(gulp.dest(DEST))
+            .pipe(rename(PKG + '.min.js'))
+            .pipe(streamify(uglify()))
+            .pipe(gulp.dest(DEST));
 });
 
 gulp.task('test', TEST_TASKS);

@@ -18,7 +18,7 @@ var log = require('./utils/console/log');
 
 var _debug = false;
 
-var reactGA = {
+var ReactGA = {
   initialize: function (gaTrackingID, options) {
     if (!gaTrackingID) {
       warn('gaTrackingID is required in initialize()');
@@ -415,7 +415,7 @@ var reactGA = {
 
 var OutboundLink = require('./components/OutboundLink');
 OutboundLink.origTrackLink = OutboundLink.trackLink;
-OutboundLink.trackLink = reactGA.outboundLink;
-reactGA.OutboundLink = OutboundLink;
+OutboundLink.trackLink = ReactGA.outboundLink;
+ReactGA.OutboundLink = OutboundLink;
 
-module.exports = reactGA;
+module.exports = ReactGA;
