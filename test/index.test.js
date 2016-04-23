@@ -75,8 +75,7 @@ describe('react-ga', function () {
   describe('set()', function () {
 
     it('should output debug info, if debug is on', function () {
-      var options = { debug: true };
-      ga.initialize('foo', options);
+      ga.initialize('foo', { debug: true });
       ga.set({ userId: 123 });
       console.info.args.should.eql([
         ['[react-ga]', "called ga('set', fieldsObject);"],
@@ -289,6 +288,28 @@ describe('react-ga', function () {
       getGaCalls().should.eql([['create', 'foo', 'auto'],
                                 ['send', { eventAction: 'Send Test',
                                             eventCategory: 'Test',
+                                            hitType: 'event'
+                                          }]
+                                ]);
+    });
+
+    it('should record an event with strings converted to titleCase', function () {
+      ga.initialize('foo');
+      ga.event({ category: 'test', action: 'send test' });
+      getGaCalls().should.eql([['create', 'foo', 'auto'],
+                                ['send', { eventAction: 'Send Test',
+                                            eventCategory: 'Test',
+                                            hitType: 'event'
+                                          }]
+                                ]);
+    });
+
+    it('should not convert strings to titleCase if the flag is false', function () {
+      ga.initialize('foo', { titleCase: false });
+      ga.event({ category: 'test', action: 'send test' });
+      getGaCalls().should.eql([['create', 'foo', 'auto'],
+                                ['send', { eventAction: 'send test',
+                                            eventCategory: 'test',
                                             hitType: 'event'
                                           }]
                                 ]);

@@ -4,14 +4,16 @@ var warn = require('./console/warn');
 
 var _redacted = 'REDACTED (Potential Email Address)';
 
-function format(s) {
+function format(s, titleCase) {
   if (mightBeEmail(s)) {
     warn('This arg looks like an email address, redacting.');
-    s = _redacted;
-    return s;
+    return _redacted;
   }
 
-  s = toTitleCase(s);
+  if (titleCase) {
+    return toTitleCase(s);
+  }
+
   return s;
 }
 
