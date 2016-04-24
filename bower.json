@@ -1,0 +1,28 @@
+{
+  "name": "react-ga",
+  "version": "1.4.0",
+  "homepage": "https://github.com/react-ga/react-ga",
+  "authors": [
+    "Tay Yang Shun <tay.yang.shun@gmail.com>"
+  ],
+  "description": "React Google Analytics module",
+  "main": "dist/react-ga.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "react",
+    "google",
+    "analytics"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
