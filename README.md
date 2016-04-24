@@ -23,11 +23,14 @@ With [bower](http://bower.io/):
 bower install react-ga --save
 ```
 
-Note that you will need [React](https://github.com/facebook/react) >= 0.14.0 to use the `<OutboundLink>` component.
+Note that [React](https://github.com/facebook/react) >= 0.14.0 is needed in order to use the `<OutboundLink>` component.
 
-## Use
+## Usage
 
-### Initializing GA and Tracking Pageviews with `react-router`
+
+### With npm
+
+Initializing GA and Tracking Pageviews with `react-router`:
 
 ```js
 var React = require('react');
@@ -49,6 +52,23 @@ ReactDOM.render(<Router routes={routes} onUpdate={logPageView} />, app);
 
 ```
 
+### With bower
+
+When included as a script tag, a variable `ReactGA` is exposed in the global scope.
+
+```js
+
+<!-- The core React library -->
+<script src="https://fb.me/react-15.0.1.js"></script>
+<!-- The ReactDOM Library -->
+<script src="https://fb.me/react-dom-15.0.1.js"></script>
+<!-- The core React library -->
+<script src="/path/to/bower_components/react-ga/dist/react-ga.js"></script>
+
+<script>
+  ReactGA.initialize('UA-000000-01', { debug: true });
+</script>
+```
 
 ### API
 
@@ -159,9 +179,9 @@ ga.event({
 
 #### ga.outboundLink(args, hitCallback)
 
-Tracking links out to external URLs (including id.webmaker.org for OAuth 2.0 login flow).
+Tracking links out to external URLs (including id.webmaker.org for OAuth 2.0 login flow). A non-programmatic approach is found in the next section, by using an `<OutboundLink>` component.
 
-###### Examples
+###### Example
 
 ```js
 ga.outboundLink({
@@ -175,6 +195,38 @@ ga.outboundLink({
 |------|-----|
 |args.label|`String`. Required. Description of where the outbound link points to. Either as a URL, or a string.|
 |hitCallback|`function`. The react-ga implementation accounts for the possibility that GA servers are down, or GA is blocked, by using a fallback 250ms timeout. See [notes in GA Dev Guide](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#hitCallback)|
+
+### `<OutboundLink>` Component
+
+Outbound links can directly be used as a component in your React code and the event label will be sent directly to GA. 
+
+###### Example
+
+```js
+var ga = require('react-ga');
+
+render() {
+  return (
+    <div>
+      <ga.OutboundLink 
+        eventLabel="myLabel"
+        to="http://www.example.com"
+        target="_blank">
+        My Link
+      </ga.OutboundLink>
+    </div>
+  );
+}
+```
+
+|Value|Notes|
+|------|-----|
+|eventLabel|`String`. Required. Description of where the outbound link points to. Either as a URL, or a string.|
+|to|`String`. Required. URL the link leads to.|
+|target|`String`. Optional. To open the link in a new tab, use a value of `_blank`.|
+
+For bower, use the `<ReactGA.OutboundLink>` component.
+
 
 #### ga.exception(args, hitCallback)
 
@@ -201,7 +253,7 @@ Require GA plugins.
 
 ###### Example
 ```js
-ga.plugin.require('localHitSender', {path: '/log', debug: true});
+ga.plugin.require('localHitSender', { path: '/log', debug: true });
 ```
 
 |Value|Notes|
