@@ -12,9 +12,18 @@ This module is mildly opinionated in how we instrument tracking within our front
 If you use `react-ga` too, we'd love your feedback. Feel free to file [issues, ideas and pull requests against this repo](https://github.com/react-ga/react-ga/issues).
 
 ## Installation
+
+With [npm](https://www.npmjs.com/):
 ```bash
-npm install react-ga
+npm install react-ga --save
 ```
+
+With [bower](http://bower.io/):
+```bash
+bower install react-ga --save
+```
+
+Note that you will need [React](https://github.com/facebook/react) >= 0.14.0 to use the `<OutboundLink>` component.
 
 ## Use
 
