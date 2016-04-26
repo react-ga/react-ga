@@ -179,6 +179,41 @@ ga.event({
 |args.value|`Int`. Optional. A means of recording a numerical value against an event. E.g. a rating, a score, etc.|
 |args.nonInteraction|`Boolean`. If an event is not triggered by a user interaction, but instead by our code (e.g. on page load, it should be flagged as a `nonInteraction` event to avoid skewing bounce rate data.|
 
+#### ga.timing(args)
+
+Allow to measure periods of time such as AJAX requests and resources loading by sending hits using the analytics.js library. For more detailed description, please refer to https://developers.google.com/analytics/devguides/collection/analyticsjs/user-timings.
+
+###### Example
+
+Usage:
+
+```js
+
+ga.timing({
+    category : 'JS Libraries',
+    variable : 'load',
+    value    : 20               //in milliseconds,
+    label    : 'CDN libs'
+});
+
+```
+
+This is equivalent to the following Google Analytics command:
+
+```js
+
+ga('send', 'timing', 'JS Libraries', 'load', 20, 'CDN libs');
+
+```
+
+|Value|Notes|
+|------|-----|
+|args.category|`String`. Required. A string for categorizing all user timing variables into logical groups. |
+|args.var|`String`. Required. Name of the variable being recorded |
+|args.value|`Int`. Required. Number of milliseconds elapsed time to report |
+|args.label|`String`. Optional. It can improved visibility in user timing reports |
+
+
 #### ga.outboundLink(args, hitCallback)
 
 Tracking links out to external URLs (including id.webmaker.org for OAuth 2.0 login flow). A non-programmatic approach is found in the next section, by using an `<OutboundLink>` component.
