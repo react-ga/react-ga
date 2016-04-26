@@ -64,7 +64,7 @@ When included as a script tag, a variable `ReactGA` is exposed in the global sco
 <script src="https://fb.me/react-15.0.1.js"></script>
 <!-- The ReactDOM Library -->
 <script src="https://fb.me/react-dom-15.0.1.js"></script>
-<!-- The core React library -->
+<!-- ReactGA library -->
 <script src="/path/to/bower_components/react-ga/dist/react-ga.js"></script>
 
 <script>
