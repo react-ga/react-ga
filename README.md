@@ -1,7 +1,7 @@
 # react-ga
 ### React Google Analytics Module
 
-[![Build Status](https://travis-ci.org/react-ga/react-ga.svg?branch=master)](https://travis-ci.org/react-ga/react-ga)
+[![Build Status](https://img.shields.io/travis/react-ga/react-ga/master.svg?style=flat-square)](https://travis-ci.org/react-ga/react-ga)
 [![npm version](https://img.shields.io/npm/v/react-ga.svg?style=flat-square)](https://www.npmjs.com/package/react-ga)
 [![npm downloads](https://img.shields.io/npm/dm/react-ga.svg?style=flat-square)](https://www.npmjs.com/package/react-ga)
 
