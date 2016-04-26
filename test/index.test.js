@@ -111,8 +111,8 @@ describe('react-ga', function () {
       ga.initialize('foo');
       ga.set({ userId: 123 });
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['set', { userId: 123 }]
-                                ]);
+        ['set', { userId: 123 }]
+      ]);
     });
   });
 
@@ -136,7 +136,7 @@ describe('react-ga', function () {
       ga.initialize('foo');
       ga.pageview('/valid');
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', 'pageview', '/valid']]);
+        ['send', 'pageview', '/valid']]);
     });
 
     it('should abort, log warning if path is not provided', function () {
@@ -184,14 +184,14 @@ describe('react-ga', function () {
       ga.initialize('foo');
       ga.modalview('valid');
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', 'pageview', '/modal/valid']]);
+        ['send', 'pageview', '/modal/valid']]);
     });
 
     it('should remove a leading slash', function () {
       ga.initialize('foo');
       ga.modalview('/valid');
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', 'pageview', '/modal/valid']]);
+        ['send', 'pageview', '/modal/valid']]);
     });
 
     it('should abort, log warning if modalName is not provided', function () {
@@ -237,30 +237,30 @@ describe('react-ga', function () {
       ga.initialize('foo');
       ga.exception({});
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', {
-                                            hitType: 'exception'
-                                          }]
-                                ]);
+        ['send', {
+          hitType: 'exception'
+        }]
+      ]);
     });
 
     it('should record a description value', function () {
       ga.initialize('foo');
       ga.exception({ description: 'This is an exception!' });
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', { exDescription: 'This Is an Exception!',
-                                            hitType: 'exception'
-                                          }]
-                                ]);
+        ['send', { exDescription: 'This Is an Exception!',
+          hitType: 'exception'
+        }]
+      ]);
     });
 
     it('should record a fatal value', function () {
       ga.initialize('foo');
       ga.exception({ fatal: true });
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', { exFatal: true,
-                                            hitType: 'exception'
-                                          }]
-                                ]);
+        ['send', { exFatal: true,
+          hitType: 'exception'
+        }]
+      ]);
     });
 
     it('should reject a non-boolean fatal value', function () {
@@ -270,10 +270,105 @@ describe('react-ga', function () {
         '[react-ga]', '`args.fatal` must be a boolean.'
       ]]);
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', {
-                                            hitType: 'exception'
-                                          }]
-                                ]);
+        ['send', {
+          hitType: 'exception'
+        }]
+      ]);
+    });
+  });
+
+  /**
+   * timing()
+   */
+
+  describe('timing()', function () {
+    it('should warn if args object is missing', function () {
+      ga.initialize('foo');
+      ga.timing();
+      console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
+      'AND args.value are required in timing() ' +
+      'AND args.value has to be a number'
+      ]]);
+    });
+
+    it('should warn if category arg is missing', function () {
+      ga.initialize('foo');
+      ga.timing({ variable:'Timing test', value: 1000 });
+      console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
+      'AND args.value are required in timing() ' +
+      'AND args.value has to be a number'
+      ]]);
+    });
+
+    it('should warn if category arg is empty string value', function () {
+      ga.initialize('foo');
+      ga.timing({ category: '', variable:'Timing test', value: 1000 });
+      console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
+      'AND args.value are required in timing() ' +
+      'AND args.value has to be a number'
+      ]]);
+    });
+
+    it('should warn if variable arg is missing', function () {
+      ga.initialize('foo');
+      ga.timing({ category:'Test', value: 1000 });
+      console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
+      'AND args.value are required in timing() ' +
+      'AND args.value has to be a number'
+      ]]);
+    });
+
+    it('should warn if variable arg is empty string value', function () {
+      ga.initialize('foo');
+      ga.timing({ category:'Test', value: 1000, variable: '' });
+      console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
+      'AND args.value are required in timing() ' +
+      'AND args.value has to be a number'
+      ]]);
+    });
+
+    it('should warn if value arg is missing', function () {
+      ga.initialize('foo');
+      ga.timing({ category:'Test', variable: 'Timing test' });
+      console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
+      'AND args.value are required in timing() ' +
+      'AND args.value has to be a number'
+      ]]);
+    });
+
+    it('should warn if value arg is not a number', function () {
+      ga.initialize('foo');
+      ga.timing({ category:'Test', variable: 'Timing test', value: 'Not a number' });
+      console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
+      'AND args.value are required in timing() ' +
+      'AND args.value has to be a number'
+      ]]);
+    });
+
+    it('should create timing event without timingLabel', function () {
+      ga.initialize('foo');
+      ga.timing({ category: 'Test', variable: 'Timing test', value: 1000 });
+      getGaCalls().should.eql([['create', 'foo', 'auto'],
+        ['send', { timingVar: 'Timing Test',
+          timingCategory: 'Test',
+          timingValue:1000,
+          hitType: 'timing'
+        }]
+      ]);
+    });
+
+    it('should create timing event with timingLabel', function () {
+      ga.initialize('foo');
+      ga.timing({ category: 'Test', variable: 'Timing test',
+        value: 1000, label: 'Timing test label' });
+      getGaCalls().should.eql([['create', 'foo', 'auto'],
+        ['send', { timingVar: 'Timing Test',
+          timingCategory: 'Test',
+          timingValue: 1000,
+          timingLabel: 'Timing Test Label',
+          hitType: 'timing'
+        }]
+      ]);
     });
   });
 
@@ -286,33 +381,33 @@ describe('react-ga', function () {
       ga.initialize('foo');
       ga.event({ category: 'Test', action: 'Send Test' });
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', { eventAction: 'Send Test',
-                                            eventCategory: 'Test',
-                                            hitType: 'event'
-                                          }]
-                                ]);
+        ['send', { eventAction: 'Send Test',
+          eventCategory: 'Test',
+          hitType: 'event'
+        }]
+      ]);
     });
 
     it('should record an event with strings converted to titleCase', function () {
       ga.initialize('foo');
       ga.event({ category: 'test', action: 'send test' });
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', { eventAction: 'Send Test',
-                                            eventCategory: 'Test',
-                                            hitType: 'event'
-                                          }]
-                                ]);
+        ['send', { eventAction: 'Send Test',
+          eventCategory: 'Test',
+          hitType: 'event'
+        }]
+      ]);
     });
 
     it('should not convert strings to titleCase if the flag is false', function () {
       ga.initialize('foo', { titleCase: false });
       ga.event({ category: 'test', action: 'send test' });
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', { eventAction: 'send test',
-                                            eventCategory: 'test',
-                                            hitType: 'event'
-                                          }]
-                                ]);
+        ['send', { eventAction: 'send test',
+          eventCategory: 'test',
+          hitType: 'event'
+        }]
+      ]);
     });
 
     it('should warn if args object is missing', function () {
@@ -359,24 +454,24 @@ describe('react-ga', function () {
       ga.initialize('foo');
       ga.event({ category: 'Test', action: 'Send Test', label: 'Test Label Value' });
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', { eventAction: 'Send Test',
-                                            eventCategory: 'Test',
-                                            eventLabel: 'Test Label Value',
-                                            hitType: 'event'
-                                          }]
-                                ]);
+        ['send', { eventAction: 'Send Test',
+          eventCategory: 'Test',
+          eventLabel: 'Test Label Value',
+          hitType: 'event'
+        }]
+      ]);
     });
 
     it('should record a value value', function () {
       ga.initialize('foo');
       ga.event({ category: 'Test', action: 'Send Test', value: 10 });
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', { eventAction: 'Send Test',
-                                            eventCategory: 'Test',
-                                            eventValue: 10,
-                                            hitType: 'event'
-                                          }]
-                                ]);
+        ['send', { eventAction: 'Send Test',
+          eventCategory: 'Test',
+          eventValue: 10,
+          hitType: 'event'
+        }]
+      ]);
     });
 
     it('should reject a non-numeric value value', function () {
@@ -386,23 +481,23 @@ describe('react-ga', function () {
         '[react-ga]', 'Expected `args.value` arg to be a Number.'
       ]]);
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', { eventAction: 'Send Test',
-                                            eventCategory: 'Test',
-                                            hitType: 'event'
-                                          }]
-                                ]);
+        ['send', { eventAction: 'Send Test',
+          eventCategory: 'Test',
+          hitType: 'event'
+        }]
+      ]);
     });
 
     it('should record a nonInteraction value', function () {
       ga.initialize('foo');
       ga.event({ category: 'Test', action: 'Send Test', nonInteraction: true });
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', { eventAction: 'Send Test',
-                                            eventCategory: 'Test',
-                                            nonInteraction: true,
-                                            hitType: 'event'
-                                          }]
-                                ]);
+        ['send', { eventAction: 'Send Test',
+          eventCategory: 'Test',
+          nonInteraction: true,
+          hitType: 'event'
+        }]
+      ]);
     });
 
     it('should reject a non-boolean nonInteraction value', function () {
@@ -412,11 +507,11 @@ describe('react-ga', function () {
         '[react-ga]', '`args.nonInteraction` must be a boolean.'
       ]]);
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', { eventAction: 'Send Test',
-                                            eventCategory: 'Test',
-                                            hitType: 'event'
-                                          }]
-                                ]);
+        ['send', { eventAction: 'Send Test',
+          eventCategory: 'Test',
+          hitType: 'event'
+        }]
+      ]);
     });
   });
 
@@ -434,13 +529,13 @@ describe('react-ga', function () {
         functionCalledBack.should.be.a.Function; // jshint ignore:line
 
         getGaCalls().should.eql([['create', 'foo', 'auto'],
-                                ['send', { eventAction: 'Click',
-                                            eventCategory: 'Outbound',
-                                            eventLabel: 'Test Click',
-                                            hitCallback: functionCalledBack,
-                                            hitType: 'event'
-                                          }]
-                                ]);
+          ['send', { eventAction: 'Click',
+            eventCategory: 'Outbound',
+            eventLabel: 'Test Click',
+            hitCallback: functionCalledBack,
+            hitType: 'event'
+          }]
+        ]);
         done();
       });
 
@@ -531,7 +626,7 @@ describe('react-ga', function () {
       var simulatedResponseTime = 275;
       setTimeout(function () {
         should.fail('no response ' + simulatedResponseTime + ' ms', 'response after 250 ms',
-                    'message', 'operator');
+            'message', 'operator');
       }, simulatedResponseTime);
     });
   });

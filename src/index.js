@@ -45,8 +45,8 @@ var ReactGA = {
     (function (i, s, o, g, r, a, m) {
       i['GoogleAnalyticsObject'] = r;
       i[r] = i[r] || function () {
-        (i[r].q = i[r].q || []).push(arguments);
-      }, i[r].l = 1 * new Date();
+            (i[r].q = i[r].q || []).push(arguments);
+          }, i[r].l = 1 * new Date();
       a = s.createElement(o),
           m = s.getElementsByTagName(o)[0];
       a.async = 1;
@@ -148,6 +148,45 @@ var ReactGA = {
       if (_debug) {
         log('called ga(\'send\', \'pageview\', path);');
         log('with path: ' + path);
+      }
+    }
+  },
+
+  /**
+   * timing:
+   * GA timing
+   * @param args.category {String} required
+   * @param args.variable {String} required
+   * @param args.value  {Int}  required
+   * @param args.label  {String} required
+   */
+  timing: function (args) {
+    if (typeof ga === 'function') {
+      if (!args || !args.category || !args.variable
+          || !args.value || typeof args.value !== 'number') {
+        warn('args.category, args.variable ' +
+            'AND args.value are required in timing() ' +
+            'AND args.value has to be a number');
+        return;
+      }
+
+      //Required Fields
+      var fieldObject = {
+        hitType: 'timing',
+        timingCategory: _format(args.category),
+        timingVar: _format(args.variable),
+        timingValue: args.value
+      };
+
+      if (args.label) {
+        fieldObject.timingLabel = _format(args.label);
+      }
+
+      ga('send', fieldObject);
+
+      if (_debug) {
+        log('called ga(\'send\', fieldObject);');
+        log('with fieldObject: ' + JSON.stringify(fieldObject));
       }
     }
   },
