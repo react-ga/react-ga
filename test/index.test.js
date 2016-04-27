@@ -457,12 +457,12 @@ describe('react-ga', function () {
       ga.initialize('foo');
       ga.event({ category: 'Test', action: 'Send Test', label: 'Test Label Value' });
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-        ['send', { eventAction: 'Send Test',
-          eventCategory: 'Test',
-          eventLabel: 'Test Label Value',
-          hitType: 'event'
-        }]
-      ]);
+                                ['send', { eventAction: 'Send Test',
+                                  eventCategory: 'Test',
+                                  eventLabel: 'Test Label Value',
+                                  hitType: 'event'
+                                }]
+                              ]);
     });
 
     it('should record a value value', function () {
@@ -474,7 +474,7 @@ describe('react-ga', function () {
                                   eventValue: 10,
                                   hitType: 'event'
                                 }]
-      ]);
+                              ]);
     });
 
     it('should reject a non-numeric value value', function () {
@@ -488,7 +488,7 @@ describe('react-ga', function () {
                                   eventCategory: 'Test',
                                   hitType: 'event'
                                 }]
-      ]);
+                              ]);
     });
 
     it('should record a nonInteraction value', function () {
@@ -500,7 +500,7 @@ describe('react-ga', function () {
                                   nonInteraction: true,
                                   hitType: 'event'
                                 }]
-      ]);
+                              ]);
     });
 
     it('should reject a non-boolean nonInteraction value', function () {
@@ -514,7 +514,7 @@ describe('react-ga', function () {
                                   eventCategory: 'Test',
                                   hitType: 'event'
                                 }]
-      ]);
+                              ]);
     });
   });
 
@@ -538,7 +538,7 @@ describe('react-ga', function () {
                                     hitCallback: functionCalledBack,
                                     hitType: 'event'
                                   }]
-        ]);
+                                 ]);
         done();
       });
 
