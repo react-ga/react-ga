@@ -626,7 +626,7 @@ describe('react-ga', function () {
       var simulatedResponseTime = 275;
       setTimeout(function () {
         should.fail('no response ' + simulatedResponseTime + ' ms', 'response after 250 ms',
-            'message', 'operator');
+                    'message', 'operator');
       }, simulatedResponseTime);
     });
   });
