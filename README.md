@@ -202,7 +202,7 @@ This is equivalent to the following Google Analytics command:
 
 ```js
 
-ga('send', 'timing', JS Libraries', 'load', 20, 'CDN libs');
+ga('send', 'timing', 'JS Libraries', 'load', 20, 'CDN libs');
 
 ```
 
