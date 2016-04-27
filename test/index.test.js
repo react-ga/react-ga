@@ -111,8 +111,8 @@ describe('react-ga', function () {
       ga.initialize('foo');
       ga.set({ userId: 123 });
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-        ['set', { userId: 123 }]
-      ]);
+                                ['set', { userId: 123 }]
+                                ]);
     });
   });
 
@@ -127,16 +127,17 @@ describe('react-ga', function () {
       ga.initialize('foo', options);
       ga.pageview('/valid');
       console.info.args.should.eql([
-        ['[react-ga]', "called ga('send', 'pageview', path);"],
-        ['[react-ga]', 'with path: /valid']
-      ]);
+                                    ['[react-ga]', "called ga('send', 'pageview', path);"],
+                                    ['[react-ga]', 'with path: /valid']
+                                  ]);
     });
 
     it('should record a pageview', function () {
       ga.initialize('foo');
       ga.pageview('/valid');
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-        ['send', 'pageview', '/valid']]);
+                                ['send', 'pageview', '/valid']
+                              ]);
     });
 
     it('should abort, log warning if path is not provided', function () {
@@ -184,22 +185,24 @@ describe('react-ga', function () {
       ga.initialize('foo');
       ga.modalview('valid');
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-        ['send', 'pageview', '/modal/valid']]);
+                                ['send', 'pageview', '/modal/valid']
+                              ]);
     });
 
     it('should remove a leading slash', function () {
       ga.initialize('foo');
       ga.modalview('/valid');
       getGaCalls().should.eql([['create', 'foo', 'auto'],
-        ['send', 'pageview', '/modal/valid']]);
+                                ['send', 'pageview', '/modal/valid']
+                              ]);
     });
 
     it('should abort, log warning if modalName is not provided', function () {
       ga.initialize('foo');
       ga.modalview();
       console.warn.args.should.eql([[
-        '[react-ga]', 'modalName is required in .modalview(modalName)'
-      ]]);
+                                    '[react-ga]', 'modalName is required in .modalview(modalName)']
+                                    ]);
     });
 
     it('should abort, log warning if modalName is empty string', function () {
@@ -286,63 +289,63 @@ describe('react-ga', function () {
       ga.initialize('foo');
       ga.timing();
       console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
-      'AND args.value are required in timing() ' +
-      'AND args.value has to be a number'
-      ]]);
+                                      'AND args.value are required in timing() ' +
+                                      'AND args.value has to be a number']
+                                  ]);
     });
 
     it('should warn if category arg is missing', function () {
       ga.initialize('foo');
       ga.timing({ variable:'Timing test', value: 1000 });
       console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
-      'AND args.value are required in timing() ' +
-      'AND args.value has to be a number'
-      ]]);
+                                      'AND args.value are required in timing() ' +
+                                      'AND args.value has to be a number']
+                                    ]);
     });
 
     it('should warn if category arg is empty string value', function () {
       ga.initialize('foo');
       ga.timing({ category: '', variable:'Timing test', value: 1000 });
       console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
-      'AND args.value are required in timing() ' +
-      'AND args.value has to be a number'
-      ]]);
+                                      'AND args.value are required in timing() ' +
+                                      'AND args.value has to be a number']
+                                    ]);
     });
 
     it('should warn if variable arg is missing', function () {
       ga.initialize('foo');
       ga.timing({ category:'Test', value: 1000 });
       console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
-      'AND args.value are required in timing() ' +
-      'AND args.value has to be a number'
-      ]]);
+                                      'AND args.value are required in timing() ' +
+                                      'AND args.value has to be a number']
+                                    ]);
     });
 
     it('should warn if variable arg is empty string value', function () {
       ga.initialize('foo');
       ga.timing({ category:'Test', value: 1000, variable: '' });
       console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
-      'AND args.value are required in timing() ' +
-      'AND args.value has to be a number'
-      ]]);
+                                      'AND args.value are required in timing() ' +
+                                      'AND args.value has to be a number']
+                                    ]);
     });
 
     it('should warn if value arg is missing', function () {
       ga.initialize('foo');
       ga.timing({ category:'Test', variable: 'Timing test' });
       console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
-      'AND args.value are required in timing() ' +
-      'AND args.value has to be a number'
-      ]]);
+                                      'AND args.value are required in timing() ' +
+                                      'AND args.value has to be a number']
+                                    ]);
     });
 
     it('should warn if value arg is not a number', function () {
       ga.initialize('foo');
       ga.timing({ category:'Test', variable: 'Timing test', value: 'Not a number' });
       console.warn.args.should.eql([['[react-ga]', 'args.category, args.variable ' +
-      'AND args.value are required in timing() ' +
-      'AND args.value has to be a number'
-      ]]);
+                                      'AND args.value are required in timing() ' +
+                                      'AND args.value has to be a number']
+      ]);
     });
 
     it('should create timing event without timingLabel', function () {
