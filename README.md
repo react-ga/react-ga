@@ -188,30 +188,26 @@ Allow to measure periods of time such as AJAX requests and resources loading by 
 Usage:
 
 ```js
-
 ga.timing({
-    category : 'JS Libraries',
-    variable : 'load',
-    value    : 20               //in milliseconds,
-    label    : 'CDN libs'
+  category: 'JS Libraries',
+  variable: 'load',
+  value: 20, // in milliseconds
+  label: 'CDN libs'
 });
-
 ```
 
 This is equivalent to the following Google Analytics command:
 
 ```js
-
 ga('send', 'timing', 'JS Libraries', 'load', 20, 'CDN libs');
-
 ```
 
 |Value|Notes|
 |------|-----|
-|args.category|`String`. Required. A string for categorizing all user timing variables into logical groups. |
-|args.var|`String`. Required. Name of the variable being recorded |
-|args.value|`Int`. Required. Number of milliseconds elapsed time to report |
-|args.label|`String`. Optional. It can improved visibility in user timing reports |
+|args.category|`String`. Required. A string for categorizing all user timing variables into logical groups.|
+|args.var|`String`. Required. Name of the variable being recorded.|
+|args.value|`Int`. Required. Number of milliseconds elapsed time to report.|
+|args.label|`String`. Optional. It can improved visibility in user timing reports.|
 
 
 #### ga.outboundLink(args, hitCallback)
@@ -235,7 +231,7 @@ ga.outboundLink({
 
 ### `<OutboundLink>` Component
 
-Outbound links can directly be used as a component in your React code and the event label will be sent directly to GA. 
+Outbound links can directly be used as a component in your React code and the event label will be sent directly to GA.
 
 ###### Example
 
@@ -245,7 +241,7 @@ var ga = require('react-ga');
 render() {
   return (
     <div>
-      <ga.OutboundLink 
+      <ga.OutboundLink
         eventLabel="myLabel"
         to="http://www.example.com"
         target="_blank">
