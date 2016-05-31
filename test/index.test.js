@@ -122,6 +122,50 @@ describe('react-ga', function () {
   });
 
   /**
+   * send()
+   */
+
+  describe('send()', function () {
+    it('should record a pageview using send', function () {
+      ga.initialize('foo');
+      ga.send({
+        hitType: 'pageview',
+        page: '/valid'
+      });
+      getGaCalls().should.eql([
+        ['create', 'foo', 'auto'],
+        [
+          'send',
+          {
+            hitType: 'pageview',
+            page: '/valid'
+          }
+        ]
+      ]);
+    });
+
+    it('should record an event using send', function () {
+      ga.initialize('foo');
+      ga.send({
+        hitType: 'event',
+        eventCategory: 'category',
+        eventAction: 'action'
+      });
+      getGaCalls().should.eql([
+        ['create', 'foo', 'auto'],
+        [
+          'send',
+          {
+            hitType: 'event',
+            eventCategory: 'category',
+            eventAction: 'action'
+          }
+        ]
+      ]);
+    });
+  });
+
+  /**
    * pageview()
    */
 
