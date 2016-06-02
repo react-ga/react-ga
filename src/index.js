@@ -96,7 +96,7 @@ var ReactGA = {
   /**
    * send:
    * Clone of the low level `ga.send` method
-   * WARNING: No validaions will be applied to this
+   * WARNING: No validations will be applied to this
    * @param  {Object} fieldObject - field object for tracking different analytics
    */
   send: function (fieldObject) {
