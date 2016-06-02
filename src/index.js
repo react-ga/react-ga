@@ -94,6 +94,23 @@ var ReactGA = {
   },
 
   /**
+   * send:
+   * Clone of the low level `ga.send` method
+   * WARNING: No validations will be applied to this
+   * @param  {Object} fieldObject - field object for tracking different analytics
+   */
+  send: function (fieldObject) {
+    if (typeof ga === 'function') {
+      ga('send', fieldObject);
+
+      if (_debug) {
+        log('called ga(\'send\', fieldObject);');
+        log('with fieldObject: ' + JSON.stringify(fieldObject));
+      }
+    }
+  },
+
+  /**
    * pageview:
    * Basic GA pageview tracking
    * @param  {String} path - the current page page e.g. '/about'
@@ -182,12 +199,7 @@ var ReactGA = {
         fieldObject.timingLabel = _format(args.label);
       }
 
-      ga('send', fieldObject);
-
-      if (_debug) {
-        log('called ga(\'send\', fieldObject);');
-        log('with fieldObject: ' + JSON.stringify(fieldObject));
-      }
+      this.send(fieldObject);
     }
   },
 
@@ -238,12 +250,7 @@ var ReactGA = {
       }
 
       // Send to GA
-      ga('send', fieldObject);
-
-      if (_debug) {
-        log('called ga(\'send\', fieldObject);');
-        log('with fieldObject: ' + JSON.stringify(fieldObject));
-      }
+      this.send(fieldObject);
     }
   },
 
@@ -275,12 +282,7 @@ var ReactGA = {
       }
 
       // Send to GA
-      ga('send', fieldObject);
-
-      if (_debug) {
-        log('called ga(\'send\', fieldObject);');
-        log('with fieldObject: ' + JSON.stringify(fieldObject));
-      }
+      this.send(fieldObject);
     }
   },
 
@@ -447,12 +449,7 @@ var ReactGA = {
       fieldObject.hitCallback = clearableCallbackForGA;
 
       // Send to GA
-      ga('send', fieldObject);
-
-      if (_debug) {
-        log('called ga(\'send\', fieldObject);');
-        log('with fieldObject: ' + JSON.stringify(fieldObject));
-      }
+      this.send(fieldObject);
     } else {
       // if ga is not defined, return the callback so the application
       // continues to work as expected
