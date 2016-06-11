@@ -263,6 +263,18 @@ var ReactGA = {
         }
       }
 
+      if (args.transport) {
+        if (typeof args.transport !== 'string') {
+          warn('`args.transport` must be a string.');
+        } else {
+          if (['beacon', 'xhr', 'image'].indexOf(args.transport) === -1) {
+            warn('`args.transport` must be either one of these values: `beacon`, `xhr` or `image`');
+          }
+
+          fieldObject.transport = args.transport;
+        }
+      }
+
       // Send to GA
       this.send(fieldObject);
     }

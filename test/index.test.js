@@ -604,6 +604,54 @@ describe('react-ga', function () {
         }]
       ]);
     });
+
+    it('should record a valid transport value', function () {
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: 'Test', action: 'Send Test', transport: 'beacon' });
+      getGaCalls().should.eql([
+        ['create', 'foo', 'auto'],
+        ['send', {
+          eventAction: 'Send Test',
+          eventCategory: 'Test',
+          transport: 'beacon',
+          hitType: 'event'
+        }]
+      ]);
+    });
+
+    it('should reject a non-string transport value', function () {
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: 'Test', action: 'Send Test', transport: true });
+      console.warn.args.should.eql([[
+        '[react-ga]', '`args.transport` must be a string.'
+      ]]);
+      getGaCalls().should.eql([
+        ['create', 'foo', 'auto'],
+        ['send', {
+          eventAction: 'Send Test',
+          eventCategory: 'Test',
+          hitType: 'event'
+        }]
+      ]);
+    });
+
+    it('should warn but allow an invalid transport value string', function () {
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: 'Test', action: 'Send Test', transport: 'lolwut' });
+      console.warn.args.should.eql([[
+        '[react-ga]', '`args.transport` must be either one of these values: '
+                    + '`beacon`, `xhr` or `image`'
+      ]]);
+      getGaCalls().should.eql([
+        ['create', 'foo', 'auto'],
+        ['send', {
+          eventAction: 'Send Test',
+          eventCategory: 'Test',
+          transport: 'lolwut',
+          hitType: 'event'
+        }]
+      ]);
+    });
   });
 
   /**
