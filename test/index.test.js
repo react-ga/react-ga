@@ -611,7 +611,6 @@ describe('react-ga', function () {
         ]);
         done();
       });
-
     });
 
     it('should warn if all args are missing', function () {
