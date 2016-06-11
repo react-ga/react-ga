@@ -104,7 +104,7 @@ See example above for use with `react-router`.
 ###### Example
 
 ```js
-Reactset({ userId: 123 });
+ReactGA.set({ userId: 123 });
 ```
 
 |Value|Notes|
