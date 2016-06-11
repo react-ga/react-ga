@@ -1,6 +1,6 @@
 {
   "name": "react-ga",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "homepage": "https://github.com/react-ga/react-ga",
   "authors": [
     "Tay Yang Shun <tay.yang.shun@gmail.com>"
@@ -22,7 +22,6 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "test"
   ]
 }
