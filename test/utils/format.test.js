@@ -6,13 +6,13 @@ var format = require('../../src/utils/format');
 describe('format()', function () {
   it('should not format email addresses', function () {
     sinon.stub(console, 'warn');
-    console.warn.callCount.should.equal(0);
+    console.warn.callCount.should.eql(0);
     format('hi@example.com').should.eql('REDACTED (Potential Email Address)');
-    console.warn.callCount.should.equal(1);
+    console.warn.callCount.should.eql(1);
     format('hey.ho@letsgo.com').should.eql('REDACTED (Potential Email Address)');
-    console.warn.callCount.should.equal(2);
+    console.warn.callCount.should.eql(2);
     format('abc@xyz.com.uk').should.eql('REDACTED (Potential Email Address)');
-    console.warn.callCount.should.equal(3);
+    console.warn.callCount.should.eql(3);
     console.warn.restore();
   });
 

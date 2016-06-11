@@ -41,12 +41,12 @@ var Router = require('react-router');
 var routes = require('./routes');
 
 ...
-var ga = require('react-ga');
-ga.initialize('UA-000000-01');
+var ReactGA = require('react-ga');
+ReactGA.initialize('UA-000000-01');
 ...
 
 function logPageView() {
-  ga.pageview(window.location.pathname);
+  ReactGA.pageview(window.location.pathname);
 }
 
 var app = document.getElementById('app');
@@ -74,14 +74,14 @@ When included as a script tag, a variable `ReactGA` is exposed in the global sco
 
 ### API
 
-#### ga.initialize(gaTrackingID, options)
+#### ReactGA.initialize(gaTrackingID, options)
 
 GA must be initialized using this function before any of the other tracking functions will record any data.
 
 ###### Example
 
 ```js
-ga.initialize('UA-000000-01', {
+ReactGA.initialize('UA-000000-01', {
   debug: true,
   titleCase: false,
   gaOptions: {
@@ -99,24 +99,24 @@ ga.initialize('UA-000000-01', {
 
 See example above for use with `react-router`.
 
-#### ga.set(fieldsObject)
+#### ReactGA.set(fieldsObject)
 
 ###### Example
 
 ```js
-ga.set({ userId: 123 });
+Reactset({ userId: 123 });
 ```
 
 |Value|Notes|
 |------|-----|
 |fieldsObject|`Object`. e.g. `{ userId: 123 }`|
 
-#### ga.pageview(path)
+#### ReactGA.pageview(path)
 
 ###### Example
 
 ```js
-ga.pageview('/about/contact-us');
+ReactGA.pageview('/about/contact-us');
 ```
 
 |Value|Notes|
@@ -125,45 +125,45 @@ ga.pageview('/about/contact-us');
 
 See example above for use with `react-router`.
 
-#### ga.modalview(modalName)
+#### ReactGA.modalview(modalName)
 
 A modal view is often an equivalent to a pageview in our UX, but without a change in URL that would record a standard GA pageview. For example, a 'contact us' modal may be accessible from any page in a site, even if we don't have a standalone 'contact us' page on its own URL. In this scenario, the modalview should be recorded using this function.
 
 ###### Example
 
 ```js
-ga.modalview('/about/contact-us');
+ReactGA.modalview('/about/contact-us');
 ```
 
 |Value|Notes|
 |------|-----|
 |modalName|`String`. E.g. 'login', 'read-terms-and-conditions'|
 
-#### ga.event(args)
+#### ReactGA.event(args)
 
 Tracking in-page `event` interactions is key to understanding the use of any interactive web property. This is how we record user interactions that don't trigger a change in URL.
 
 ###### Examples
 
 ```js
-ga.event({
+ReactGA.event({
   category: 'User',
   action: 'Created an Account'
 });
 
-ga.event({
+ReactGA.event({
   category: 'Social',
   action: 'Rated an App',
   value: 3
 });
 
-ga.event({
+ReactGA.event({
   category: 'Editing',
   action: 'Deleted Component',
   label: 'Game Widget'
 });
 
-ga.event({
+ReactGA.event({
   category: 'Promotion',
   action: 'Displayed Promotional Widget',
   label: 'Homepage Thing',
@@ -179,7 +179,7 @@ ga.event({
 |args.value|`Int`. Optional. A means of recording a numerical value against an event. E.g. a rating, a score, etc.|
 |args.nonInteraction|`Boolean`. If an event is not triggered by a user interaction, but instead by our code (e.g. on page load, it should be flagged as a `nonInteraction` event to avoid skewing bounce rate data.|
 
-#### ga.timing(args)
+#### ReactGA.timing(args)
 
 Allow to measure periods of time such as AJAX requests and resources loading by sending hits using the analytics.js library. For more detailed description, please refer to https://developers.google.com/analytics/devguides/collection/analyticsjs/user-timings.
 
@@ -188,7 +188,7 @@ Allow to measure periods of time such as AJAX requests and resources loading by 
 Usage:
 
 ```js
-ga.timing({
+ReactGA.timing({
   category: 'JS Libraries',
   variable: 'load',
   value: 20, // in milliseconds
@@ -209,15 +209,37 @@ ga('send', 'timing', 'JS Libraries', 'load', 20, 'CDN libs');
 |args.value|`Int`. Required. Number of milliseconds elapsed time to report.|
 |args.label|`String`. Optional. It can improved visibility in user timing reports.|
 
+#### ReactGA.ga()
 
-#### ga.outboundLink(args, hitCallback)
+The original `ga` function can be accessed via this method. This gives developers the flexibility of directly
+using `ga.js` features that have not yet been implemented in `ReactGA`. No validations will be done
+by `ReactGA` as it is being bypassed if this approach is used.
+
+If no arguments are passed to `ReactGA.ga()`, the `ga` object is returned instead.
+
+###### Example
+
+Usage with arguments:
+
+```js
+ReactGA.ga('send', 'pageview', '/mypage');
+```
+
+Usage without arguments:
+
+```js
+var ga = ReactGA.ga();
+ga('send', 'pageview', '/mypage');
+```
+
+#### ReactGA.outboundLink(args, hitCallback)
 
 Tracking links out to external URLs (including id.webmaker.org for OAuth 2.0 login flow). A non-programmatic approach is found in the next section, by using an `<OutboundLink>` component.
 
 ###### Example
 
 ```js
-ga.outboundLink({
+ReactGA.outboundLink({
   label: 'Clicked Create an Account'
 }, function () {
   console.log('redirect here');
@@ -231,22 +253,22 @@ ga.outboundLink({
 
 ### `<OutboundLink>` Component
 
-Outbound links can directly be used as a component in your React code and the event label will be sent directly to GA.
+Outbound links can directly be used as a component in your React code and the event label will be sent directly to ReactGA.
 
 ###### Example
 
 ```js
-var ga = require('react-ga');
+var ReactGA = require('react-ga');
 
 render() {
   return (
     <div>
-      <ga.OutboundLink
+      <ReactGA.OutboundLink
         eventLabel="myLabel"
         to="http://www.example.com"
         target="_blank">
         My Link
-      </ga.OutboundLink>
+      </ReactGA.OutboundLink>
     </div>
   );
 }
@@ -261,14 +283,14 @@ render() {
 For bower, use the `<ReactGA.OutboundLink>` component.
 
 
-#### ga.exception(args, hitCallback)
+#### ReactGA.exception(args, hitCallback)
 
 [GA exception tracking](https://developers.google.com/analytics/devguides/collection/analyticsjs/exceptions)
 
 ###### Example
 
 ```js
-ga.exception({
+ReactGA.exception({
   description: 'An error ocurred',
   fatal: true
 });
@@ -280,13 +302,13 @@ ga.exception({
 |args.fatal|`String`. Optional. Set to `true` if it was a fatal exception.|
 
 
-#### ga.plugin.require(name, [options])
+#### ReactGA.plugin.require(name, [options])
 
 Require GA plugins.
 
 ###### Example
 ```js
-ga.plugin.require('localHitSender', { path: '/log', debug: true });
+ReactGA.plugin.require('localHitSender', { path: '/log', debug: true });
 ```
 
 |Value|Notes|
@@ -295,14 +317,14 @@ ga.plugin.require('localHitSender', { path: '/log', debug: true });
 |options|`Object`. Optional. An initialization object that will be passed to the plugin constructor upon instantiation.|
 
 
-#### ga.plugin.execute(pluginName, action, [actionType], [payload])
+#### ReactGA.plugin.execute(pluginName, action, [actionType], [payload])
 
 Execute the `action` for the `pluginName` with the payload.
 
 ###### Example
 
 ```js
-ga.plugin.execute('ecommerce', 'addTransaction', {
+ReactGA.plugin.execute('ecommerce', 'addTransaction', {
   id: 'jd38je31j',
   revenue: '3.50'
 });
@@ -313,7 +335,7 @@ You can use this function with four arguments to pass `actionType` and `payload`
 ###### Example
 
 ```js
-ga.plugin.execute('ec', 'setAction', 'purchase', {
+ReactGA.plugin.execute('ec', 'setAction', 'purchase', {
   id: 'jd38je31j',
   revenue: '3.50'
 });

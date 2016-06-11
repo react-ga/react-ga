@@ -60,7 +60,21 @@ var ReactGA = {
     } else {
       ga('create', gaTrackingID, 'auto');
     }
+  },
 
+  /**
+   * ga:
+   * Returns the original GA object.
+   */
+  ga: function () {
+    if (arguments.length > 0) {
+      ga.apply(this, arguments);
+      log('called ga(arguments);');
+      log('with arguments: ' + JSON.stringify([].slice.apply(arguments)));
+      return;
+    }
+
+    return ga;
   },
 
   /**

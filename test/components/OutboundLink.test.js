@@ -38,13 +38,13 @@ describe('<OutboundLink> React component', function () {
       eventLabel: ''
     }));
     anchor = TestUtils.findRenderedDOMComponentWithTag(renderedOutboundLink, 'a');
-    findDOMNode(anchor).href.should.equal(destinationUrl);
+    findDOMNode(anchor).href.should.eql(destinationUrl);
   });
 
   it('should raise warning if ga module is not available', function () {
     sinon.stub(console, 'warn');
     var OutboundLinkComponent = React.createElement(OutboundLink, { eventLabel: '' });
-    console.warn.callCount.should.equal(0);
+    console.warn.callCount.should.eql(0);
     if (OutboundLink.origTrackLink) {
       // OutboundLink.trackLink has already been replaced in react-ga
       OutboundLinkComponent.type.trackLink = OutboundLink.origTrackLink;
@@ -53,7 +53,7 @@ describe('<OutboundLink> React component', function () {
     OutboundLinkComponent.type.trackLink({}, function () {
     });
 
-    console.warn.callCount.should.equal(1);
+    console.warn.callCount.should.eql(1);
     console.warn.getCall(0).args.should.eql([
       'ga tracking not enabled'
     ]);
@@ -63,12 +63,12 @@ describe('<OutboundLink> React component', function () {
   it('should not raise warning if ga module is available', function () {
     sinon.stub(console, 'warn');
     var OutboundLinkComponent = React.createElement(OutboundLink, { eventLabel: '' });
-    console.warn.callCount.should.equal(0);
+    console.warn.callCount.should.eql(0);
     OutboundLinkComponent.type.trackLink = require('../../src/index').outboundLink;
     OutboundLinkComponent.type.trackLink({}, function () {
     });
 
-    console.warn.callCount.should.equal(0);
+    console.warn.callCount.should.eql(0);
     console.warn.restore();
   });
 
@@ -92,7 +92,7 @@ describe('<OutboundLink> React component', function () {
     renderedOutboundLink = TestUtils.renderIntoDocument(OutboundLinkComponent);
     anchor = TestUtils.findRenderedDOMComponentWithTag(renderedOutboundLink, 'a');
     TestUtils.Simulate.click(anchor);
-    fakeOutboundLinkFunc.getCall(0).args[0].label.should.equal('helloworld');
+    fakeOutboundLinkFunc.getCall(0).args[0].label.should.eql('helloworld');
   });
 
   it('should call preserve onClick prop in onClick event handler', function () {

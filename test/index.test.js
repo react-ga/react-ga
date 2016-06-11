@@ -3,7 +3,7 @@ var sinon = require('sinon');
 var React = require('react');
 var TestUtils = require('react-addons-test-utils');
 
-var ga = require('../src/index');
+var ReactGA = require('../src/index');
 
 var GLOBALS = ['ga', 'GoogleAnalyticsObject', 'window', 'document'];
 
@@ -45,30 +45,50 @@ describe('react-ga', function () {
 
   describe('initialize()', function () {
     it('should define window.ga', function () {
-      ga.initialize('foo');
-      (typeof window.ga).should.equal('function');
+      ReactGA.initialize('foo');
+      (typeof window.ga).should.eql('function');
     });
 
     it('should call window.ga()', function () {
-      ga.initialize('foo');
+      ReactGA.initialize('foo');
       getGaCalls().should.eql([
         ['create', 'foo', 'auto']
       ]);
     });
 
     it('should call window.ga() with ga options if they are given', function () {
-      ga.initialize('foo', { gaOptions: { userId: 123 } });
+      ReactGA.initialize('foo', { gaOptions: { userId: 123 } });
       getGaCalls().should.eql([
         ['create', 'foo', { userId: 123 }]
       ]);
     });
 
     it('should abort, log warning if tracking ID is not given', function () {
-      ga.initialize();
+      ReactGA.initialize();
       console.warn.args.should.eql([
         ['[react-ga]', 'gaTrackingID is required in initialize()']
       ]);
       getGaCalls().should.eql([]);
+    });
+  });
+
+  /**
+   * ga()
+   */
+
+  describe('ga()', function () {
+    it('should return the same object as window.ga when no arguments are passed', function () {
+      ReactGA.initialize('foo');
+      (ReactGA.ga() === window.ga).should.eql(true);
+    });
+
+    it('should send the correct arguments to window.ga when arguments are passed', function () {
+      ReactGA.initialize('foo');
+      ReactGA.ga('send', 'pageview', '/mypage');
+      getGaCalls().should.eql([
+        ['create', 'foo', 'auto'],
+        ['send', 'pageview', '/mypage']
+      ]);
     });
   });
 
@@ -79,8 +99,8 @@ describe('react-ga', function () {
   describe('set()', function () {
 
     it('should output debug info, if debug is on', function () {
-      ga.initialize('foo', { debug: true });
-      ga.set({ userId: 123 });
+      ReactGA.initialize('foo', { debug: true });
+      ReactGA.set({ userId: 123 });
       console.info.args.should.eql([
         ['[react-ga]', "called ga('set', fieldsObject);"],
         ['[react-ga]', 'with fieldsObject: {"userId":123}']
@@ -88,32 +108,32 @@ describe('react-ga', function () {
     });
 
     it('should warn if fieldsObject object is missing', function () {
-      ga.initialize('foo');
-      ga.set();
+      ReactGA.initialize('foo');
+      ReactGA.set();
       console.warn.args.should.eql([
         ['[react-ga]', '`fieldsObject` is required in .set()']
       ]);
     });
 
     it('should warn if fieldsObject is not an Object', function () {
-      ga.initialize('foo');
-      ga.set(123);
+      ReactGA.initialize('foo');
+      ReactGA.set(123);
       console.warn.args.should.eql([
         ['[react-ga]', 'Expected `fieldsObject` arg to be an Object']
       ]);
     });
 
     it('should warn if fieldsObject object is an empty object', function () {
-      ga.initialize('foo');
-      ga.set({});
+      ReactGA.initialize('foo');
+      ReactGA.set({});
       console.warn.args.should.eql([
         ['[react-ga]', 'empty `fieldsObject` given to .set()']
       ]);
     });
 
     it('should set the field values', function () {
-      ga.initialize('foo');
-      ga.set({ userId: 123 });
+      ReactGA.initialize('foo');
+      ReactGA.set({ userId: 123 });
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['set', { userId: 123 }]
@@ -127,8 +147,8 @@ describe('react-ga', function () {
 
   describe('send()', function () {
     it('should record a pageview using send', function () {
-      ga.initialize('foo');
-      ga.send({
+      ReactGA.initialize('foo');
+      ReactGA.send({
         hitType: 'pageview',
         page: '/valid'
       });
@@ -145,8 +165,8 @@ describe('react-ga', function () {
     });
 
     it('should record an event using send', function () {
-      ga.initialize('foo');
-      ga.send({
+      ReactGA.initialize('foo');
+      ReactGA.send({
         hitType: 'event',
         eventCategory: 'category',
         eventAction: 'action'
@@ -173,8 +193,8 @@ describe('react-ga', function () {
 
     it('should output debug info, if debug is on', function () {
       var options = { debug: true };
-      ga.initialize('foo', options);
-      ga.pageview('/valid');
+      ReactGA.initialize('foo', options);
+      ReactGA.pageview('/valid');
       console.info.args.should.eql([
         ['[react-ga]', "called ga('send', 'pageview', path);"],
         ['[react-ga]', 'with path: /valid']
@@ -182,8 +202,8 @@ describe('react-ga', function () {
     });
 
     it('should record a pageview', function () {
-      ga.initialize('foo');
-      ga.pageview('/valid');
+      ReactGA.initialize('foo');
+      ReactGA.pageview('/valid');
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', 'pageview', '/valid']
@@ -191,24 +211,24 @@ describe('react-ga', function () {
     });
 
     it('should abort, log warning if path is not provided', function () {
-      ga.initialize('foo');
-      ga.pageview();
+      ReactGA.initialize('foo');
+      ReactGA.pageview();
       console.warn.args.should.eql([
         ['[react-ga]', 'path is required in .pageview()']
       ]);
     });
 
     it('should abort, log warning if path is empty string', function () {
-      ga.initialize('foo');
-      ga.pageview('');
+      ReactGA.initialize('foo');
+      ReactGA.pageview('');
       console.warn.args.should.eql([
         ['[react-ga]', 'path is required in .pageview()']
       ]);
     });
 
     it('should abort, log warning if path is empty string of spaces', function () {
-      ga.initialize('foo');
-      ga.pageview('  ');
+      ReactGA.initialize('foo');
+      ReactGA.pageview('  ');
       console.warn.args.should.eql([
         ['[react-ga]', 'path cannot be an empty string in .pageview()']
       ]);
@@ -223,8 +243,8 @@ describe('react-ga', function () {
 
     it('should output debug info, if debug is on', function () {
       var options = { debug: true };
-      ga.initialize('foo', options);
-      ga.modalview('valid');
+      ReactGA.initialize('foo', options);
+      ReactGA.modalview('valid');
       console.info.args.should.eql([
         ['[react-ga]', "called ga('send', 'pageview', path);"],
         ['[react-ga]', 'with path: /modal/valid']
@@ -232,8 +252,8 @@ describe('react-ga', function () {
     });
 
     it('should record a modalview', function () {
-      ga.initialize('foo');
-      ga.modalview('valid');
+      ReactGA.initialize('foo');
+      ReactGA.modalview('valid');
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', 'pageview', '/modal/valid']
@@ -241,8 +261,8 @@ describe('react-ga', function () {
     });
 
     it('should remove a leading slash', function () {
-      ga.initialize('foo');
-      ga.modalview('/valid');
+      ReactGA.initialize('foo');
+      ReactGA.modalview('/valid');
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', 'pageview', '/modal/valid']
@@ -250,32 +270,32 @@ describe('react-ga', function () {
     });
 
     it('should abort, log warning if modalName is not provided', function () {
-      ga.initialize('foo');
-      ga.modalview();
+      ReactGA.initialize('foo');
+      ReactGA.modalview();
       console.warn.args.should.eql([
         ['[react-ga]', 'modalName is required in .modalview(modalName)']
       ]);
     });
 
     it('should abort, log warning if modalName is empty string', function () {
-      ga.initialize('foo');
-      ga.modalview('');
+      ReactGA.initialize('foo');
+      ReactGA.modalview('');
       console.warn.args.should.eql([
         ['[react-ga]', 'modalName is required in .modalview(modalName)']
       ]);
     });
 
     it('should abort, log warning if modalName is empty string of spaces', function () {
-      ga.initialize('foo');
-      ga.modalview('  ');
+      ReactGA.initialize('foo');
+      ReactGA.modalview('  ');
       console.warn.args.should.eql([
         ['[react-ga]', 'modalName cannot be an empty string or a single / in .modalview()']
       ]);
     });
 
     it('should abort, log warning if modalName is /', function () {
-      ga.initialize('foo');
-      ga.modalview('/');
+      ReactGA.initialize('foo');
+      ReactGA.modalview('/');
       console.warn.args.should.eql([
         ['[react-ga]', 'modalName cannot be an empty string or a single / in .modalview()']
       ]);
@@ -289,8 +309,8 @@ describe('react-ga', function () {
   describe('exception()', function () {
 
     it('should record an exception', function () {
-      ga.initialize('foo');
-      ga.exception({});
+      ReactGA.initialize('foo');
+      ReactGA.exception({});
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', { hitType: 'exception' }]
@@ -298,8 +318,8 @@ describe('react-ga', function () {
     });
 
     it('should record a description value', function () {
-      ga.initialize('foo');
-      ga.exception({ description: 'This is an exception!' });
+      ReactGA.initialize('foo');
+      ReactGA.exception({ description: 'This is an exception!' });
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', { exDescription: 'This Is an Exception!', hitType: 'exception' }]
@@ -307,8 +327,8 @@ describe('react-ga', function () {
     });
 
     it('should record a fatal value', function () {
-      ga.initialize('foo');
-      ga.exception({ fatal: true });
+      ReactGA.initialize('foo');
+      ReactGA.exception({ fatal: true });
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', { exFatal: true, hitType: 'exception' }]
@@ -316,8 +336,8 @@ describe('react-ga', function () {
     });
 
     it('should reject a non-boolean fatal value', function () {
-      ga.initialize('foo');
-      ga.exception({ fatal: 'this-is-fatal' });
+      ReactGA.initialize('foo');
+      ReactGA.exception({ fatal: 'this-is-fatal' });
       console.warn.args.should.eql([[
         '[react-ga]', '`args.fatal` must be a boolean.'
       ]]);
@@ -334,8 +354,8 @@ describe('react-ga', function () {
 
   describe('timing()', function () {
     it('should warn if args object is missing', function () {
-      ga.initialize('foo');
-      ga.timing();
+      ReactGA.initialize('foo');
+      ReactGA.timing();
       console.warn.args.should.eql([
         ['[react-ga]', 'args.category, args.variable AND args.value are required in timing() ' +
                         'AND args.value has to be a number']
@@ -343,8 +363,8 @@ describe('react-ga', function () {
     });
 
     it('should warn if category arg is missing', function () {
-      ga.initialize('foo');
-      ga.timing({ variable: 'Timing test', value: 1000 });
+      ReactGA.initialize('foo');
+      ReactGA.timing({ variable: 'Timing test', value: 1000 });
       console.warn.args.should.eql([
         ['[react-ga]', 'args.category, args.variable AND args.value are required in timing() ' +
                         'AND args.value has to be a number']
@@ -352,8 +372,8 @@ describe('react-ga', function () {
     });
 
     it('should warn if category arg is empty string value', function () {
-      ga.initialize('foo');
-      ga.timing({ category: '', variable: 'Timing test', value: 1000 });
+      ReactGA.initialize('foo');
+      ReactGA.timing({ category: '', variable: 'Timing test', value: 1000 });
       console.warn.args.should.eql([
         ['[react-ga]', 'args.category, args.variable AND args.value are required in timing() ' +
                         'AND args.value has to be a number']
@@ -361,8 +381,8 @@ describe('react-ga', function () {
     });
 
     it('should warn if variable arg is missing', function () {
-      ga.initialize('foo');
-      ga.timing({ category: 'Test', value: 1000 });
+      ReactGA.initialize('foo');
+      ReactGA.timing({ category: 'Test', value: 1000 });
       console.warn.args.should.eql([
         ['[react-ga]', 'args.category, args.variable AND args.value are required in timing() ' +
                         'AND args.value has to be a number']
@@ -370,8 +390,8 @@ describe('react-ga', function () {
     });
 
     it('should warn if variable arg is empty string value', function () {
-      ga.initialize('foo');
-      ga.timing({ category: 'Test', value: 1000, variable: '' });
+      ReactGA.initialize('foo');
+      ReactGA.timing({ category: 'Test', value: 1000, variable: '' });
       console.warn.args.should.eql([
         ['[react-ga]', 'args.category, args.variable AND args.value are required in timing() ' +
                         'AND args.value has to be a number']
@@ -379,8 +399,8 @@ describe('react-ga', function () {
     });
 
     it('should warn if value arg is missing', function () {
-      ga.initialize('foo');
-      ga.timing({ category: 'Test', variable: 'Timing test' });
+      ReactGA.initialize('foo');
+      ReactGA.timing({ category: 'Test', variable: 'Timing test' });
       console.warn.args.should.eql([
         ['[react-ga]', 'args.category, args.variable AND args.value are required in timing() ' +
                         'AND args.value has to be a number']
@@ -388,8 +408,8 @@ describe('react-ga', function () {
     });
 
     it('should warn if value arg is not a number', function () {
-      ga.initialize('foo');
-      ga.timing({ category: 'Test', variable: 'Timing test', value: 'Not a number' });
+      ReactGA.initialize('foo');
+      ReactGA.timing({ category: 'Test', variable: 'Timing test', value: 'Not a number' });
       console.warn.args.should.eql([
         ['[react-ga]', 'args.category, args.variable AND args.value are required in timing() ' +
                         'AND args.value has to be a number']
@@ -397,8 +417,8 @@ describe('react-ga', function () {
     });
 
     it('should create timing event without timingLabel', function () {
-      ga.initialize('foo');
-      ga.timing({ category: 'Test', variable: 'Timing test', value: 1000 });
+      ReactGA.initialize('foo');
+      ReactGA.timing({ category: 'Test', variable: 'Timing test', value: 1000 });
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', {
@@ -411,8 +431,8 @@ describe('react-ga', function () {
     });
 
     it('should create timing event with timingLabel', function () {
-      ga.initialize('foo');
-      ga.timing({ category: 'Test', variable: 'Timing test',
+      ReactGA.initialize('foo');
+      ReactGA.timing({ category: 'Test', variable: 'Timing test',
                   value: 1000, label: 'Timing test label' });
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
@@ -433,8 +453,8 @@ describe('react-ga', function () {
 
   describe('event()', function () {
     it('should record an event', function () {
-      ga.initialize('foo');
-      ga.event({ category: 'Test', action: 'Send Test' });
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: 'Test', action: 'Send Test' });
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', {
@@ -446,8 +466,8 @@ describe('react-ga', function () {
     });
 
     it('should record an event with strings converted to titleCase', function () {
-      ga.initialize('foo');
-      ga.event({ category: 'test', action: 'send test' });
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: 'test', action: 'send test' });
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', {
@@ -459,8 +479,8 @@ describe('react-ga', function () {
     });
 
     it('should not convert strings to titleCase if the flag is false', function () {
-      ga.initialize('foo', { titleCase: false });
-      ga.event({ category: 'test', action: 'send test' });
+      ReactGA.initialize('foo', { titleCase: false });
+      ReactGA.event({ category: 'test', action: 'send test' });
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', {
@@ -472,48 +492,48 @@ describe('react-ga', function () {
     });
 
     it('should warn if args object is missing', function () {
-      ga.initialize('foo');
-      ga.event();
+      ReactGA.initialize('foo');
+      ReactGA.event();
       console.warn.args.should.eql([
         ['[react-ga]', 'args.category AND args.action are required in event()']
       ]);
     });
 
     it('should warn if category is missing', function () {
-      ga.initialize('foo');
-      ga.event({ action: 'Send Test' });
+      ReactGA.initialize('foo');
+      ReactGA.event({ action: 'Send Test' });
       console.warn.args.should.eql([
         ['[react-ga]', 'args.category AND args.action are required in event()']
       ]);
     });
 
     it('should warn if category is empty string', function () {
-      ga.initialize('foo');
-      ga.event({ category: '', action: 'Send Test' });
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: '', action: 'Send Test' });
       console.warn.args.should.eql([
         ['[react-ga]', 'args.category AND args.action are required in event()']
       ]);
     });
 
     it('should warn if action is missing', function () {
-      ga.initialize('foo');
-      ga.event({ category: 'Test' });
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: 'Test' });
       console.warn.args.should.eql([
         ['[react-ga]', 'args.category AND args.action are required in event()']
       ]);
     });
 
     it('should warn if action is empty string', function () {
-      ga.initialize('foo');
-      ga.event({ category: 'Test', action: '' });
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: 'Test', action: '' });
       console.warn.args.should.eql([
         ['[react-ga]', 'args.category AND args.action are required in event()']
       ]);
     });
 
     it('should record a label value', function () {
-      ga.initialize('foo');
-      ga.event({ category: 'Test', action: 'Send Test', label: 'Test Label Value' });
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: 'Test', action: 'Send Test', label: 'Test Label Value' });
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', {
@@ -526,8 +546,8 @@ describe('react-ga', function () {
     });
 
     it('should record a value value', function () {
-      ga.initialize('foo');
-      ga.event({ category: 'Test', action: 'Send Test', value: 10 });
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: 'Test', action: 'Send Test', value: 10 });
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', {
@@ -540,8 +560,8 @@ describe('react-ga', function () {
     });
 
     it('should reject a non-numeric value value', function () {
-      ga.initialize('foo');
-      ga.event({ category: 'Test', action: 'Send Test', value: 'millions' });
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: 'Test', action: 'Send Test', value: 'millions' });
       console.warn.args.should.eql([[
         '[react-ga]', 'Expected `args.value` arg to be a Number.'
       ]]);
@@ -556,8 +576,8 @@ describe('react-ga', function () {
     });
 
     it('should record a nonInteraction value', function () {
-      ga.initialize('foo');
-      ga.event({ category: 'Test', action: 'Send Test', nonInteraction: true });
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: 'Test', action: 'Send Test', nonInteraction: true });
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', {
@@ -570,8 +590,8 @@ describe('react-ga', function () {
     });
 
     it('should reject a non-boolean nonInteraction value', function () {
-      ga.initialize('foo');
-      ga.event({ category: 'Test', action: 'Send Test', nonInteraction: 'yeahsure' });
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: 'Test', action: 'Send Test', nonInteraction: 'yeahsure' });
       console.warn.args.should.eql([[
         '[react-ga]', '`args.nonInteraction` must be a boolean.'
       ]]);
@@ -592,8 +612,8 @@ describe('react-ga', function () {
 
   describe('outboundLink()', function () {
     it('should record an outboundLink event', function (done) {
-      ga.initialize('foo');
-      ga.outboundLink({ label: 'Test Click' }, function () {
+      ReactGA.initialize('foo');
+      ReactGA.outboundLink({ label: 'Test Click' }, function () {
         // we need a reference to the function to compare in the
         // getGaCalls() test below
         var functionCalledBack = getGaCalls()[1][1].hitCallback;
@@ -614,16 +634,16 @@ describe('react-ga', function () {
     });
 
     it('should warn if all args are missing', function () {
-      ga.initialize('foo');
-      ga.outboundLink();
+      ReactGA.initialize('foo');
+      ReactGA.outboundLink();
       console.warn.args.should.eql([[
         '[react-ga]', 'hitCallback function is required'
       ]]);
     });
 
     it('should warn if label arg is missing', function () {
-      ga.initialize('foo');
-      ga.outboundLink({ missing: 'labelarg' }, function () {
+      ReactGA.initialize('foo');
+      ReactGA.outboundLink({ missing: 'labelarg' }, function () {
         // do nothing on callback
       });
 
@@ -633,22 +653,22 @@ describe('react-ga', function () {
     });
 
     it('should warn if hitCallback is missing', function () {
-      ga.initialize('foo');
-      ga.outboundLink({ label: 'Missing hitCallback' });
+      ReactGA.initialize('foo');
+      ReactGA.outboundLink({ label: 'Missing hitCallback' });
       console.warn.args.should.eql([[
         '[react-ga]', 'hitCallback function is required'
       ]]);
     });
 
     it('should fire hitCallback if ga is defined', function (done) {
-      ga.initialize('foo');
-      ga.outboundLink({ label: 'http://www.google.com' }, function () {
+      ReactGA.initialize('foo');
+      ReactGA.outboundLink({ label: 'http://www.google.com' }, function () {
         done();
       });
     });
 
     it('should fire hitCallback if ga is not defined', function (done) {
-      ga.outboundLink({ label: 'http://www.google.com' }, function () {
+      ReactGA.outboundLink({ label: 'http://www.google.com' }, function () {
         done();
       });
     });
@@ -657,12 +677,12 @@ describe('react-ga', function () {
       // use fake timers to simulate response time from GA
       this.clock = sinon.useFakeTimers();
 
-      ga.initialize('foo');
+      ReactGA.initialize('foo');
       var simulateGACallback = function () {
         done();
       };
 
-      ga.outboundLink({ label: 'http://www.google.com' }, simulateGACallback);
+      ReactGA.outboundLink({ label: 'http://www.google.com' }, simulateGACallback);
 
       this.clock.tick(125);
       var functionCalledBack = getGaCalls()[1][1].hitCallback;
@@ -674,12 +694,12 @@ describe('react-ga', function () {
       // use fake timers to simulate response time from GA
       this.clock = sinon.useFakeTimers();
 
-      ga.initialize('foo');
+      ReactGA.initialize('foo');
       var simulateGACallback = function () {
         done();
       };
 
-      ga.outboundLink({ label: 'http://www.google.com' }, simulateGACallback);
+      ReactGA.outboundLink({ label: 'http://www.google.com' }, simulateGACallback);
 
       this.clock.tick(260);
       var functionCalledBack = getGaCalls()[1][1].hitCallback;
@@ -688,12 +708,12 @@ describe('react-ga', function () {
     });
 
     it('should fire hitCallback if ga is not available after 250ms', function (done) {
-      ga.initialize('foo');
+      ReactGA.initialize('foo');
       var simulateGACallback = function () {
         done();
       };
 
-      ga.outboundLink({ label: 'http://www.google.com' }, simulateGACallback);
+      ReactGA.outboundLink({ label: 'http://www.google.com' }, simulateGACallback);
 
       var simulatedResponseTime = 275;
       setTimeout(function () {
@@ -709,11 +729,11 @@ describe('react-ga', function () {
 
   describe('OutboundLink()', function () {
     it('should create a React component <OutboundLink>', function () {
-      ga.initialize();
+      ReactGA.initialize();
 
-      var OutboundLinkComponent = ga.OutboundLink;
+      var OutboundLinkComponent = ReactGA.OutboundLink;
       TestUtils.isElement(OutboundLinkComponent);
-      OutboundLinkComponent.displayName.should.equal('OutboundLink');
+      OutboundLinkComponent.displayName.should.eql('OutboundLink');
     });
 
   });
@@ -725,8 +745,8 @@ describe('react-ga', function () {
   describe('Plugin', function () {
 
     it('should require the plugin: ecommerce', function () {
-      ga.initialize('plugin');
-      ga.plugin.require('ecommerce');
+      ReactGA.initialize('plugin');
+      ReactGA.plugin.require('ecommerce');
 
       getGaCalls().should.eql([
         ['create', 'plugin', 'auto'],
@@ -735,8 +755,8 @@ describe('react-ga', function () {
     });
 
     it('should execute ecommerce:addItem', function () {
-      ga.initialize('plugin');
-      ga.plugin.execute('ecommerce', 'addItem', { id: 1, name: 'Product' });
+      ReactGA.initialize('plugin');
+      ReactGA.plugin.execute('ecommerce', 'addItem', { id: 1, name: 'Product' });
 
       getGaCalls().should.eql([
         ['create', 'plugin', 'auto'],
@@ -745,8 +765,8 @@ describe('react-ga', function () {
     });
 
     it('should execute ec:setAction \'checkout\' with payload { \'step\': 1 }', function () {
-      ga.initialize('plugin');
-      ga.plugin.execute('ec', 'setAction', 'checkout', { step: 1 });
+      ReactGA.initialize('plugin');
+      ReactGA.plugin.execute('ec', 'setAction', 'checkout', { step: 1 });
       getGaCalls().should.eql([
         ['create', 'plugin', 'auto'],
         ['ec:setAction', 'checkout', { step: 1 }]
@@ -754,8 +774,8 @@ describe('react-ga', function () {
     });
 
     it('should execute ecommerce:addItem', function () {
-      ga.initialize('plugin');
-      ga.plugin.execute('ecommerce', 'addItem', {
+      ReactGA.initialize('plugin');
+      ReactGA.plugin.execute('ecommerce', 'addItem', {
         id: 1,
         name: 'Product'
       });
@@ -767,8 +787,8 @@ describe('react-ga', function () {
     });
 
     it('should execute ecommerce:send', function () {
-      ga.initialize('plugin');
-      ga.plugin.execute('ecommerce', 'send');
+      ReactGA.initialize('plugin');
+      ReactGA.plugin.execute('ecommerce', 'send');
       getGaCalls().should.eql([
         ['create', 'plugin', 'auto'],
         ['ecommerce:send']
@@ -776,8 +796,8 @@ describe('react-ga', function () {
     });
 
     it('should execute ec:setAction \'checkout\' with payload { \'step\': 1 }', function () {
-      ga.initialize('plugin');
-      ga.plugin.execute('ec', 'setAction', 'checkout', { step: 1 });
+      ReactGA.initialize('plugin');
+      ReactGA.plugin.execute('ec', 'setAction', 'checkout', { step: 1 });
       getGaCalls().should.eql([
         ['create', 'plugin', 'auto'],
         ['ec:setAction', 'checkout', { step: 1 }]
