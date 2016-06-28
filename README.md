@@ -29,7 +29,6 @@ Note that [React](https://github.com/facebook/react) >= 0.14.0 is needed in orde
 
 ## Usage
 
-
 ### With npm
 
 Initializing GA and Tracking Pageviews with `react-router`:
@@ -73,7 +72,12 @@ When included as a script tag, a variable `ReactGA` is exposed in the global sco
 </script>
 ```
 
-### API
+## Upgrading from `1.x` to `2.x`
+
+You can safely upgrade to `2.x` as there are no breaking changes. The main new feature is that the underlying `ga` function is now exposed via the property `ReactGA.ga`. This can be helpful when you need a function that `ReactGA` doesn't support at the moment. Also, for that reason, it is recommended that you rename your imported value as `ReactGA` rather than `ga` so as to distinguish between the React GA wrapper and the original `ga` function.
+
+
+## API
 
 #### ReactGA.initialize(gaTrackingID, options)
 
