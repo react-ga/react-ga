@@ -35,6 +35,7 @@ var OutboundLink = React.createClass({
       href: this.props.to,
       onClick: this.handleClick
     });
+    delete props.eventLabel;
     return React.createElement('a', props);
   }
 });
