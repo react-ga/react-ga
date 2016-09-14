@@ -158,8 +158,11 @@ var ReactGA = {
   ga: function () {
     if (arguments.length > 0) {
       ga.apply(this, arguments);
-      log('called ga(arguments);');
-      log('with arguments: ' + JSON.stringify([].slice.apply(arguments)));
+      if (_debug) {
+        log('called ga(\'arguments\');');
+        log('with arguments: ' + JSON.stringify([].slice.apply(arguments)));
+      }
+
       return;
     }
 

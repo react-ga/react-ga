@@ -90,6 +90,15 @@ describe('react-ga', function () {
         ['send', 'pageview', '/mypage']
       ]);
     });
+
+    it('should output debug info, if debug is on', function () {
+      ReactGA.initialize('foo', { debug: true });
+      ReactGA.ga('send', 'pageview', '/mypage');
+      console.info.args.should.eql([
+        ['[react-ga]', "called ga('arguments');"],
+        ['[react-ga]', 'with arguments: ["send","pageview","/mypage"]']
+      ]);
+    });
   });
 
   /**
