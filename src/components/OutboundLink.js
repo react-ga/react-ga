@@ -2,6 +2,7 @@ var React = require('react');
 var assign = require('object-assign');
 
 var NEWTAB = '_blank';
+var MIDDLECLICK = 1;
 
 var OutboundLink = React.createClass({
   displayName: 'OutboundLink',
@@ -16,9 +17,10 @@ var OutboundLink = React.createClass({
   handleClick: function (e) {
     var props = this.props;
     var eventMeta = { label: props.eventLabel };
-    var sameWindow = props.target !== NEWTAB;
+    var sameTarget = props.target !== NEWTAB;
+    var normalClick = !(e.ctrlKey || e.shiftKey || e.metaKey || e.button === MIDDLECLICK);
 
-    if (sameWindow) {
+    if (sameTarget && normalClick) {
       e.preventDefault();
       OutboundLink.trackLink(eventMeta, function () {
         window.location.href = props.to;
