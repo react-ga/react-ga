@@ -14,16 +14,18 @@ var OutboundLink = React.createClass({
     }
   },
   handleClick: function (e) {
-    e.preventDefault();
     var props = this.props;
     var eventMeta = { label: props.eventLabel };
-    OutboundLink.trackLink(eventMeta, function () {
-      if (props.target === NEWTAB) {
-        window.open(props.to, NEWTAB);
-      } else {
+    var sameWindow = props.target !== NEWTAB;
+
+    if (sameWindow) {
+      e.preventDefault();
+      OutboundLink.trackLink(eventMeta, function () {
         window.location.href = props.to;
-      }
-    });
+      });
+    } else {
+      OutboundLink.trackLink(eventMeta, function () {});
+    }
 
     if (props.onClick) {
       props.onClick(e);
