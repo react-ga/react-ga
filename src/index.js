@@ -32,7 +32,7 @@ var ReactGA = {
     }
 
     if (options) {
-      if (options.gaOptions.name) {
+      if (options.gaOptions && options.gaOptions.name) {
         _trackerName = options.gaOptions.name;
       }
 
