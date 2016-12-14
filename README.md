@@ -289,7 +289,7 @@ render() {
 For bower, use the `<ReactGA.OutboundLink>` component.
 
 
-#### ReactGA.exception(args, hitCallback)
+#### ReactGA.exception(args)
 
 [GA exception tracking](https://developers.google.com/analytics/devguides/collection/analyticsjs/exceptions)
 
