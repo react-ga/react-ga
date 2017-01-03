@@ -250,7 +250,7 @@ var ReactGA = {
         fieldObject.eventLabel = _format(args.label);
       }
 
-      if (args.value) {
+      if (args.hasOwnProperty('value')) {
         if (typeof args.value !== 'number') {
           warn('Expected `args.value` arg to be a Number.');
         } else {
