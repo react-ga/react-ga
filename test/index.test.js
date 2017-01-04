@@ -568,6 +568,20 @@ describe('react-ga', function () {
       ]);
     });
 
+    it('should record a value value of zero', function () {
+      ReactGA.initialize('foo');
+      ReactGA.event({ category: 'Test', action: 'Send Test', value: 0 });
+      getGaCalls().should.eql([
+        ['create', 'foo', 'auto'],
+        ['send', {
+          eventAction: 'Send Test',
+          eventCategory: 'Test',
+          eventValue: 0,
+          hitType: 'event'
+        }]
+      ]);
+    });
+
     it('should reject a non-numeric value value', function () {
       ReactGA.initialize('foo');
       ReactGA.event({ category: 'Test', action: 'Send Test', value: 'millions' });
