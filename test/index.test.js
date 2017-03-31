@@ -56,10 +56,11 @@ describe('react-ga', function () {
       ]);
     });
 
-    it('should call window.ga() with ga options if they are given', function () {
+    it('should set options using window.ga() when they are provided', function () {
       ReactGA.initialize('foo', { gaOptions: { userId: 123 } });
       getGaCalls().should.eql([
-        ['create', 'foo', { userId: 123 }]
+        ['create', 'foo', 'auto'],
+        ['set', 'userId', '123']
       ]);
     });
 
