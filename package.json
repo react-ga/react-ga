@@ -38,6 +38,7 @@
     "browserify": "^13.0.0",
     "browserify-shim": "^3.8.12",
     "del": "^2.2.0",
+    "envify": "^4.0.0",
     "gulp": "~3.8.11",
     "gulp-jscs": "^3.0.2",
     "gulp-rename": "~1.2.0",

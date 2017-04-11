@@ -6,6 +6,7 @@ var uglify = require('gulp-uglify');
 var jscs = require('gulp-jscs');
 var del = require('del');
 var browserify = require('browserify');
+var envify = require('envify/custom');
 var shim = require('browserify-shim');
 
 var DEST = 'dist/';
@@ -39,16 +40,17 @@ gulp.task('clean', function () {
 });
 
 gulp.task('package', function () {
-    return browserify('./src/index.js', {
-              standalone: 'ReactGA'
-            })
-            .transform(shim)
-            .bundle()
-            .pipe(source(PKG + '.js'))
-            .pipe(gulp.dest(DEST))
-            .pipe(rename(PKG + '.min.js'))
-            .pipe(streamify(uglify()))
-            .pipe(gulp.dest(DEST));
+  return browserify('./src/index.js', {
+      standalone: 'ReactGA'
+    })
+    .transform(envify({ NODE_ENV: 'production' }), { global: true })
+    .transform(shim, { global: true })
+    .bundle()
+    .pipe(source(PKG + '.js'))
+    .pipe(gulp.dest(DEST))
+    .pipe(rename(PKG + '.min.js'))
+    .pipe(streamify(uglify()))
+    .pipe(gulp.dest(DEST));
 });
 
 gulp.task('test', TEST_TASKS);
