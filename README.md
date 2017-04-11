@@ -61,11 +61,11 @@ When included as a script tag, a variable `ReactGA` is exposed in the global sco
 ```js
 
 <!-- The core React library -->
-<script src="https://fb.me/react-15.0.1.js"></script>
+<script src="https://unpkg.com/react@15.5.0/dist/react.min.js"></script>
 <!-- The ReactDOM Library -->
-<script src="https://fb.me/react-dom-15.0.1.js"></script>
+<script src="https://unpkg.com/react-dom@15.5.0/dist/react-dom.min.js"></script>
 <!-- ReactGA library -->
-<script src="/path/to/bower_components/react-ga/dist/react-ga.js"></script>
+<script src="/path/to/bower_components/react-ga/dist/react-ga.min.js"></script>
 
 <script>
   ReactGA.initialize('UA-000000-01', { debug: true });
