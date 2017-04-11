@@ -1,12 +1,14 @@
 var React = require('react');
+var CreateReactClass = require('create-react-class');
+var PropTypes = require('prop-types');
 var assign = require('object-assign');
 
 var NEWTAB = '_blank';
 
-var OutboundLink = React.createClass({
+var OutboundLink = CreateReactClass({
   displayName: 'OutboundLink',
   propTypes: {
-    eventLabel: React.PropTypes.string.isRequired
+    eventLabel: PropTypes.string.isRequired
   },
   statics: {
     trackLink: function () {

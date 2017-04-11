@@ -30,7 +30,9 @@
     "react": ">= 0.14.0"
   },
   "dependencies": {
-    "object-assign": "^4.0.1"
+    "create-react-class": "^15.5.2",
+    "object-assign": "^4.0.1",
+    "prop-types": "^15.5.6"
   },
   "devDependencies": {
     "browserify": "^13.0.0",
