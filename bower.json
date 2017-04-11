@@ -1,12 +1,12 @@
 {
   "name": "react-ga",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "homepage": "https://github.com/react-ga/react-ga",
   "authors": [
     "Tay Yang Shun <tay.yang.shun@gmail.com>"
   ],
   "description": "React Google Analytics module",
-  "main": "dist/react-ga.js",
+  "main": "dist/react-ga.min.js",
   "moduleType": [
     "amd",
     "globals",
