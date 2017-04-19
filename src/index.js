@@ -197,7 +197,7 @@ var ReactGA = {
   timing: function (args) {
     if (typeof ga === 'function') {
       if (!args || !args.category || !args.variable
-          || !args.value || typeof args.value !== 'number') {
+          || !args.hasOwnProperty('value') || typeof args.value !== 'number') {
         warn('args.category, args.variable ' +
               'AND args.value are required in timing() ' +
               'AND args.value has to be a number');
