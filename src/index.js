@@ -55,11 +55,14 @@ var ReactGA = {
     })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
     // jscs:enable
 
+    ga('create', gaTrackingID, 'auto');
+
     if (options && options.gaOptions) {
-      ga('create', gaTrackingID, options.gaOptions);
-    } else {
-      ga('create', gaTrackingID, 'auto');
+      for (var prop in options.gaOptions) {
+        ga('set', prop, options.gaOptions[prop].toString());
+      }
     }
+
   },
 
   /**
