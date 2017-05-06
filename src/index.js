@@ -25,6 +25,10 @@ var _format = function (s) {
 
 var ReactGA = {
   initialize: function (gaTrackingID, options) {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
     if (!gaTrackingID) {
       warn('gaTrackingID is required in initialize()');
       return;
