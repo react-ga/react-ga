@@ -16,6 +16,9 @@ var trim = require('./utils/trim');
 var warn = require('./utils/console/warn');
 var log = require('./utils/console/log');
 
+var window = require('window-or-global');
+var ga     = null;
+
 var _debug = false;
 var _titleCase = true;
 
@@ -54,6 +57,10 @@ var ReactGA = {
       m.parentNode.insertBefore(a, m);
     })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
     // jscs:enable
+
+	if(!ga){
+		ga = window.ga;
+	}
 
     if (options && options.gaOptions) {
       ga('create', gaTrackingID, options.gaOptions);
