@@ -18,6 +18,7 @@ var log = require('./utils/console/log');
 
 var _debug = false;
 var _titleCase = true;
+var _trackerName = '';
 
 var _format = function (s) {
   return format(s, _titleCase);
@@ -31,6 +32,10 @@ var ReactGA = {
     }
 
     if (options) {
+      if (options.gaOptions && options.gaOptions.name) {
+        _trackerName = options.gaOptions.name;
+      }
+
       if (options.debug && options.debug === true) {
         _debug = true;
       }
@@ -118,7 +123,7 @@ var ReactGA = {
    */
   send: function (fieldObject) {
     if (typeof ga === 'function') {
-      ga('send', fieldObject);
+      ga((_trackerName == '' ? '' : _trackerName + '.') + 'send', fieldObject);
 
       if (_debug) {
         log('called ga(\'send\', fieldObject);');
@@ -145,7 +150,7 @@ var ReactGA = {
     }
 
     if (typeof ga === 'function') {
-      ga('send', 'pageview', path);
+      ga((_trackerName == '' ? '' : _trackerName + '.') + 'send', 'pageview', path);
 
       if (_debug) {
         log('called ga(\'send\', \'pageview\', path);');

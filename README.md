@@ -90,6 +90,7 @@ ReactGA.initialize('UA-000000-01', {
   debug: true,
   titleCase: false,
   gaOptions: {
+    name: 'myTracker', // tracker name
     userId: 123
   }
 });
@@ -101,6 +102,7 @@ ReactGA.initialize('UA-000000-01', {
 |options.debug| `Boolean`. Optional. If set to `true`, will output additional feedback to the console.|
 |options.titleCase| `Boolean`. Optional. Defaults to `true`. If set to `false`, strings will not be converted to title case before sending to GA.|
 |options.gaOptions| `Object`. Optional. [GA configurable fields.](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference)|
+|options.gaOptions.name| `String`. Optional. [GA tracker name.] [Working with multiple trackers.](https://developers.google.com/analytics/devguides/collection/analyticsjs/creating-trackers#working_with_multiple_trackers)|
 
 See example above for use with `react-router`.
 
