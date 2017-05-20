@@ -6,6 +6,9 @@
  *          Atul Varma <atul@mozillafoundation.org>
  */
 
+var React = require('react');
+var createReactClass = require('create-react-class');
+
 /**
  * Utilities
  */
@@ -484,6 +487,27 @@ var ReactGA = {
       // continues to work as expected
       setTimeout(hitCallback, 0);
     }
+  },
+
+  /**
+   * withPageView:
+   * HoC for auto-triggering pageview on component mount
+   */
+  withPageView: function (WrappedComponent) {
+    var _this = this;
+
+    return createReactClass({
+      componentDidMount: function () {
+        const location = window.location.pathname + window.location.search;
+        _this.set({ page: location });
+        _this.pageview(location);
+
+      },
+
+      render: function () {
+        return React.createElement(WrappedComponent, this.props);
+      }
+    });
   }
 };
 
