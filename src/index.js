@@ -492,16 +492,17 @@ var ReactGA = {
   /**
    * withPageView:
    * HoC for auto-triggering pageview on component mount
+   * @param {Function} WrappedComponent component to wrap
+   * @param {String} path - the current page page e.g. '/homepage'
    */
-  withPageView: function (WrappedComponent) {
+  withPageView: function (WrappedComponent, path) {
     var _this = this;
 
     return createReactClass({
       componentDidMount: function () {
-        const location = window.location.pathname + window.location.search;
+        const location = path || window.location.pathname + window.location.search;
         _this.set({ page: location });
         _this.pageview(location);
-
       },
 
       render: function () {

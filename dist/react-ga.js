@@ -1037,12 +1037,12 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 'use strict';
 
-var invariant = require('fbjs/lib/invariant');
-var warning = require('fbjs/lib/warning');
-
-var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
-
-var loggedTypeFailures = {};
+if ("production" !== 'production') {
+  var invariant = require('fbjs/lib/invariant');
+  var warning = require('fbjs/lib/warning');
+  var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
+  var loggedTypeFailures = {};
+}
 
 /**
  * Assert that the values match with the type specs.
@@ -1071,7 +1071,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
         } catch (ex) {
           error = ex;
         }
-        "production" !== 'production' ? warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error) : void 0;
+        warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error);
         if (error instanceof Error && !(error.message in loggedTypeFailures)) {
           // Only monitor this failure once because there tends to be a lot of the
           // same error.
@@ -1079,7 +1079,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 
           var stack = getStack ? getStack() : '';
 
-          "production" !== 'production' ? warning(false, 'Failed %s type: %s%s', location, error.message, stack != null ? stack : '') : void 0;
+          warning(false, 'Failed %s type: %s%s', location, error.message, stack != null ? stack : '');
         }
       }
     }
@@ -1088,7 +1088,68 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 
 module.exports = checkPropTypes;
 
-},{"./lib/ReactPropTypesSecret":11,"fbjs/lib/invariant":5,"fbjs/lib/warning":6}],9:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":12,"fbjs/lib/invariant":14,"fbjs/lib/warning":15}],9:[function(require,module,exports){
+/**
+ * Copyright 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+'use strict';
+
+var emptyFunction = require('fbjs/lib/emptyFunction');
+var invariant = require('fbjs/lib/invariant');
+var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
+
+module.exports = function() {
+  function shim(props, propName, componentName, location, propFullName, secret) {
+    if (secret === ReactPropTypesSecret) {
+      // It is still safe when called from React.
+      return;
+    }
+    invariant(
+      false,
+      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+      'Use PropTypes.checkPropTypes() to call them. ' +
+      'Read more at http://fb.me/use-check-prop-types'
+    );
+  };
+  shim.isRequired = shim;
+  function getShim() {
+    return shim;
+  };
+  // Important!
+  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
+  var ReactPropTypes = {
+    array: shim,
+    bool: shim,
+    func: shim,
+    number: shim,
+    object: shim,
+    string: shim,
+    symbol: shim,
+
+    any: shim,
+    arrayOf: getShim,
+    element: shim,
+    instanceOf: getShim,
+    node: shim,
+    objectOf: getShim,
+    oneOf: getShim,
+    oneOfType: getShim,
+    shape: getShim
+  };
+
+  ReactPropTypes.checkPropTypes = emptyFunction;
+  ReactPropTypes.PropTypes = ReactPropTypes;
+
+  return ReactPropTypes;
+};
+
+},{"./lib/ReactPropTypesSecret":12,"fbjs/lib/emptyFunction":13,"fbjs/lib/invariant":14}],10:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -1107,7 +1168,7 @@ var warning = require('fbjs/lib/warning');
 var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
 var checkPropTypes = require('./checkPropTypes');
 
-module.exports = function (isValidElement) {
+module.exports = function(isValidElement, throwOnDirectAccess) {
   /* global Symbol */
   var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
   var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
@@ -1182,58 +1243,27 @@ module.exports = function (isValidElement) {
 
   var ANONYMOUS = '<<anonymous>>';
 
-  var ReactPropTypes;
+  // Important!
+  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
+  var ReactPropTypes = {
+    array: createPrimitiveTypeChecker('array'),
+    bool: createPrimitiveTypeChecker('boolean'),
+    func: createPrimitiveTypeChecker('function'),
+    number: createPrimitiveTypeChecker('number'),
+    object: createPrimitiveTypeChecker('object'),
+    string: createPrimitiveTypeChecker('string'),
+    symbol: createPrimitiveTypeChecker('symbol'),
 
-  if ("production" !== 'production') {
-    // Keep in sync with production version below
-    ReactPropTypes = {
-      array: createPrimitiveTypeChecker('array'),
-      bool: createPrimitiveTypeChecker('boolean'),
-      func: createPrimitiveTypeChecker('function'),
-      number: createPrimitiveTypeChecker('number'),
-      object: createPrimitiveTypeChecker('object'),
-      string: createPrimitiveTypeChecker('string'),
-      symbol: createPrimitiveTypeChecker('symbol'),
-
-      any: createAnyTypeChecker(),
-      arrayOf: createArrayOfTypeChecker,
-      element: createElementTypeChecker(),
-      instanceOf: createInstanceTypeChecker,
-      node: createNodeChecker(),
-      objectOf: createObjectOfTypeChecker,
-      oneOf: createEnumTypeChecker,
-      oneOfType: createUnionTypeChecker,
-      shape: createShapeTypeChecker
-    };
-  } else {
-    var productionTypeChecker = function () {
-      invariant(false, 'React.PropTypes type checking code is stripped in production.');
-    };
-    productionTypeChecker.isRequired = productionTypeChecker;
-    var getProductionTypeChecker = function () {
-      return productionTypeChecker;
-    };
-    // Keep in sync with development version above
-    ReactPropTypes = {
-      array: productionTypeChecker,
-      bool: productionTypeChecker,
-      func: productionTypeChecker,
-      number: productionTypeChecker,
-      object: productionTypeChecker,
-      string: productionTypeChecker,
-      symbol: productionTypeChecker,
-
-      any: productionTypeChecker,
-      arrayOf: getProductionTypeChecker,
-      element: productionTypeChecker,
-      instanceOf: getProductionTypeChecker,
-      node: productionTypeChecker,
-      objectOf: getProductionTypeChecker,
-      oneOf: getProductionTypeChecker,
-      oneOfType: getProductionTypeChecker,
-      shape: getProductionTypeChecker
-    };
-  }
+    any: createAnyTypeChecker(),
+    arrayOf: createArrayOfTypeChecker,
+    element: createElementTypeChecker(),
+    instanceOf: createInstanceTypeChecker,
+    node: createNodeChecker(),
+    objectOf: createObjectOfTypeChecker,
+    oneOf: createEnumTypeChecker,
+    oneOfType: createUnionTypeChecker,
+    shape: createShapeTypeChecker
+  };
 
   /**
    * inlined Object.is polyfill to avoid requiring consumers ship their own
@@ -1270,16 +1300,41 @@ module.exports = function (isValidElement) {
   function createChainableTypeChecker(validate) {
     if ("production" !== 'production') {
       var manualPropTypeCallCache = {};
+      var manualPropTypeWarningCount = 0;
     }
     function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
       componentName = componentName || ANONYMOUS;
       propFullName = propFullName || propName;
-      if ("production" !== 'production') {
-        if (secret !== ReactPropTypesSecret && typeof console !== 'undefined') {
+
+      if (secret !== ReactPropTypesSecret) {
+        if (throwOnDirectAccess) {
+          // New behavior only for users of `prop-types` package
+          invariant(
+            false,
+            'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+            'Use `PropTypes.checkPropTypes()` to call them. ' +
+            'Read more at http://fb.me/use-check-prop-types'
+          );
+        } else if ("production" !== 'production' && typeof console !== 'undefined') {
+          // Old behavior for people using React.PropTypes
           var cacheKey = componentName + ':' + propName;
-          if (!manualPropTypeCallCache[cacheKey]) {
-            "production" !== 'production' ? warning(false, 'You are manually calling a React.PropTypes validation ' + 'function for the `%s` prop on `%s`. This is deprecated ' + 'and will not work in production with the next major version. ' + 'You may be seeing this warning due to a third-party PropTypes ' + 'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.', propFullName, componentName) : void 0;
+          if (
+            !manualPropTypeCallCache[cacheKey] &&
+            // Avoid spamming the console because they are often not actionable except for lib authors
+            manualPropTypeWarningCount < 3
+          ) {
+            warning(
+              false,
+              'You are manually calling a React.PropTypes validation ' +
+              'function for the `%s` prop on `%s`. This is deprecated ' +
+              'and will throw in the standalone `prop-types` package. ' +
+              'You may be seeing this warning due to a third-party PropTypes ' +
+              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.',
+              propFullName,
+              componentName
+            );
             manualPropTypeCallCache[cacheKey] = true;
+            manualPropTypeWarningCount++;
           }
         }
       }
@@ -1417,6 +1472,20 @@ module.exports = function (isValidElement) {
       return emptyFunction.thatReturnsNull;
     }
 
+    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+      var checker = arrayOfTypeCheckers[i];
+      if (typeof checker !== 'function') {
+        warning(
+          false,
+          'Invalid argument supplid to oneOfType. Expected an array of check functions, but ' +
+          'received %s at index %s.',
+          getPostfixForTypeWarning(checker),
+          i
+        );
+        return emptyFunction.thatReturnsNull;
+      }
+    }
+
     function validate(props, propName, componentName, location, propFullName) {
       for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
         var checker = arrayOfTypeCheckers[i];
@@ -1549,6 +1618,9 @@ module.exports = function (isValidElement) {
   // This handles more types than `getPropType`. Only used for error messages.
   // See `createPrimitiveTypeChecker`.
   function getPreciseType(propValue) {
+    if (typeof propValue === 'undefined' || propValue === null) {
+      return '' + propValue;
+    }
     var propType = getPropType(propValue);
     if (propType === 'object') {
       if (propValue instanceof Date) {
@@ -1558,6 +1630,23 @@ module.exports = function (isValidElement) {
       }
     }
     return propType;
+  }
+
+  // Returns a string that is postfixed to a warning about an invalid type.
+  // For example, "undefined" or "of type array"
+  function getPostfixForTypeWarning(value) {
+    var type = getPreciseType(value);
+    switch (type) {
+      case 'array':
+      case 'object':
+        return 'an ' + type;
+      case 'boolean':
+      case 'date':
+      case 'regexp':
+        return 'a ' + type;
+      default:
+        return type;
+    }
   }
 
   // Returns class name of the object, if any.
@@ -1574,7 +1663,7 @@ module.exports = function (isValidElement) {
   return ReactPropTypes;
 };
 
-},{"./checkPropTypes":8,"./lib/ReactPropTypesSecret":11,"fbjs/lib/emptyFunction":3,"fbjs/lib/invariant":5,"fbjs/lib/warning":6}],10:[function(require,module,exports){
+},{"./checkPropTypes":8,"./lib/ReactPropTypesSecret":12,"fbjs/lib/emptyFunction":13,"fbjs/lib/invariant":14,"fbjs/lib/warning":15}],11:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -1584,22 +1673,29 @@ module.exports = function (isValidElement) {
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-var factory = require('./factory');
+if ("production" !== 'production') {
+  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
+    Symbol.for &&
+    Symbol.for('react.element')) ||
+    0xeac7;
 
-var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
-  Symbol.for &&
-  Symbol.for('react.element')) ||
-  0xeac7;
+  var isValidElement = function(object) {
+    return typeof object === 'object' &&
+      object !== null &&
+      object.$$typeof === REACT_ELEMENT_TYPE;
+  };
 
-function isValidElement(object) {
-  return typeof object === 'object' &&
-    object !== null &&
-    object.$$typeof === REACT_ELEMENT_TYPE;
+  // By explicitly using `prop-types` you are opting into new development behavior.
+  // http://fb.me/prop-types-in-prod
+  var throwOnDirectAccess = true;
+  module.exports = require('./factoryWithTypeCheckers')(isValidElement, throwOnDirectAccess);
+} else {
+  // By explicitly using `prop-types` you are opting into new production behavior.
+  // http://fb.me/prop-types-in-prod
+  module.exports = require('./factoryWithThrowingShims')();
 }
 
-module.exports = factory(isValidElement);
-
-},{"./factory":9}],11:[function(require,module,exports){
+},{"./factoryWithThrowingShims":9,"./factoryWithTypeCheckers":10}],12:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -1615,7 +1711,13 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
+arguments[4][3][0].apply(exports,arguments)
+},{"dup":3}],14:[function(require,module,exports){
+arguments[4][5][0].apply(exports,arguments)
+},{"dup":5}],15:[function(require,module,exports){
+arguments[4][6][0].apply(exports,arguments)
+},{"./emptyFunction":13,"dup":6}],16:[function(require,module,exports){
 (function (global){
 var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var CreateReactClass = require('create-react-class');
@@ -1664,7 +1766,8 @@ var OutboundLink = CreateReactClass({
 module.exports = OutboundLink;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"create-react-class":2,"object-assign":7,"prop-types":10}],13:[function(require,module,exports){
+},{"create-react-class":2,"object-assign":7,"prop-types":11}],17:[function(require,module,exports){
+(function (global){
 /**
  * React Google Analytics Module
  *
@@ -1672,6 +1775,9 @@ module.exports = OutboundLink;
  * @author  Adam Lofting <adam@mozillafoundation.org>
  *          Atul Varma <atul@mozillafoundation.org>
  */
+
+var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
+var createReactClass = require('create-react-class');
 
 /**
  * Utilities
@@ -1864,7 +1970,7 @@ var ReactGA = {
   timing: function (args) {
     if (typeof ga === 'function') {
       if (!args || !args.category || !args.variable
-          || !args.value || typeof args.value !== 'number') {
+          || !args.hasOwnProperty('value') || typeof args.value !== 'number') {
         warn('args.category, args.variable ' +
               'AND args.value are required in timing() ' +
               'AND args.value has to be a number');
@@ -2151,6 +2257,26 @@ var ReactGA = {
       // continues to work as expected
       setTimeout(hitCallback, 0);
     }
+  },
+
+  /**
+   * withPageView:
+   * HoC for auto-triggering pageview on component mount
+   */
+  withPageView: function (WrappedComponent) {
+    var _this = this;
+
+    return createReactClass({
+      componentDidMount: function () {
+        const location = window.location.pathname + window.location.search;
+        _this.set({ page: location });
+        _this.pageview(location);
+      },
+
+      render: function () {
+        return React.createElement(WrappedComponent, this.props);
+      }
+    });
   }
 };
 
@@ -2161,21 +2287,22 @@ ReactGA.OutboundLink = OutboundLink;
 
 module.exports = ReactGA;
 
-},{"./components/OutboundLink":12,"./utils/console/log":14,"./utils/console/warn":15,"./utils/format":16,"./utils/removeLeadingSlash":18,"./utils/trim":20}],14:[function(require,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./components/OutboundLink":16,"./utils/console/log":18,"./utils/console/warn":19,"./utils/format":20,"./utils/removeLeadingSlash":22,"./utils/trim":24,"create-react-class":2}],18:[function(require,module,exports){
 function log(s) {
   console.info('[react-ga]', s);
 }
 
 module.exports = log;
 
-},{}],15:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 function warn(s) {
   console.warn('[react-ga]', s);
 }
 
 module.exports = warn;
 
-},{}],16:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var mightBeEmail = require('./mightBeEmail');
 var toTitleCase = require('./toTitleCase');
 var warn = require('./console/warn');
@@ -2197,7 +2324,7 @@ function format(s, titleCase) {
 
 module.exports = format;
 
-},{"./console/warn":15,"./mightBeEmail":17,"./toTitleCase":19}],17:[function(require,module,exports){
+},{"./console/warn":19,"./mightBeEmail":21,"./toTitleCase":23}],21:[function(require,module,exports){
 // See if s could be an email address. We don't want to send personal data like email.
 // https://support.google.com/analytics/answer/2795983?hl=en
 function mightBeEmail(s) {
@@ -2207,7 +2334,7 @@ function mightBeEmail(s) {
 
 module.exports = mightBeEmail;
 
-},{}],18:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 function removeLeadingSlash(s) {
   if (s.substring(0, 1) === '/') {
     s = s.substring(1);
@@ -2218,7 +2345,7 @@ function removeLeadingSlash(s) {
 
 module.exports = removeLeadingSlash;
 
-},{}],19:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 /**
  * To Title Case 2.1 - http://individed.com/code/to-title-case/
  * Copyright 2008-2013 David Gouch. Licensed under the MIT License.
@@ -2251,7 +2378,7 @@ function toTitleCase(s) {
 
 module.exports = toTitleCase;
 
-},{"./trim":20}],20:[function(require,module,exports){
+},{"./trim":24}],24:[function(require,module,exports){
 // GA strings need to have leading/trailing whitespace trimmed, and not all
 // browsers have String.prototoype.trim().
 
@@ -2261,5 +2388,5 @@ function trim(s) {
 
 module.exports = trim;
 
-},{}]},{},[13])(13)
+},{}]},{},[17])(17)
 });
