@@ -264,7 +264,6 @@ ReactGA.outboundLink({
 ###### Example
 
 ```js
-var { Component,  } = require('react');
 var { withPageView } = require('react-ga');
 
 const ProductPage = () => (
