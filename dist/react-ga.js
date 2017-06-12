@@ -724,7 +724,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
 
 module.exports = factory;
 
-},{"fbjs/lib/emptyObject":4,"fbjs/lib/invariant":5,"fbjs/lib/warning":6,"object-assign":7}],2:[function(require,module,exports){
+},{"fbjs/lib/emptyObject":4,"fbjs/lib/invariant":5,"fbjs/lib/warning":6,"object-assign":8}],2:[function(require,module,exports){
 (function (global){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -934,6 +934,58 @@ if ("production" !== 'production') {
 
 module.exports = warning;
 },{"./emptyFunction":3}],7:[function(require,module,exports){
+/**
+ * Copyright 2015, Yahoo! Inc.
+ * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+ */
+'use strict';
+
+var REACT_STATICS = {
+    childContextTypes: true,
+    contextTypes: true,
+    defaultProps: true,
+    displayName: true,
+    getDefaultProps: true,
+    mixins: true,
+    propTypes: true,
+    type: true
+};
+
+var KNOWN_STATICS = {
+    name: true,
+    length: true,
+    prototype: true,
+    caller: true,
+    arguments: true,
+    arity: true
+};
+
+var isGetOwnPropertySymbolsAvailable = typeof Object.getOwnPropertySymbols === 'function';
+
+module.exports = function hoistNonReactStatics(targetComponent, sourceComponent, customStatics) {
+    if (typeof sourceComponent !== 'string') { // don't hoist over string (html) components
+        var keys = Object.getOwnPropertyNames(sourceComponent);
+
+        /* istanbul ignore else */
+        if (isGetOwnPropertySymbolsAvailable) {
+            keys = keys.concat(Object.getOwnPropertySymbols(sourceComponent));
+        }
+
+        for (var i = 0; i < keys.length; ++i) {
+            if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]] && (!customStatics || !customStatics[keys[i]])) {
+                try {
+                    targetComponent[keys[i]] = sourceComponent[keys[i]];
+                } catch (error) {
+
+                }
+            }
+        }
+    }
+
+    return targetComponent;
+};
+
+},{}],8:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -1025,7 +1077,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -1088,7 +1140,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 
 module.exports = checkPropTypes;
 
-},{"./lib/ReactPropTypesSecret":12,"fbjs/lib/invariant":14,"fbjs/lib/warning":15}],9:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":13,"fbjs/lib/invariant":15,"fbjs/lib/warning":16}],10:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -1149,7 +1201,7 @@ module.exports = function() {
   return ReactPropTypes;
 };
 
-},{"./lib/ReactPropTypesSecret":12,"fbjs/lib/emptyFunction":13,"fbjs/lib/invariant":14}],10:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":13,"fbjs/lib/emptyFunction":14,"fbjs/lib/invariant":15}],11:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -1663,7 +1715,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   return ReactPropTypes;
 };
 
-},{"./checkPropTypes":8,"./lib/ReactPropTypesSecret":12,"fbjs/lib/emptyFunction":13,"fbjs/lib/invariant":14,"fbjs/lib/warning":15}],11:[function(require,module,exports){
+},{"./checkPropTypes":9,"./lib/ReactPropTypesSecret":13,"fbjs/lib/emptyFunction":14,"fbjs/lib/invariant":15,"fbjs/lib/warning":16}],12:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -1695,7 +1747,7 @@ if ("production" !== 'production') {
   module.exports = require('./factoryWithThrowingShims')();
 }
 
-},{"./factoryWithThrowingShims":9,"./factoryWithTypeCheckers":10}],12:[function(require,module,exports){
+},{"./factoryWithThrowingShims":10,"./factoryWithTypeCheckers":11}],13:[function(require,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -1711,13 +1763,13 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 arguments[4][3][0].apply(exports,arguments)
-},{"dup":3}],14:[function(require,module,exports){
+},{"dup":3}],15:[function(require,module,exports){
 arguments[4][5][0].apply(exports,arguments)
-},{"dup":5}],15:[function(require,module,exports){
+},{"dup":5}],16:[function(require,module,exports){
 arguments[4][6][0].apply(exports,arguments)
-},{"./emptyFunction":13,"dup":6}],16:[function(require,module,exports){
+},{"./emptyFunction":14,"dup":6}],17:[function(require,module,exports){
 (function (global){
 var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var CreateReactClass = require('create-react-class');
@@ -1766,7 +1818,7 @@ var OutboundLink = CreateReactClass({
 module.exports = OutboundLink;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"create-react-class":2,"object-assign":7,"prop-types":11}],17:[function(require,module,exports){
+},{"create-react-class":2,"object-assign":8,"prop-types":12}],18:[function(require,module,exports){
 (function (global){
 /**
  * React Google Analytics Module
@@ -1778,6 +1830,7 @@ module.exports = OutboundLink;
 
 var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var createReactClass = require('create-react-class');
+var hoistStatics = require('hoist-non-react-statics');
 
 /**
  * Utilities
@@ -2262,13 +2315,17 @@ var ReactGA = {
   /**
    * withPageView:
    * HoC for auto-triggering pageview on component mount
+   * @param {Function} WrappedComponent component to wrap
+   * @param {String} path - the current page page e.g. '/homepage'
    */
-  withPageView: function (WrappedComponent) {
+  withPageView: function (WrappedComponent, path) {
     var _this = this;
-
-    return createReactClass({
+    var childCompName = WrappedComponent.displayName
+      || WrappedComponent.name
+      || 'Component';
+    var WithPageViewHoC = createReactClass({
       componentDidMount: function () {
-        const location = window.location.pathname + window.location.search;
+        const location = path || window.location.pathname + window.location.search;
         _this.set({ page: location });
         _this.pageview(location);
       },
@@ -2277,32 +2334,37 @@ var ReactGA = {
         return React.createElement(WrappedComponent, this.props);
       }
     });
+
+    WithPageViewHoC.displayName = 'withPageView(' + childCompName + ')';
+
+    return hoistStatics(WithPageViewHoC, WrappedComponent);
   }
 };
 
 var OutboundLink = require('./components/OutboundLink');
 OutboundLink.origTrackLink = OutboundLink.trackLink;
 OutboundLink.trackLink = ReactGA.outboundLink.bind(ReactGA);
+ReactGA.withPageView = ReactGA.withPageView.bind(ReactGA);
 ReactGA.OutboundLink = OutboundLink;
 
 module.exports = ReactGA;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./components/OutboundLink":16,"./utils/console/log":18,"./utils/console/warn":19,"./utils/format":20,"./utils/removeLeadingSlash":22,"./utils/trim":24,"create-react-class":2}],18:[function(require,module,exports){
+},{"./components/OutboundLink":17,"./utils/console/log":19,"./utils/console/warn":20,"./utils/format":21,"./utils/removeLeadingSlash":23,"./utils/trim":25,"create-react-class":2,"hoist-non-react-statics":7}],19:[function(require,module,exports){
 function log(s) {
   console.info('[react-ga]', s);
 }
 
 module.exports = log;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 function warn(s) {
   console.warn('[react-ga]', s);
 }
 
 module.exports = warn;
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var mightBeEmail = require('./mightBeEmail');
 var toTitleCase = require('./toTitleCase');
 var warn = require('./console/warn');
@@ -2324,7 +2386,7 @@ function format(s, titleCase) {
 
 module.exports = format;
 
-},{"./console/warn":19,"./mightBeEmail":21,"./toTitleCase":23}],21:[function(require,module,exports){
+},{"./console/warn":20,"./mightBeEmail":22,"./toTitleCase":24}],22:[function(require,module,exports){
 // See if s could be an email address. We don't want to send personal data like email.
 // https://support.google.com/analytics/answer/2795983?hl=en
 function mightBeEmail(s) {
@@ -2334,7 +2396,7 @@ function mightBeEmail(s) {
 
 module.exports = mightBeEmail;
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 function removeLeadingSlash(s) {
   if (s.substring(0, 1) === '/') {
     s = s.substring(1);
@@ -2345,7 +2407,7 @@ function removeLeadingSlash(s) {
 
 module.exports = removeLeadingSlash;
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 /**
  * To Title Case 2.1 - http://individed.com/code/to-title-case/
  * Copyright 2008-2013 David Gouch. Licensed under the MIT License.
@@ -2378,7 +2440,7 @@ function toTitleCase(s) {
 
 module.exports = toTitleCase;
 
-},{"./trim":24}],24:[function(require,module,exports){
+},{"./trim":25}],25:[function(require,module,exports){
 // GA strings need to have leading/trailing whitespace trimmed, and not all
 // browsers have String.prototoype.trim().
 
@@ -2388,5 +2450,5 @@ function trim(s) {
 
 module.exports = trim;
 
-},{}]},{},[17])(17)
+},{}]},{},[18])(18)
 });

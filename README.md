@@ -271,7 +271,7 @@ const ProductPage = () => (
   <div>{/* ... */}</div>
 );
 
-module.exports = withPageView(ProductPage);
+module.exports = withPageView(ProductPage/*, '/some/optional/url/param' */);
 ```
 
 ### `<OutboundLink>` Component

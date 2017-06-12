@@ -8,6 +8,7 @@
 
 var React = require('react');
 var createReactClass = require('create-react-class');
+var hoistStatics = require('hoist-non-react-statics');
 
 /**
  * Utilities
@@ -497,8 +498,10 @@ var ReactGA = {
    */
   withPageView: function (WrappedComponent, path) {
     var _this = this;
-
-    return createReactClass({
+    var childCompName = WrappedComponent.displayName
+      || WrappedComponent.name
+      || 'Component';
+    var WithPageViewHoC = createReactClass({
       componentDidMount: function () {
         const location = path || window.location.pathname + window.location.search;
         _this.set({ page: location });
@@ -509,12 +512,17 @@ var ReactGA = {
         return React.createElement(WrappedComponent, this.props);
       }
     });
+
+    WithPageViewHoC.displayName = 'withPageView(' + childCompName + ')';
+
+    return hoistStatics(WithPageViewHoC, WrappedComponent);
   }
 };
 
 var OutboundLink = require('./components/OutboundLink');
 OutboundLink.origTrackLink = OutboundLink.trackLink;
 OutboundLink.trackLink = ReactGA.outboundLink.bind(ReactGA);
+ReactGA.withPageView = ReactGA.withPageView.bind(ReactGA);
 ReactGA.OutboundLink = OutboundLink;
 
 module.exports = ReactGA;
