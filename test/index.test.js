@@ -63,6 +63,27 @@ describe('react-ga', function () {
       ]);
     });
 
+    it('should initialize multiple trackers if they are given', function () {
+      ReactGA.initialize([
+        { trackingId: 'foo', gaOptions: { userId: 123 } },
+        { trackingId: 'bar', gaOptions: { name: 'baz' } }
+      ]);
+      getGaCalls().should.eql([
+        ['create', 'foo', { userId: 123 }],
+        ['create', 'bar', { name: 'baz' }]
+      ]);
+    });
+
+    it('should error if initialize multiple trackers are missing trackingId', function () {
+      ReactGA.initialize([
+        { gaOptions: { userId: 123 } }
+      ]);
+      console.warn.args.should.eql([
+        ['[react-ga]', 'gaTrackingID is required in initialize()']
+      ]);
+      getGaCalls().should.eql([]);
+    });
+
     it('should abort, log warning if tracking ID is not given', function () {
       ReactGA.initialize();
       console.warn.args.should.eql([
@@ -192,6 +213,38 @@ describe('react-ga', function () {
         ]
       ]);
     });
+
+    it('should send to multiple trackers', function () {
+      ReactGA.initialize([
+        { trackingId: 'foo', gaOptions: { userId: 123 } },
+        { trackingId: 'bar', gaOptions: { name: 'baz' } }
+      ]);
+      ReactGA.send({
+        hitType: 'event',
+        eventCategory: 'category',
+        eventAction: 'action'
+      }, ['baz']);
+      getGaCalls().should.eql([
+        ['create', 'foo', { userId: 123 }],
+        ['create', 'bar', { name: 'baz' }],
+        [
+          'send',
+          {
+            hitType: 'event',
+            eventCategory: 'category',
+            eventAction: 'action'
+          }
+        ],
+        [
+          'baz.send',
+          {
+            hitType: 'event',
+            eventCategory: 'category',
+            eventAction: 'action'
+          }
+        ]
+      ]);
+    });
   });
 
   /**
@@ -216,6 +269,20 @@ describe('react-ga', function () {
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', 'pageview', '/valid']
+      ]);
+    });
+
+    it('should record a pageview with multiple trackers', function () {
+      ReactGA.initialize([
+        { trackingId: 'foo' },
+        { trackingId: 'bar', gaOptions: { name: 'baz' } }
+      ]);
+      ReactGA.pageview('/valid', ['baz']);
+      getGaCalls().should.eql([
+        ['create', 'foo', 'auto'],
+        ['create', 'bar', { name: 'baz' }],
+        ['send', 'pageview', '/valid'],
+        ['baz.send', 'pageview', '/valid']
       ]);
     });
 
@@ -467,6 +534,28 @@ describe('react-ga', function () {
       getGaCalls().should.eql([
         ['create', 'foo', 'auto'],
         ['send', {
+          eventAction: 'Send Test',
+          eventCategory: 'Test',
+          hitType: 'event'
+        }]
+      ]);
+    });
+
+    it('should record an event with multiple trackers', function () {
+      ReactGA.initialize([
+        { trackingId: 'foo' },
+        { trackingId: 'bar', gaOptions: { name: 'baz' } }
+      ]);
+      ReactGA.event({ category: 'Test', action: 'Send Test' }, ['baz']);
+      getGaCalls().should.eql([
+        ['create', 'foo', 'auto'],
+        ['create', 'bar', { name: 'baz' }],
+        ['send', {
+          eventAction: 'Send Test',
+          eventCategory: 'Test',
+          hitType: 'event'
+        }],
+        ['baz.send', {
           eventAction: 'Send Test',
           eventCategory: 'Test',
           hitType: 'event'
