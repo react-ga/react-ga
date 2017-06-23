@@ -38,6 +38,10 @@ var ReactGA = {
       if (options.titleCase === false) {
         _titleCase = false;
       }
+      
+      if (options.gOptimizeID && options.gOptimizeID == true) {
+        ga('require', gOptimizeID);
+      }
     }
 
     // https://developers.google.com/analytics/devguides/collection/analyticsjs/
