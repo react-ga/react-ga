@@ -89,6 +89,7 @@ GA must be initialized using this function before any of the other tracking func
 ReactGA.initialize('UA-000000-01', {
   debug: true,
   titleCase: false,
+  gOptimizeID: 'GGG-0A1B2C3D',
   gaOptions: {
     userId: 123
   }
@@ -98,6 +99,7 @@ ReactGA.initialize('UA-000000-01', {
 |Value|Notes|
 |------|-----|
 |gaTrackingID| `String`. Required. GA Tracking ID like `UA-000000-01`.|
+|gOptimizeID| `String`. Optional for use with Google Optimize, ex. `GGG-0A1B2C3D`. |
 |options.debug| `Boolean`. Optional. If set to `true`, will output additional feedback to the console.|
 |options.titleCase| `Boolean`. Optional. Defaults to `true`. If set to `false`, strings will not be converted to title case before sending to GA.|
 |options.gaOptions| `Object`. Optional. [GA configurable fields.](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference)|
