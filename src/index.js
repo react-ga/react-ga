@@ -23,23 +23,48 @@ var _format = function (s) {
   return format(s, _titleCase);
 };
 
-var ReactGA = {
-  initialize: function (gaTrackingID, options) {
-    if (!gaTrackingID) {
-      warn('gaTrackingID is required in initialize()');
+var _gaCommand = function (trackerNames, command) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  if (typeof ga === 'function') {
+    if (typeof command !== 'string') {
+      warn('ga command must be a string');
       return;
     }
 
-    if (options) {
-      if (options.debug && options.debug === true) {
-        _debug = true;
-      }
+    ga.apply(null, args);
+    if (Array.isArray(trackerNames)) {
+      trackerNames.forEach(function (name) {
+        ga.apply(null, [name + '.' + command].concat(args.slice(1)));
+      });
+    }
+  }
+};
 
-      if (options.titleCase === false) {
-        _titleCase = false;
-      }
+var _initialize = function (gaTrackingID, options) {
+  if (!gaTrackingID) {
+    warn('gaTrackingID is required in initialize()');
+    return;
+  }
+
+  if (options) {
+    if (options.debug && options.debug === true) {
+      _debug = true;
     }
 
+    if (options.titleCase === false) {
+      _titleCase = false;
+    }
+  }
+
+  if (options && options.gaOptions) {
+    ga('create', gaTrackingID, options.gaOptions);
+  } else {
+    ga('create', gaTrackingID, 'auto');
+  }
+};
+
+var ReactGA = {
+  initialize: function (configs, options) {
     // https://developers.google.com/analytics/devguides/collection/analyticsjs/
     // jscs:disable
     (function (i, s, o, g, r, a, m) {
@@ -48,17 +73,24 @@ var ReactGA = {
         (i[r].q = i[r].q || []).push(arguments);
       }, i[r].l = 1 * new Date();
       a = s.createElement(o),
-          m = s.getElementsByTagName(o)[0];
+        m = s.getElementsByTagName(o)[0];
       a.async = 1;
       a.src = g;
       m.parentNode.insertBefore(a, m);
     })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
     // jscs:enable
 
-    if (options && options.gaOptions) {
-      ga('create', gaTrackingID, options.gaOptions);
+    if (Array.isArray(configs)) {
+      configs.forEach(function (config) {
+        if (typeof config !== 'object') {
+          warn('All configs must be an object');
+          return;
+        }
+
+        _initialize(config.trackingId, config);
+      });
     } else {
-      ga('create', gaTrackingID, 'auto');
+      return _initialize(configs, options);
     }
   },
 
@@ -73,8 +105,6 @@ var ReactGA = {
         log('called ga(\'arguments\');');
         log('with arguments: ' + JSON.stringify([].slice.apply(arguments)));
       }
-
-      return;
     }
 
     return ga;
@@ -84,29 +114,28 @@ var ReactGA = {
    * set:
    * GA tracker set method
    * @param {Object} fieldsObject - a field/value pair or a group of field/value pairs on the tracker
+   * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  set: function (fieldsObject) {
-    if (typeof ga === 'function') {
-      if (!fieldsObject) {
-        warn('`fieldsObject` is required in .set()');
-        return;
-      }
+  set: function (fieldsObject, trackerNames) {
+    if (!fieldsObject) {
+      warn('`fieldsObject` is required in .set()');
+      return;
+    }
 
-      if (typeof fieldsObject !== 'object') {
-        warn('Expected `fieldsObject` arg to be an Object');
-        return;
-      }
+    if (typeof fieldsObject !== 'object') {
+      warn('Expected `fieldsObject` arg to be an Object');
+      return;
+    }
 
-      if (Object.keys(fieldsObject).length === 0) {
-        warn('empty `fieldsObject` given to .set()');
-      }
+    if (Object.keys(fieldsObject).length === 0) {
+      warn('empty `fieldsObject` given to .set()');
+    }
 
-      ga('set', fieldsObject);
+    _gaCommand(trackerNames, 'set', fieldsObject);
 
-      if (_debug) {
-        log('called ga(\'set\', fieldsObject);');
-        log('with fieldsObject: ' + JSON.stringify(fieldsObject));
-      }
+    if (_debug) {
+      log('called ga(\'set\', fieldsObject);');
+      log('with fieldsObject: ' + JSON.stringify(fieldsObject));
     }
   },
 
@@ -115,15 +144,15 @@ var ReactGA = {
    * Clone of the low level `ga.send` method
    * WARNING: No validations will be applied to this
    * @param  {Object} fieldObject - field object for tracking different analytics
+   * @param  {Array} trackerNames - trackers to send the command to
+   * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  send: function (fieldObject) {
-    if (typeof ga === 'function') {
-      ga('send', fieldObject);
-
-      if (_debug) {
-        log('called ga(\'send\', fieldObject);');
-        log('with fieldObject: ' + JSON.stringify(fieldObject));
-      }
+  send: function (fieldObject, trackerNames) {
+    _gaCommand(trackerNames, 'send', fieldObject);
+    if (_debug) {
+      log('called ga(\'send\', fieldObject);');
+      log('with fieldObject: ' + JSON.stringify(fieldObject));
+      log('with trackers: ' + JSON.stringify(trackerNames));
     }
   },
 
@@ -131,8 +160,9 @@ var ReactGA = {
    * pageview:
    * Basic GA pageview tracking
    * @param  {String} path - the current page page e.g. '/about'
+   * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  pageview: function (path) {
+  pageview: function (path, trackerNames) {
     if (!path) {
       warn('path is required in .pageview()');
       return;
@@ -145,7 +175,7 @@ var ReactGA = {
     }
 
     if (typeof ga === 'function') {
-      ga('send', 'pageview', path);
+      _gaCommand(trackerNames, 'send', 'pageview', path);
 
       if (_debug) {
         log('called ga(\'send\', \'pageview\', path);');
@@ -159,8 +189,9 @@ var ReactGA = {
    * a proxy to basic GA pageview tracking to consistently track
    * modal views that are an equivalent UX to a traditional pageview
    * @param  {String} modalName e.g. 'add-or-edit-club'
+   * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  modalview: function (modalName) {
+  modalview: function (modalName, trackerNames) {
     if (!modalName) {
       warn('modalName is required in .modalview(modalName)');
       return;
@@ -177,7 +208,7 @@ var ReactGA = {
     if (typeof ga === 'function') {
       modalName = trim(modalName);
       var path = '/modal/' + modalName;
-      ga('send', 'pageview', path);
+      _gaCommand(trackerNames, 'send', 'pageview', path);
 
       if (_debug) {
         log('called ga(\'send\', \'pageview\', path);');
@@ -193,8 +224,9 @@ var ReactGA = {
    * @param args.variable {String} required
    * @param args.value  {Int}  required
    * @param args.label  {String} required
+   * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  timing: function (args) {
+  timing: function (args, trackerNames) {
     if (typeof ga === 'function') {
       if (!args || !args.category || !args.variable
           || !args.hasOwnProperty('value') || typeof args.value !== 'number') {
@@ -216,7 +248,7 @@ var ReactGA = {
         fieldObject.timingLabel = _format(args.label);
       }
 
-      this.send(fieldObject);
+      this.send(fieldObject, trackerNames);
     }
   },
 
@@ -228,8 +260,9 @@ var ReactGA = {
    * @param args.label {String} optional
    * @param args.value {Int} optional
    * @param args.nonInteraction {boolean} optional
+   * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  event: function (args) {
+  event: function (args, trackerNames) {
     if (typeof ga === 'function') {
 
       // Simple Validation
@@ -279,7 +312,7 @@ var ReactGA = {
       }
 
       // Send to GA
-      this.send(fieldObject);
+      this.send(fieldObject, trackerNames);
     }
   },
 
@@ -288,8 +321,9 @@ var ReactGA = {
    * GA exception tracking
    * @param args.description {String} optional
    * @param args.fatal {boolean} optional
+   * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  exception: function (args) {
+  exception: function (args, trackerNames) {
     if (typeof ga === 'function') {
 
       // Required Fields
@@ -311,7 +345,7 @@ var ReactGA = {
       }
 
       // Send to GA
-      this.send(fieldObject);
+      this.send(fieldObject, trackerNames);
     }
   },
 
@@ -429,7 +463,7 @@ var ReactGA = {
    * @param args.label {String} e.g. url, or 'Create an Account'
    * @param {function} hitCallback - Called after processing a hit.
    */
-  outboundLink: function (args, hitCallback) {
+  outboundLink: function (args, hitCallback, trackerNames) {
     if (typeof hitCallback !== 'function') {
       warn('hitCallback function is required');
       return;
@@ -478,7 +512,7 @@ var ReactGA = {
       fieldObject.hitCallback = clearableCallbackForGA;
 
       // Send to GA
-      this.send(fieldObject);
+      this.send(fieldObject, trackerNames);
     } else {
       // if ga is not defined, return the callback so the application
       // continues to work as expected
