@@ -81,7 +81,7 @@ You can safely upgrade to `2.x` as there are no breaking changes. The main new f
 
 #### ReactGA.initialize(gaTrackingID, options)
 
-GA must be initialized using this function before any of the other tracking functions will record any data.
+GA must be initialized using this function before any of the other tracking functions will record any data. The values are checked and sent through to the `ga('create', ...` call.
 
 ###### Example
 
@@ -100,7 +100,7 @@ ReactGA.initialize('UA-000000-01', {
 |gaTrackingID| `String`. Required. GA Tracking ID like `UA-000000-01`.|
 |options.debug| `Boolean`. Optional. If set to `true`, will output additional feedback to the console.|
 |options.titleCase| `Boolean`. Optional. Defaults to `true`. If set to `false`, strings will not be converted to title case before sending to GA.|
-|options.gaOptions| `Object`. Optional. [GA configurable fields.](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference)|
+|options.gaOptions| `Object`. Optional. [GA configurable create only fields.](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference)|
 
 See example above for use with `react-router`.
 
