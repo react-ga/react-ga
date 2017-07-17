@@ -211,7 +211,7 @@ ga('send', 'timing', 'JS Libraries', 'load', 20, 'CDN libs');
 |Value|Notes|
 |------|-----|
 |args.category|`String`. Required. A string for categorizing all user timing variables into logical groups.|
-|args.var|`String`. Required. Name of the variable being recorded.|
+|args.variable|`String`. Required. Name of the variable being recorded.|
 |args.value|`Int`. Required. Number of milliseconds elapsed time to report.|
 |args.label|`String`. Optional. It can improved visibility in user timing reports.|
 
