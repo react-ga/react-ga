@@ -79,7 +79,7 @@ You can safely upgrade to `2.x` as there are no breaking changes. The main new f
 ## Community Components
 
 While some convenience components are included inside the package, some are specific to each application.
-A community curated list of these is available in the wiki: https://github.com/react-ga/react-ga/wiki/Example-Higher-Order-Components. Feel free to add any you have found useful.
+A community curated list of these is available in the wiki: https://github.com/react-ga/react-ga/wiki/Community-Components. Feel free to add any you have found useful.
 
 ## API
 
