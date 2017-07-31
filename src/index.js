@@ -65,6 +65,9 @@ var _initialize = function (gaTrackingID, options) {
 
 var ReactGA = {
   initialize: function (configs, options) {
+    if (typeof window === 'undefined') {
+      return false;
+    }
     // https://developers.google.com/analytics/devguides/collection/analyticsjs/
     // jscs:disable
     (function (i, s, o, g, r, a, m) {
