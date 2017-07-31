@@ -76,6 +76,10 @@ When included as a script tag, a variable `ReactGA` is exposed in the global sco
 
 You can safely upgrade to `2.x` as there are no breaking changes. The main new feature is that the underlying `ga` function is now exposed via the property `ReactGA.ga`. This can be helpful when you need a function that `ReactGA` doesn't support at the moment. Also, for that reason, it is recommended that you rename your imported value as `ReactGA` rather than `ga` so as to distinguish between the React GA wrapper and the original `ga` function.
 
+## Community Components
+
+While some convenience components are included inside the package, some are specific to each application.
+A community curated list of these is available in the wiki: https://github.com/react-ga/react-ga/wiki/Example-Higher-Order-Components. Feel free to add any you have found useful.
 
 ## API
 
