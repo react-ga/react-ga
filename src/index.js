@@ -6,6 +6,10 @@
  *          Atul Varma <atul@mozillafoundation.org>
  */
 
+var React = require('react');
+var createReactClass = require('create-react-class');
+var hoistStatics = require('hoist-non-react-statics');
+
 /**
  * Utilities
  */
@@ -521,12 +525,41 @@ var ReactGA = {
       // continues to work as expected
       setTimeout(hitCallback, 0);
     }
+  },
+
+  /**
+   * withPageView:
+   * HoC for auto-triggering pageview on component mount
+   * @param {Function} WrappedComponent component to wrap
+   * @param {String} path - the current page page e.g. '/homepage'
+   */
+  withPageView: function (WrappedComponent, path) {
+    var _this = this;
+    var childCompName = WrappedComponent.displayName
+      || WrappedComponent.name
+      || 'Component';
+    var WithPageViewHoC = createReactClass({
+      componentDidMount: function () {
+        const location = path || window.location.pathname + window.location.search;
+        _this.set({ page: location });
+        _this.pageview(location);
+      },
+
+      render: function () {
+        return React.createElement(WrappedComponent, this.props);
+      }
+    });
+
+    WithPageViewHoC.displayName = 'withPageView(' + childCompName + ')';
+
+    return hoistStatics(WithPageViewHoC, WrappedComponent);
   }
 };
 
 var OutboundLink = require('./components/OutboundLink');
 OutboundLink.origTrackLink = OutboundLink.trackLink;
 OutboundLink.trackLink = ReactGA.outboundLink.bind(ReactGA);
+ReactGA.withPageView = ReactGA.withPageView.bind(ReactGA);
 ReactGA.OutboundLink = OutboundLink;
 
 module.exports = ReactGA;

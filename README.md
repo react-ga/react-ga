@@ -257,6 +257,22 @@ ReactGA.outboundLink({
 |args.label|`String`. Required. Description of where the outbound link points to. Either as a URL, or a string.|
 |hitCallback|`function`. The react-ga implementation accounts for the possibility that GA servers are down, or GA is blocked, by using a fallback 250ms timeout. See [notes in GA Dev Guide](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#hitCallback)|
 
+### `withPageView` HoC
+
+`withPageView` is higher order component for automatic pageview trigger when component is mount.
+
+###### Example
+
+```js
+var { withPageView } = require('react-ga');
+
+const ProductPage = () => (
+  <div>{/* ... */}</div>
+);
+
+module.exports = withPageView(ProductPage/*, '/some/optional/url/param' */);
+```
+
 ### `<OutboundLink>` Component
 
 Outbound links can directly be used as a component in your React code and the event label will be sent directly to ReactGA.
