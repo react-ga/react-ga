@@ -314,6 +314,14 @@ var ReactGA = {
         }
       }
 
+      Object.keys(args)
+        .filter(key => key.substr(0, 'dimension'.length) == 'dimension')
+        .forEach(key => fieldObject[key] = args[key]);
+
+      Object.keys(args)
+        .filter(key => key.substr(0, 'metric'.length) == 'metric')
+        .forEach(key => fieldObject[key] = args[key]);
+
       // Send to GA
       this.send(fieldObject, trackerNames);
     }
