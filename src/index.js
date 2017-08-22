@@ -80,7 +80,7 @@ var ReactGA = {
       a.async = 1;
       a.src = g;
       m.parentNode.insertBefore(a, m);
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    })(window, document, 'script', ((options && options.gaAddress) ? options.gaAddress : 'https://www.google-analytics.com/analytics.js'), 'ga');
     // jscs:enable
 
     if (Array.isArray(configs)) {
