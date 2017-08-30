@@ -314,6 +314,14 @@ var ReactGA = {
         }
       }
 
+      Object.keys(args)
+        .filter(function(key) { return key.substr(0, 'dimension'.length) == 'dimension'; })
+        .forEach(function(key) { return fieldObject[key] = args[key]; });
+
+      Object.keys(args)
+        .filter(function(key) { return key.substr(0, 'metric'.length) == 'metric'; })
+        .forEach(function(key) { return fieldObject[key] = args[key]; });
+
       // Send to GA
       this.send(fieldObject, trackerNames);
     }
