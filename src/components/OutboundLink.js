@@ -4,6 +4,7 @@ var PropTypes = require('prop-types');
 var assign = require('object-assign');
 
 var NEWTAB = '_blank';
+var MIDDLECLICK = 1;
 
 var OutboundLink = CreateReactClass({
   displayName: 'OutboundLink',
@@ -16,16 +17,19 @@ var OutboundLink = CreateReactClass({
     }
   },
   handleClick: function (e) {
-    e.preventDefault();
     var props = this.props;
     var eventMeta = { label: props.eventLabel };
-    OutboundLink.trackLink(eventMeta, function () {
-      if (props.target === NEWTAB) {
-        window.open(props.to, NEWTAB);
-      } else {
+    var sameTarget = props.target !== NEWTAB;
+    var normalClick = !(e.ctrlKey || e.shiftKey || e.metaKey || e.button === MIDDLECLICK);
+
+    if (sameTarget && normalClick) {
+      e.preventDefault();
+      OutboundLink.trackLink(eventMeta, function () {
         window.location.href = props.to;
-      }
-    });
+      });
+    } else {
+      OutboundLink.trackLink(eventMeta, function () {});
+    }
 
     if (props.onClick) {
       props.onClick(e);
