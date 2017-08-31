@@ -1,6 +1,6 @@
-var should = require('should');
+import should from 'should';
 
-var removeLeadingSlash = require('../../src/utils/removeLeadingSlash');
+import removeLeadingSlash from '../../src/utils/removeLeadingSlash';
 
 describe('removeLeadingSlash()', function () {
   it('should remove leading slashes', function () {

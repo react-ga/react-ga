@@ -1,11 +1,10 @@
-var should = require('should');
+import should from 'should';
 
-var toTitleCase = require('../../src/utils/toTitleCase');
+import toTitleCase from '../../src/utils/toTitleCase';
 
 describe('toTitleCase()', function () {
   // Tests taken from https://github.com/gouch/to-title-case/blob/master/test/tests.json
   it('should convert correctly to title case', function () {
-     // jscs:disable
     toTitleCase('follow step-by-step instructions')
       .should.eql('Follow Step-by-Step Instructions');
     toTitleCase('this sub-phrase is nice')
@@ -82,6 +81,5 @@ describe('toTitleCase()', function () {
       .should.eql('Capitalize Hyphenated Words On-Demand');
     toTitleCase('take them on: special lower cases')
       .should.eql('Take Them On: Special Lower Cases');
-    // jscs:enable
   });
 });

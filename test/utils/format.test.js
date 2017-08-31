@@ -1,7 +1,7 @@
-var should = require('should');
-var sinon = require('sinon');
+import should from 'should';
+import sinon from 'sinon';
 
-var format = require('../../src/utils/format');
+import format from '../../src/utils/format';
 
 describe('format()', function () {
   it('should not format email addresses', function () {

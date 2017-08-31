@@ -4,8 +4,9 @@
   "description": "React Google Analytics Module.",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha test/*.test.js && mocha test/**/*.test.js && gulp test",
-    "build": "gulp build"
+    "test": "npm run lint && BABEL_ENV=test nyc mocha",
+    "build": "webpack",
+    "lint": "eslint src webpack.config.js test --ext .js,.jsx"
   },
   "types": "./types/index.d.ts",
   "repository": {
@@ -28,34 +29,60 @@
   },
   "homepage": "https://github.com/react-ga/react-ga",
   "peerDependencies": {
-    "react": ">= 0.14.0"
+    "react": ">= 0.14.0",
+    "prop-types": "^15.5.10"
   },
-  "dependencies": {
-    "create-react-class": "^15.5.2",
-    "object-assign": "^4.0.1",
-    "prop-types": "^15.5.6"
+  "nyc": {
+    "include": [
+      "src/**/*"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "sourceMap": false,
+    "instrument": false,
+    "cache": true,
+    "all": true,
+    "reporter": [
+      "lcov",
+      "cobertura",
+      "text-summary"
+    ],
+    "report-dir": "./coverage"
   },
   "devDependencies": {
-    "browserify": "^13.0.0",
-    "browserify-shim": "^3.8.12",
-    "del": "^2.2.0",
-    "envify": "^4.0.0",
-    "gulp": "~3.8.11",
-    "gulp-jscs": "^3.0.2",
-    "gulp-rename": "~1.2.0",
-    "gulp-streamify": "^1.0.2",
-    "gulp-uglify": "~1.1.0",
-    "jsdom": "^3.0.0",
-    "mocha": "^2.2.1",
-    "mocha-jsdom": "~1.0.0",
-    "react": "^15.0.1",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-istanbul": "^4.1.4",
+    "babel-plugin-rewire": "^1.1.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "conventional-changelog-cli": "^1.3.2",
+    "enzyme": "^2.9.1",
+    "eslint": "^4.3.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-mocha": "^4.11.0",
+    "eslint-plugin-react": "^7.1.0",
+    "jsdom": "~9.12.0",
+    "jsdom-global": "~2.1.1",
+    "mocha": "^3.5.0",
+    "nyc": "~10.2.0",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
     "react-addons-test-utils": "^15.0.1",
     "react-dom": "^15.0.1",
-    "should": "^5.2.0",
-    "sinon": "^1.14.1",
-    "vinyl-source-stream": "^1.1.0"
+    "rewire": "^2.5.2",
+    "should": "^12.0.0",
+    "sinon": "^3.2.1",
+    "webpack": "^3.5.5"
   },
-  "browserify-shim": {
-    "react": "global:React"
+  "dependencies": {
+    "object-assign": "^4.1.1"
   }
 }

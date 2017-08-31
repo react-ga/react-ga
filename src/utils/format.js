@@ -1,13 +1,13 @@
-var mightBeEmail = require('./mightBeEmail');
-var toTitleCase = require('./toTitleCase');
-var warn = require('./console/warn');
+import mightBeEmail from './mightBeEmail';
+import toTitleCase from './toTitleCase';
+import warn from './console/warn';
 
-var _redacted = 'REDACTED (Potential Email Address)';
+const redacted = 'REDACTED (Potential Email Address)';
 
-function format(s, titleCase) {
+export default function format(s, titleCase) {
   if (mightBeEmail(s)) {
     warn('This arg looks like an email address, redacting.');
-    return _redacted;
+    return redacted;
   }
 
   if (titleCase) {
@@ -16,5 +16,3 @@ function format(s, titleCase) {
 
   return s;
 }
-
-module.exports = format;

@@ -1,7 +1,7 @@
-var should = require('should');
-var sinon = require('sinon');
+import should from 'should';
+import sinon from 'sinon';
 
-var log = require('../../../src/utils/console/log');
+import log from '../../../src/utils/console/log';
 
 describe('log()', function () {
   it('should append [react-ga] to log messages', function () {

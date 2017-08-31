@@ -1,0 +1,8 @@
+ --compilers js:babel-core/register
+ --compilers jsx:babel-core/register
+ --require test/setup.js
+ --require jsdom-global/register
+ test/*.test.js
+ test/**/*.test.js
+ test/*.test.jsx
+ test/**/*.test.jsx

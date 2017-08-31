@@ -9,38 +9,44 @@
 /**
  * Utilities
  */
-var format = require('./utils/format');
-var removeLeadingSlash = require('./utils/removeLeadingSlash');
-var trim = require('./utils/trim');
+import format from './utils/format';
+import removeLeadingSlash from './utils/removeLeadingSlash';
+import trim from './utils/trim';
+import loadGA from './utils/loadGA';
 
-var warn = require('./utils/console/warn');
-var log = require('./utils/console/log');
+import warn from './utils/console/warn';
+import log from './utils/console/log';
+import OutboundLink from './components/OutboundLink';
 
-var _debug = false;
-var _titleCase = true;
+let _debug = false;
+let _titleCase = true;
 
-var _format = function (s) {
-  return format(s, _titleCase);
+let ga = () => {
+  warn('ReactGA.initialize must be called first');
 };
 
-var _gaCommand = function (trackerNames, command) {
-  var args = Array.prototype.slice.call(arguments, 1);
+function _format(s) {
+  return format(s, _titleCase);
+}
+
+function _gaCommand(trackerNames, ...args) {
+  const command = args[0];
   if (typeof ga === 'function') {
     if (typeof command !== 'string') {
       warn('ga command must be a string');
       return;
     }
 
-    ga.apply(null, args);
+    ga(...args);
     if (Array.isArray(trackerNames)) {
-      trackerNames.forEach(function (name) {
-        ga.apply(null, [name + '.' + command].concat(args.slice(1)));
+      trackerNames.forEach((name) => {
+        ga(...[`${name}.${command}`].concat(args.slice(1)));
       });
     }
   }
-};
+}
 
-var _initialize = function (gaTrackingID, options) {
+function _initialize(gaTrackingID, options) {
   if (!gaTrackingID) {
     warn('gaTrackingID is required in initialize()');
     return;
@@ -61,52 +67,41 @@ var _initialize = function (gaTrackingID, options) {
   } else {
     ga('create', gaTrackingID, 'auto');
   }
-};
+}
 
-var ReactGA = {
-  initialize: function (configs, options) {
+
+const ReactGA = {
+  initialize: (configs, options) => {
     if (typeof window === 'undefined') {
       return false;
     }
-    // https://developers.google.com/analytics/devguides/collection/analyticsjs/
-    // jscs:disable
-    (function (i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r;
-      i[r] = i[r] || function () {
-        (i[r].q = i[r].q || []).push(arguments);
-      }, i[r].l = 1 * new Date();
-      a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0];
-      a.async = 1;
-      a.src = g;
-      m.parentNode.insertBefore(a, m);
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-    // jscs:enable
+
+    ga = loadGA();
 
     if (Array.isArray(configs)) {
-      configs.forEach(function (config) {
+      configs.forEach((config) => {
         if (typeof config !== 'object') {
           warn('All configs must be an object');
           return;
         }
-
         _initialize(config.trackingId, config);
       });
     } else {
-      return _initialize(configs, options);
+      _initialize(configs, options);
     }
+    return true;
   },
 
   /**
    * ga:
    * Returns the original GA object.
    */
-  ga: function () {
-    if (arguments.length > 0) {
-      ga.apply(this, arguments);
+  ga: (...args) => {
+    if (args.length > 0) {
+      ga(...args);
       if (_debug) {
         log('called ga(\'arguments\');');
-        log('with arguments: ' + JSON.stringify([].slice.apply(arguments)));
+        log(`with arguments: ${JSON.stringify(args)}`);
       }
     }
 
@@ -119,7 +114,7 @@ var ReactGA = {
    * @param {Object} fieldsObject - a field/value pair or a group of field/value pairs on the tracker
    * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  set: function (fieldsObject, trackerNames) {
+  set: (fieldsObject, trackerNames) => {
     if (!fieldsObject) {
       warn('`fieldsObject` is required in .set()');
       return;
@@ -138,7 +133,7 @@ var ReactGA = {
 
     if (_debug) {
       log('called ga(\'set\', fieldsObject);');
-      log('with fieldsObject: ' + JSON.stringify(fieldsObject));
+      log(`with fieldsObject: ${JSON.stringify(fieldsObject)}`);
     }
   },
 
@@ -150,12 +145,12 @@ var ReactGA = {
    * @param  {Array} trackerNames - trackers to send the command to
    * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  send: function (fieldObject, trackerNames) {
+  send: (fieldObject, trackerNames) => {
     _gaCommand(trackerNames, 'send', fieldObject);
     if (_debug) {
       log('called ga(\'send\', fieldObject);');
-      log('with fieldObject: ' + JSON.stringify(fieldObject));
-      log('with trackers: ' + JSON.stringify(trackerNames));
+      log(`with fieldObject: ${JSON.stringify(fieldObject)}`);
+      log(`with trackers: ${JSON.stringify(trackerNames)}`);
     }
   },
 
@@ -165,13 +160,13 @@ var ReactGA = {
    * @param  {String} path - the current page page e.g. '/about'
    * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  pageview: function (path, trackerNames) {
-    if (!path) {
+  pageview: (rawPath, trackerNames) => {
+    if (!rawPath) {
       warn('path is required in .pageview()');
       return;
     }
 
-    path = trim(path);
+    const path = trim(rawPath);
     if (path === '') {
       warn('path cannot be an empty string in .pageview()');
       return;
@@ -182,7 +177,7 @@ var ReactGA = {
 
       if (_debug) {
         log('called ga(\'send\', \'pageview\', path);');
-        log('with path: ' + path);
+        log(`with path: ${path}`);
       }
     }
   },
@@ -194,14 +189,13 @@ var ReactGA = {
    * @param  {String} modalName e.g. 'add-or-edit-club'
    * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  modalview: function (modalName, trackerNames) {
-    if (!modalName) {
+  modalview: (rawModalName, trackerNames) => {
+    if (!rawModalName) {
       warn('modalName is required in .modalview(modalName)');
       return;
     }
 
-    modalName = trim(modalName);
-    modalName = removeLeadingSlash(modalName);
+    const modalName = removeLeadingSlash(trim(rawModalName));
 
     if (modalName === '') {
       warn('modalName cannot be an empty string or a single / in .modalview()');
@@ -209,13 +203,12 @@ var ReactGA = {
     }
 
     if (typeof ga === 'function') {
-      modalName = trim(modalName);
-      var path = '/modal/' + modalName;
+      const path = `/modal/${modalName}`;
       _gaCommand(trackerNames, 'send', 'pageview', path);
 
       if (_debug) {
         log('called ga(\'send\', \'pageview\', path);');
-        log('with path: ' + path);
+        log(`with path: ${path}`);
       }
     }
   },
@@ -229,29 +222,28 @@ var ReactGA = {
    * @param args.label  {String} required
    * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  timing: function (args, trackerNames) {
+  timing: ({ category, variable, value, label } = {}, trackerNames) => {
     if (typeof ga === 'function') {
-      if (!args || !args.category || !args.variable
-          || !args.hasOwnProperty('value') || typeof args.value !== 'number') {
+      if (!category || !variable || !value || typeof value !== 'number') {
         warn('args.category, args.variable ' +
               'AND args.value are required in timing() ' +
               'AND args.value has to be a number');
         return;
       }
 
-      //Required Fields
-      var fieldObject = {
+      // Required Fields
+      const fieldObject = {
         hitType: 'timing',
-        timingCategory: _format(args.category),
-        timingVar: _format(args.variable),
-        timingValue: args.value
+        timingCategory: _format(category),
+        timingVar: _format(variable),
+        timingValue: value
       };
 
-      if (args.label) {
-        fieldObject.timingLabel = _format(args.label);
+      if (label) {
+        fieldObject.timingLabel = _format(label);
       }
 
-      this.send(fieldObject, trackerNames);
+      ReactGA.send(fieldObject, trackerNames);
     }
   },
 
@@ -265,65 +257,68 @@ var ReactGA = {
    * @param args.nonInteraction {boolean} optional
    * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  event: function (args, trackerNames) {
+  event: ({ category, action, label, value, nonInteraction, transport, ...args } = {}, trackerNames) => {
     if (typeof ga === 'function') {
-
       // Simple Validation
-      if (!args || !args.category || !args.action) {
+      if (!category || !action) {
         warn('args.category AND args.action are required in event()');
         return;
       }
 
       // Required Fields
-      var fieldObject = {
+      const fieldObject = {
         hitType: 'event',
-        eventCategory: _format(args.category),
-        eventAction: _format(args.action)
+        eventCategory: _format(category),
+        eventAction: _format(action)
       };
 
       // Optional Fields
-      if (args.label) {
-        fieldObject.eventLabel = _format(args.label);
+      if (label) {
+        fieldObject.eventLabel = _format(label);
       }
 
-      if (args.hasOwnProperty('value')) {
-        if (typeof args.value !== 'number') {
+      if (typeof value !== 'undefined') {
+        if (typeof value !== 'number') {
           warn('Expected `args.value` arg to be a Number.');
         } else {
-          fieldObject.eventValue = args.value;
+          fieldObject.eventValue = value;
         }
       }
 
-      if (args.nonInteraction) {
-        if (typeof args.nonInteraction !== 'boolean') {
+      if (typeof nonInteraction !== 'undefined') {
+        if (typeof nonInteraction !== 'boolean') {
           warn('`args.nonInteraction` must be a boolean.');
         } else {
-          fieldObject.nonInteraction = args.nonInteraction;
+          fieldObject.nonInteraction = nonInteraction;
         }
       }
 
-      if (args.transport) {
-        if (typeof args.transport !== 'string') {
+      if (typeof transport !== 'undefined') {
+        if (typeof transport !== 'string') {
           warn('`args.transport` must be a string.');
         } else {
-          if (['beacon', 'xhr', 'image'].indexOf(args.transport) === -1) {
+          if (['beacon', 'xhr', 'image'].indexOf(transport) === -1) {
             warn('`args.transport` must be either one of these values: `beacon`, `xhr` or `image`');
           }
 
-          fieldObject.transport = args.transport;
+          fieldObject.transport = transport;
         }
       }
 
       Object.keys(args)
-        .filter(function(key) { return key.substr(0, 'dimension'.length) == 'dimension'; })
-        .forEach(function(key) { return fieldObject[key] = args[key]; });
+        .filter(key => key.substr(0, 'dimension'.length) === 'dimension')
+        .forEach((key) => {
+          fieldObject[key] = args[key];
+        });
 
       Object.keys(args)
-        .filter(function(key) { return key.substr(0, 'metric'.length) == 'metric'; })
-        .forEach(function(key) { return fieldObject[key] = args[key]; });
+        .filter(key => key.substr(0, 'metric'.length) === 'metric')
+        .forEach((key) => {
+          fieldObject[key] = args[key];
+        });
 
       // Send to GA
-      this.send(fieldObject, trackerNames);
+      ReactGA.send(fieldObject, trackerNames);
     }
   },
 
@@ -334,29 +329,28 @@ var ReactGA = {
    * @param args.fatal {boolean} optional
    * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
    */
-  exception: function (args, trackerNames) {
+  exception: ({ description, fatal }, trackerNames) => {
     if (typeof ga === 'function') {
-
       // Required Fields
-      var fieldObject = {
+      const fieldObject = {
         hitType: 'exception'
       };
 
       // Optional Fields
-      if (args.description) {
-        fieldObject.exDescription = _format(args.description);
+      if (description) {
+        fieldObject.exDescription = _format(description);
       }
 
-      if (typeof args.fatal !== 'undefined') {
-        if (typeof args.fatal !== 'boolean') {
+      if (typeof fatal !== 'undefined') {
+        if (typeof fatal !== 'boolean') {
           warn('`args.fatal` must be a boolean.');
         } else {
-          fieldObject.exFatal = args.fatal;
+          fieldObject.exFatal = fatal;
         }
       }
 
       // Send to GA
-      this.send(fieldObject, trackerNames);
+      ReactGA.send(fieldObject, trackerNames);
     }
   },
 
@@ -367,16 +361,15 @@ var ReactGA = {
      * @param name {String} e.g. 'ecommerce' or 'myplugin'
      * @param options {Object} optional e.g {path: '/log', debug: true}
      */
-    require: function (name, options) {
+    require: (rawName, options) => {
       if (typeof ga === 'function') {
-
         // Required Fields
-        if (!name) {
+        if (!rawName) {
           warn('`name` is required in .require()');
           return;
         }
 
-        name = trim(name);
+        const name = trim(rawName);
         if (name === '') {
           warn('`name` cannot be an empty string in .require()');
           return;
@@ -396,18 +389,14 @@ var ReactGA = {
           ga('require', name, options);
 
           if (_debug) {
-            log('called ga(\'require\', \'' + name + '\', ' + JSON.stringify(options) + ');');
+            log(`called ga('require', '${name}', ${JSON.stringify(options)}`);
           }
-
-          return;
         } else {
           ga('require', name);
 
           if (_debug) {
-            log('called ga(\'require\', \'' + name + '\');');
+            log(`called ga('require', '${name}');`);
           }
-
-          return;
         }
       }
     },
@@ -421,19 +410,15 @@ var ReactGA = {
      * @param actionType {String} optional e.g. 'detail'
      * @param payload {Object} optional e.g { id: '1x5e', name : 'My product to track' }
      */
-    execute: function () {
-      var args = Array.prototype.slice.call(arguments);
+    execute: (pluginName, action, ...args) => {
+      let payload;
+      let actionType;
 
-      var pluginName = args[0];
-      var action = args[1];
-      var payload;
-      var actionType;
-
-      if (args.length === 3) {
-        payload = args[2];
+      if (args.length === 1) {
+        payload = args[0];
       } else {
-        actionType = args[2];
-        payload = args[3];
+        actionType = args[0];
+        payload = args[1];
       }
 
       if (typeof ga === 'function') {
@@ -442,26 +427,25 @@ var ReactGA = {
         } else if (typeof action !== 'string') {
           warn('Expected `action` arg to be a String.');
         } else {
-          var command = pluginName + ':' + action;
+          const command = `${pluginName}:${action}`;
           payload = payload || null;
           if (actionType && payload) {
             ga(command, actionType, payload);
             if (_debug) {
-              log('called ga(\'' + command + '\');');
-              log('actionType: "' + actionType + '" with payload: ' + JSON.stringify(payload));
+              log(`called ga('${command}');`);
+              log(`actionType: "${actionType}" with payload: ${JSON.stringify(payload)}`);
             }
           } else if (payload) {
             ga(command, payload);
             if (_debug) {
-              log('called ga(\'' + command + '\');');
-              log('with payload: ' + JSON.stringify(payload));
+              log(`called ga('${command}');`);
+              log(`with payload: ${JSON.stringify(payload)}`);
             }
           } else {
             ga(command);
             if (_debug) {
-              log('called ga(\'' + command + '\');');
+              log(`called ga('${command}');`);
             }
-
           }
         }
       }
@@ -474,14 +458,13 @@ var ReactGA = {
    * @param args.label {String} e.g. url, or 'Create an Account'
    * @param {function} hitCallback - Called after processing a hit.
    */
-  outboundLink: function (args, hitCallback, trackerNames) {
+  outboundLink: (args, hitCallback, trackerNames) => {
     if (typeof hitCallback !== 'function') {
       warn('hitCallback function is required');
       return;
     }
 
     if (typeof ga === 'function') {
-
       // Simple Validation
       if (!args || !args.label) {
         warn('args.label is required in outboundLink()');
@@ -489,16 +472,15 @@ var ReactGA = {
       }
 
       // Required Fields
-      var fieldObject = {
+      const fieldObject = {
         hitType: 'event',
         eventCategory: 'Outbound',
         eventAction: 'Click',
         eventLabel: _format(args.label)
       };
 
-      var safetyCallbackCalled = false;
-      var safetyCallback = function () {
-
+      let safetyCallbackCalled = false;
+      const safetyCallback = () => {
         // This prevents a delayed response from GA
         // causing hitCallback from being fired twice
         safetyCallbackCalled = true;
@@ -511,9 +493,9 @@ var ReactGA = {
       // or an ad blocker prevents sending the data
 
       // register safety net timeout:
-      var t = setTimeout(safetyCallback, 250);
+      const t = setTimeout(safetyCallback, 250);
 
-      var clearableCallbackForGA = function () {
+      const clearableCallbackForGA = () => {
         clearTimeout(t);
         if (!safetyCallbackCalled) {
           hitCallback();
@@ -523,7 +505,7 @@ var ReactGA = {
       fieldObject.hitCallback = clearableCallbackForGA;
 
       // Send to GA
-      this.send(fieldObject, trackerNames);
+      ReactGA.send(fieldObject, trackerNames);
     } else {
       // if ga is not defined, return the callback so the application
       // continues to work as expected
@@ -532,9 +514,8 @@ var ReactGA = {
   }
 };
 
-var OutboundLink = require('./components/OutboundLink');
 OutboundLink.origTrackLink = OutboundLink.trackLink;
 OutboundLink.trackLink = ReactGA.outboundLink.bind(ReactGA);
 ReactGA.OutboundLink = OutboundLink;
 
-module.exports = ReactGA;
+export default ReactGA;
