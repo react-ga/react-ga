@@ -1,9 +1,7 @@
-function removeLeadingSlash(s) {
-  if (s.substring(0, 1) === '/') {
-    s = s.substring(1);
+export default function removeLeadingSlash(string) {
+  if (string.substring(0, 1) === '/') {
+    return string.substring(1);
   }
 
-  return s;
+  return string;
 }
-
-module.exports = removeLeadingSlash;

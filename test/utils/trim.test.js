@@ -1,6 +1,6 @@
-var should = require('should');
+import should from 'should';
 
-var trim = require('../../src/utils/trim');
+import trim from '../../src/utils/trim';
 
 describe('trim()', function () {
   it('should trim a string with leading whitespaces', function () {

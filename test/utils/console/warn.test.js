@@ -1,7 +1,7 @@
-var should = require('should');
-var sinon = require('sinon');
+import should from 'should';
+import sinon from 'sinon';
 
-var warn = require('../../../src/utils/console/warn');
+import warn from '../../../src/utils/console/warn';
 
 describe('warn()', function () {
   it('should append [react-ga] to warning messages', function () {

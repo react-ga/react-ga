@@ -1,49 +1,56 @@
-var React = require('react');
-var CreateReactClass = require('create-react-class');
-var PropTypes = require('prop-types');
-var assign = require('object-assign');
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import assign from 'object-assign';
 
-var NEWTAB = '_blank';
-var MIDDLECLICK = 1;
+import warn from '../utils/console/warn';
 
-var OutboundLink = CreateReactClass({
-  displayName: 'OutboundLink',
-  propTypes: {
-    eventLabel: PropTypes.string.isRequired
-  },
-  statics: {
-    trackLink: function () {
-      console.warn('ga tracking not enabled');
-    }
-  },
-  handleClick: function (e) {
-    var props = this.props;
-    var eventMeta = { label: props.eventLabel };
-    var sameTarget = props.target !== NEWTAB;
-    var normalClick = !(e.ctrlKey || e.shiftKey || e.metaKey || e.button === MIDDLECLICK);
+const NEWTAB = '_blank';
+const MIDDLECLICK = 1;
+
+export default class OutboundLink extends Component {
+  static propTypes = {
+    eventLabel: PropTypes.string.isRequired,
+    target: PropTypes.string,
+    to: PropTypes.string,
+    onClick: PropTypes.func
+  };
+
+  static defaultProps = {
+    target: null,
+    to: null,
+    onClick: null
+  };
+
+  static trackLink = () => {
+    warn('ga tracking not enabled');
+  };
+
+  handleClick = (event) => {
+    const { target, eventLabel, to, onClick } = this.props;
+    const eventMeta = { label: eventLabel };
+    const sameTarget = target !== NEWTAB;
+    const normalClick = !(event.ctrlKey || event.shiftKey || event.metaKey || event.button === MIDDLECLICK);
 
     if (sameTarget && normalClick) {
-      e.preventDefault();
-      OutboundLink.trackLink(eventMeta, function () {
-        window.location.href = props.to;
+      event.preventDefault();
+      OutboundLink.trackLink(eventMeta, () => {
+        window.location.href = to;
       });
     } else {
-      OutboundLink.trackLink(eventMeta, function () {});
+      OutboundLink.trackLink(eventMeta, () => {});
     }
 
-    if (props.onClick) {
-      props.onClick(e);
+    if (onClick) {
+      onClick(event);
     }
-  },
+  };
 
-  render: function () {
-    var props = assign({}, this.props, {
+  render() {
+    const props = assign({}, this.props, {
       href: this.props.to,
       onClick: this.handleClick
     });
     delete props.eventLabel;
     return React.createElement('a', props);
   }
-});
-
-module.exports = OutboundLink;
+}

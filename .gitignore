@@ -3,3 +3,5 @@
 .npm-*
 /dist/index.html
 *.log
+/coverage
+/.nyc_output

@@ -1,6 +1,6 @@
-var should = require('should');
+import should from 'should';
 
-var mightBeEmail = require('../../src/utils/mightBeEmail');
+import mightBeEmail from '../../src/utils/mightBeEmail';
 
 describe('mightBeEmail()', function () {
   it('should return `true` for possible emails', function () {
