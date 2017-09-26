@@ -1,6 +1,6 @@
 {
   "name": "react-ga",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "React Google Analytics Module.",
   "main": "dist/react-ga.js",
   "scripts": {
