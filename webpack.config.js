@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const pkg = require('./package.json');
 
 module.exports = {
   entry: {
@@ -11,6 +12,9 @@ module.exports = {
     filename: '[name].js',
     libraryTarget: 'commonjs2'
   },
+  externals: []
+    .concat(Object.keys(pkg.peerDependencies))
+    .concat(Object.keys(pkg.dependencies)),
   module: {
     loaders: [
       { test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/ }
