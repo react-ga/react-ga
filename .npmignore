@@ -1,0 +1,14 @@
+.eslintrc
+.gitignore
+.nvmrc
+.travis.yml
+webpack.config.js
+.idea
+/test
+.DS_Store
+/node_modules
+.npm-*
+/dist/index.html
+*.log
+/coverage
+/.nyc_output
