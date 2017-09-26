@@ -6,7 +6,10 @@
   "scripts": {
     "test": "npm run lint && BABEL_ENV=test nyc mocha",
     "build": "webpack",
-    "lint": "eslint src webpack.config.js test --ext .js,.jsx"
+    "lint": "eslint src webpack.config.js test --ext .js,.jsx",
+    "preversion": "npm test && npm run lint",
+    "version": "node ./version-bower.js && npm run build && git add -A dist bower.json",
+    "postversion": "git push && git push --tags && npm publish"
   },
   "types": "./types/index.d.ts",
   "repository": {
@@ -69,6 +72,7 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-mocha": "^4.11.0",
     "eslint-plugin-react": "^7.1.0",
+    "fs-extra": "^4.0.2",
     "jsdom": "~9.12.0",
     "jsdom-global": "~2.1.1",
     "mocha": "^3.5.0",
