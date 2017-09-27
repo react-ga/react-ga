@@ -1,10 +1,11 @@
 {
   "name": "react-ga",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "React Google Analytics Module.",
   "main": "dist/react-ga.js",
   "scripts": {
-    "test": "npm run lint && BABEL_ENV=test nyc mocha",
+    "test": "npm run lint && npm run test-only",
+    "test-only": "BABEL_ENV=test nyc mocha",
     "build": "webpack",
     "lint": "eslint src webpack.config.js test --ext .js,.jsx",
     "preversion": "npm test && npm run lint",

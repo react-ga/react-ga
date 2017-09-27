@@ -2,7 +2,12 @@ import should from 'should';
 import { spy, useFakeTimers } from 'sinon';
 import TestUtils from 'react-addons-test-utils';
 
-import ReactGA, { __RewireAPI__ as RewireAPI } from '../src/index';
+// eslint-disable-next-line import/no-duplicates
+import DefaultReactGA from '../src/index';
+// eslint-disable-next-line import/no-duplicates
+import * as ReactGA from '../src/index';
+// eslint-disable-next-line import/no-duplicates
+import { __RewireAPI__ as RewireAPI } from '../src/index';
 
 describe('react-ga', function () {
   let warnSpy;
@@ -25,6 +30,10 @@ describe('react-ga', function () {
     RewireAPI.__ResetDependency__('warn');
     RewireAPI.__ResetDependency__('log');
     RewireAPI.__ResetDependency__('loadGA');
+  });
+
+  it('should import as both default and * syntax', function () {
+    should.deepEqual(Object.keys(DefaultReactGA).concat(['default']).sort(), Object.keys(ReactGA).sort());
   });
 
   describe('initialize()', function () {
