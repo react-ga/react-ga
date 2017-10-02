@@ -1,5 +1,14 @@
-module.exports =
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("react"), require("prop-types"), require("object-assign"));
+	else if(typeof define === 'function' && define.amd)
+		define(["react", "prop-types", "object-assign"], factory);
+	else {
+		var a = typeof exports === 'object' ? factory(require("react"), require("prop-types"), require("object-assign")) : factory(root["react"], root["prop-types"], root["object-assign"]);
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function(__WEBPACK_EXTERNAL_MODULE_10__, __WEBPACK_EXTERNAL_MODULE_11__, __WEBPACK_EXTERNAL_MODULE_12__) {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -227,7 +236,12 @@ function initialize(configs, options) {
     return false;
   }
 
-  internalGa = (0, _loadGA2.default)();
+  (0, _loadGA2.default)();
+  internalGa = function internalGa() {
+    var _window;
+
+    return (_window = window).ga.apply(_window, arguments);
+  };
 
   if (Array.isArray(configs)) {
     configs.forEach(function (config) {
@@ -260,7 +274,7 @@ function ga() {
     }
   }
 
-  return internalGa;
+  return window.ga;
 }
 
 /**
@@ -850,8 +864,6 @@ exports.default = function () {
     m.parentNode.insertBefore(a, m);
   })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
   /* eslint-enable */
-
-  return window.ga;
 };
 
 /***/ }),
@@ -986,19 +998,20 @@ exports.default = OutboundLink;
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = require("react");
+module.exports = __WEBPACK_EXTERNAL_MODULE_10__;
 
 /***/ }),
 /* 11 */
 /***/ (function(module, exports) {
 
-module.exports = require("prop-types");
+module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
 
 /***/ }),
 /* 12 */
 /***/ (function(module, exports) {
 
-module.exports = require("object-assign");
+module.exports = __WEBPACK_EXTERNAL_MODULE_12__;
 
 /***/ })
 /******/ ]);
+});

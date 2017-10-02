@@ -10,7 +10,7 @@ module.exports = {
   output: {
     path: path.resolve('./dist'),
     filename: '[name].js',
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'umd'
   },
   externals: []
     .concat(Object.keys(pkg.peerDependencies))
