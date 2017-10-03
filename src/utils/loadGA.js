@@ -13,6 +13,4 @@ export default function () {
     m.parentNode.insertBefore(a, m);
   })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
   /* eslint-enable */
-
-  return window.ga;
 }

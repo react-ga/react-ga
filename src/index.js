@@ -75,7 +75,8 @@ export function initialize(configs, options) {
     return false;
   }
 
-  internalGa = loadGA();
+  loadGA();
+  internalGa = (...args) => window.ga(...args);
 
   if (Array.isArray(configs)) {
     configs.forEach((config) => {
@@ -104,7 +105,7 @@ export function ga(...args) {
     }
   }
 
-  return internalGa;
+  return window.ga;
 }
 
 /**
