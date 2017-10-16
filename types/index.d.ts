@@ -53,6 +53,13 @@ export interface OutboundLinkArgs {
     label: string;
 }
 
+export interface OutboundLinkProps {
+    eventLabel: string;
+    to: string;
+    target?: string,
+    onClick?: Function
+}
+
 export function initialize(trackingCode: string, options?: InitializeOptions): void;
 export function ga(): any;
 export function set(fieldsObject: FieldsObject): void;
@@ -64,3 +71,4 @@ export function event(args: EventArgs): void;
 export function exception(fieldsObject: FieldsObject): void;
 export const plugin: Plugin;
 export function outboundLink(args: OutboundLinkArgs, hitCallback: () => void): void;
+export const OutboundLink : React.ComponentClass<OutboundLinkProps & React.HTMLProps<OutboundLinkProps>>;
