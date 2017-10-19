@@ -31,16 +31,69 @@ Note that [React](https://github.com/facebook/react) >= 0.14.0 is needed in orde
 
 ### With npm
 
-Initializing GA and Tracking Pageviews with `react-router`:
+For use with `react-router` v4, one strategy is to create a [Higher Order Component](https://reactjs.org/docs/higher-order-components.html) and wrap your main route with it, like below:
+
+```jsx
+import React from 'react';
+import GoogleAnalytics from 'react-ga';
+import ReactDOM from 'react-dom';
+import Router from 'react-router-router';
+import routes from './routes';
+import App from './components/App';
+
+GoogleAnalytics.initialize('UA-0000000-0');
+
+// Higher Order Component
+const withTracker = (WrappedComponent, options = {}) => {
+  const trackPage = page => {
+    GoogleAnalytics.set({
+      page,
+      ...options,
+    });
+    GoogleAnalytics.pageview(page);
+  };
+
+  class HOC extends React.Component {
+    componentDidMount() {
+      const page = this.props.location.pathname;
+      trackPage(page);
+    }
+
+    componentWillReceiveProps(nextProps) {
+      const currentPage = this.props.location.pathname;
+      const nextPage = nextProps.location.pathname;
+
+      if (currentPage !== nextPage) {
+        trackPage(nextPage);
+      }
+    }
+
+    render() {
+      return <WrappedComponent {...this.props} />;
+    }
+  }
+
+  return HOC;
+};
+
+// Wrap the top-level route with the Higher Order Component
+const trackerOptions = {}
+const trackedAppRoute = withTracker(props => <App {...props}>{routes}</App>, trackerOptions)
+const app = document.getElementById('app');
+
+ReactDOM.render(<Route path="/" render={trackedAppRoute} />, app);
+```
+
+Initializing GA and Tracking Pageviews with `react-router` v3 and below:
 
 ```js
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Router = require('react-router');
-var routes = require('./routes');
+import React from'react';
+import ReactDOM from'react-dom';
+import Router from'react-router';
+import routes from'./routes';
+import ReactGA from 'react-ga';
 
 ...
-var ReactGA = require('react-ga');
 ReactGA.initialize('UA-000000-01');
 ...
 
@@ -49,9 +102,8 @@ function logPageView() {
   ReactGA.pageview(window.location.pathname + window.location.search);
 }
 
-var app = document.getElementById('app');
+const app = document.getElementById('app');
 ReactDOM.render(<Router routes={routes} onUpdate={logPageView} />, app);
-
 ```
 
 ### With bower
@@ -238,7 +290,7 @@ ReactGA.ga('send', 'pageview', '/mypage');
 Usage without arguments:
 
 ```js
-var ga = ReactGA.ga();
+const ga = ReactGA.ga();
 ga('send', 'pageview', '/mypage');
 ```
 
@@ -268,7 +320,7 @@ Outbound links can directly be used as a component in your React code and the ev
 ###### Example
 
 ```js
-var ReactGA = require('react-ga');
+import ReactGA from 'react-ga';
 
 render() {
   return (
