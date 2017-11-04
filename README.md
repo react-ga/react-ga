@@ -34,24 +34,9 @@ Note that [React](https://github.com/facebook/react) >= 0.14.0 is needed in orde
 Initializing GA and Tracking Pageviews with `react-router`:
 
 ```js
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Router = require('react-router');
-var routes = require('./routes');
-
-...
-var ReactGA = require('react-ga');
+import ReactGA from 'react-ga';
 ReactGA.initialize('UA-000000-01');
-...
-
-function logPageView() {
-  ReactGA.set({ page: window.location.pathname + window.location.search });
-  ReactGA.pageview(window.location.pathname + window.location.search);
-}
-
-var app = document.getElementById('app');
-ReactDOM.render(<Router routes={routes} onUpdate={logPageView} />, app);
-
+ReactGA.pageview(window.location.pathname + window.location.search);
 ```
 
 ### With bower
@@ -71,6 +56,11 @@ When included as a script tag, a variable `ReactGA` is exposed in the global sco
   ReactGA.initialize('UA-000000-01', { debug: true });
 </script>
 ```
+
+### Demo Code
+
+For a working demo have a look at the [demo files](/demo) or clone this repo and run `npm install` `npm start`.
+Demo requires you to have your own TrackingID.
 
 ## Upgrading from `1.x` to `2.x`
 
@@ -106,7 +96,8 @@ ReactGA.initialize('UA-000000-01', {
 |options.titleCase| `Boolean`. Optional. Defaults to `true`. If set to `false`, strings will not be converted to title case before sending to GA.|
 |options.gaOptions| `Object`. Optional. [GA configurable create only fields.](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference)|
 
-See example above for use with `react-router`.
+If you are having additional troubles and setting `debug = true` shows as working please try using the [Chrome GA Debugger Extension](https://chrome.google.com/webstore/detail/google-analytics-debugger/jnkmfdileelhofjcijamephohjechhna).
+This will help you figure out if your implementation is off or your GA Settings are not correct.
 
 #### ReactGA.set(fieldsObject)
 

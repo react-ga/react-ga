@@ -70,7 +70,7 @@ function _initialize(gaTrackingID, options) {
 }
 
 
-export function initialize(configs, options) {
+export function initialize(configsOrTrackingId, options) {
   if (typeof window === 'undefined') {
     return false;
   }
@@ -78,8 +78,8 @@ export function initialize(configs, options) {
   loadGA();
   internalGa = (...args) => window.ga(...args);
 
-  if (Array.isArray(configs)) {
-    configs.forEach((config) => {
+  if (Array.isArray(configsOrTrackingId)) {
+    configsOrTrackingId.forEach((config) => {
       if (typeof config !== 'object') {
         warn('All configs must be an object');
         return;
@@ -87,7 +87,7 @@ export function initialize(configs, options) {
       _initialize(config.trackingId, config);
     });
   } else {
-    _initialize(configs, options);
+    _initialize(configsOrTrackingId, options);
   }
   return true;
 }
