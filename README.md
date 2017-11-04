@@ -59,7 +59,7 @@ When included as a script tag, a variable `ReactGA` is exposed in the global sco
 
 ### Demo Code
 
-For a working demo have a look at the [demo files](/demo) or clone this repo and run `npm install` `npm start`.
+For a working demo have a look at the [demo files](/demo) or clone this repo and run `npm install` `npm start` then open http://localhost:8080 and follow the instructions.
 Demo requires you to have your own TrackingID.
 
 ## Upgrading from `1.x` to `2.x`

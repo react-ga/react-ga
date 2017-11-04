@@ -10,6 +10,8 @@ import {
 } from 'react-router-dom';
 import withTracker from './withTracker';
 
+import Events from './Events';
+
 const Topic = ({ match }) => (
   <div>
     <h3>{match.params.topicId}</h3>
@@ -67,6 +69,7 @@ const BasicExample = () => (
         <li><Link to="/">Home</Link></li>
         <li><Link to="/about">About</Link></li>
         <li><Link to="/topics">Topics</Link></li>
+        <li><Link to="/events">Events</Link></li>
       </ul>
 
       <hr />
@@ -74,6 +77,7 @@ const BasicExample = () => (
       <Route exact path="/" component={withTracker(Home)} />
       <Route path="/about" component={withTracker(About)} />
       <Route path="/topics" component={withTracker(Topics)} />
+      <Route path="/events" component={withTracker(Events)} />
     </div>
   </Router>
 );
