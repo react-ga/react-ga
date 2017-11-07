@@ -159,8 +159,9 @@ export function send(fieldObject, trackerNames) {
  * Basic GA pageview tracking
  * @param  {String} path - the current page page e.g. '/about'
  * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
+ * @param {String} title - (optional) the page title e. g. 'My Website'
  */
-export function pageview(rawPath, trackerNames) {
+export function pageview(rawPath, trackerNames, title) {
   if (!rawPath) {
     warn('path is required in .pageview()');
     return;
@@ -172,12 +173,25 @@ export function pageview(rawPath, trackerNames) {
     return;
   }
 
+  const extraFields = {};
+  if (title) {
+    extraFields.title = title;
+  }
+
   if (typeof ga === 'function') {
-    _gaCommand(trackerNames, 'send', 'pageview', path);
+    _gaCommand(trackerNames, 'send', {
+      hitType: 'pageview',
+      page: path,
+      ...extraFields
+    });
 
     if (_debug) {
       log('called ga(\'send\', \'pageview\', path);');
-      log(`with path: ${path}`);
+      let extraLog = '';
+      if (title) {
+        extraLog = ` and title: ${title}`;
+      }
+      log(`with path: ${path}${extraLog}`);
     }
   }
 }

@@ -122,6 +122,7 @@ ReactGA.pageview('/about/contact-us');
 |Value|Notes|
 |------|-----|
 |path|`String`. e.g. '/get-involved/other-ways-to-help'|
+|title|`String`. Optional. e.g. 'Other Ways to Help'|
 
 See example above for use with `react-router`.
 
