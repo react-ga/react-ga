@@ -75,7 +75,7 @@ export function initialize(configsOrTrackingId, options) {
     return false;
   }
 
-  loadGA();
+  loadGA(options);
   internalGa = (...args) => window.ga(...args);
 
   if (Array.isArray(configsOrTrackingId)) {
