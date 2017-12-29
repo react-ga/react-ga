@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import assign from 'object-assign';
 
 import warn from '../utils/console/warn';
 
@@ -46,10 +45,11 @@ export default class OutboundLink extends Component {
   };
 
   render() {
-    const props = assign({}, this.props, {
+    const props = {
+      ...this.props,
       href: this.props.to,
       onClick: this.handleClick
-    });
+    };
     delete props.eventLabel;
     return React.createElement('a', props);
   }
