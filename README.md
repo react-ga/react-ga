@@ -31,7 +31,7 @@ Note that [React](https://github.com/facebook/react) >= 0.14.0 is needed in orde
 
 ### With npm
 
-Initializing GA and Tracking Pageviews with `react-router`:
+Initializing GA and Tracking Pageviews:
 
 ```js
 import ReactGA from 'react-ga';
