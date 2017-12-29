@@ -343,6 +343,21 @@ ReactGA.plugin.execute('ec', 'setAction', 'purchase', {
 });
 ```
 
+### Test Mode
+
+To enable test mode, initialize ReactGA with the `testMode: true` option. Here's an example from `tests/utils/testMode.test.js`
+```js
+// This should be part of your setup
+ReactGA.initialize('foo', { testMode: true });
+// This would be in the component/js you are testing
+ReactGA.ga('send', 'pageview', '/mypage');
+// This would be how you check that the calls are made correctly
+ReactGA.testModeAPI.calls.should.eql([
+  ['create', 'foo', 'auto'],
+  ['send', 'pageview', '/mypage']
+]);
+```
+
 ---
 
 ## Development
@@ -351,7 +366,8 @@ ReactGA.plugin.execute('ec', 'setAction', 'purchase', {
 
 * node.js
 * npm
-* `npm install --global gulp`
+* `npm install`
+* `npm install react@^15.6.1 prop-types@^15.5.10` - This is for the optionalDependancies.
 
 ### To Test
 ```bash

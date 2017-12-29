@@ -34,8 +34,8 @@
   },
   "homepage": "https://github.com/react-ga/react-ga",
   "optionalDependencies": {
-    "react": ">= 0.14.0",
-    "prop-types": "^15.5.10"
+    "prop-types": "^15.6.0",
+    "react": "^15.6.2"
   },
   "nyc": {
     "include": [
@@ -80,8 +80,6 @@
     "jsdom-global": "~2.1.1",
     "mocha": "^3.5.0",
     "nyc": "~10.2.0",
-    "prop-types": "^15.5.10",
-    "react": "^15.6.1",
     "react-addons-test-utils": "^15.0.1",
     "react-dom": "^15.0.1",
     "react-router": "^4.2.0",
