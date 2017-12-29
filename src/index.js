@@ -16,13 +16,16 @@ import loadGA from './utils/loadGA';
 
 import warn from './utils/console/warn';
 import log from './utils/console/log';
+import TestModeAPI from './utils/testModeAPI';
 import UnboundOutboundLink from './components/OutboundLink';
 
 let _debug = false;
 let _titleCase = true;
+let _testMode = false;
 
 const internalGa = (...args) => {
-  if (!window.ga) return warn('ReactGA.initialize must be called first');
+  if (_testMode) return TestModeAPI.ga(...args);
+  if (!window.ga) return warn('ReactGA.initialize must be called first or GoogleAnalytics should be loaded manually');
   return window.ga(...args);
 };
 
@@ -72,11 +75,15 @@ function _initialize(gaTrackingID, options) {
 
 
 export function initialize(configsOrTrackingId, options) {
-  if (typeof window === 'undefined') {
-    return false;
-  }
+  if (options && options.testMode === true) {
+    _testMode = true;
+  } else {
+    if (typeof window === 'undefined') {
+      return false;
+    }
 
-  loadGA(options);
+    loadGA(options);
+  }
 
   if (Array.isArray(configsOrTrackingId)) {
     configsOrTrackingId.forEach((config) => {
@@ -530,6 +537,7 @@ export function outboundLink(args, hitCallback, trackerNames) {
 UnboundOutboundLink.origTrackLink = UnboundOutboundLink.trackLink;
 UnboundOutboundLink.trackLink = outboundLink;
 export const OutboundLink = UnboundOutboundLink;
+export const testModeAPI = TestModeAPI;
 
 export default {
   initialize,
@@ -543,5 +551,6 @@ export default {
   exception,
   plugin,
   outboundLink,
-  OutboundLink
+  OutboundLink,
+  testModeAPI: TestModeAPI
 };
