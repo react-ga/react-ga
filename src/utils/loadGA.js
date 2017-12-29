@@ -1,4 +1,4 @@
-export default function () {
+export default function (options) {
   // https://developers.google.com/analytics/devguides/collection/analyticsjs/
   /* eslint-disable */
   (function (i, s, o, g, r, a, m) {
@@ -11,6 +11,6 @@ export default function () {
     a.async = 1;
     a.src = g;
     m.parentNode.insertBefore(a, m);
-  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+})(window, document, 'script', options && options.gaAddress ? options.gaAddress : 'https://www.google-analytics.com/analytics.js', 'ga');
   /* eslint-enable */
 }
