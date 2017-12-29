@@ -12,3 +12,4 @@ webpack.config.js
 *.log
 /coverage
 /.nyc_output
+.babelrc
