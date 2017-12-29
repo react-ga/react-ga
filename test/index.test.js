@@ -259,7 +259,16 @@ describe('react-ga', function () {
       ReactGA.pageview('/valid');
       gaSpy.args.should.eql([
         ['create', 'foo', 'auto'],
-        ['send', 'pageview', '/valid']
+        ['send', { hitType: 'pageview', page: '/valid' }]
+      ]);
+    });
+
+    it('should pass an optional title', function () {
+      ReactGA.initialize('foo');
+      ReactGA.pageview('/valid', null, 'Title');
+      gaSpy.args.should.eql([
+        ['create', 'foo', 'auto'],
+        ['send', { hitType: 'pageview', page: '/valid', title: 'Title' }]
       ]);
     });
 
@@ -272,8 +281,8 @@ describe('react-ga', function () {
       gaSpy.args.should.eql([
         ['create', 'foo', 'auto'],
         ['create', 'bar', { name: 'baz' }],
-        ['send', 'pageview', '/valid'],
-        ['baz.send', 'pageview', '/valid']
+        ['send', { hitType: 'pageview', page: '/valid' }],
+        ['baz.send', { hitType: 'pageview', page: '/valid' }]
       ]);
     });
 
