@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"), require("prop-types"), require("object-assign"));
+		module.exports = factory(require("react"), require("prop-types"));
 	else if(typeof define === 'function' && define.amd)
-		define(["react", "prop-types", "object-assign"], factory);
+		define(["react", "prop-types"], factory);
 	else {
-		var a = typeof exports === 'object' ? factory(require("react"), require("prop-types"), require("object-assign")) : factory(root["react"], root["prop-types"], root["object-assign"]);
+		var a = typeof exports === 'object' ? factory(require("react"), require("prop-types")) : factory(root["react"], root["prop-types"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_10__, __WEBPACK_EXTERNAL_MODULE_11__, __WEBPACK_EXTERNAL_MODULE_12__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_10__, __WEBPACK_EXTERNAL_MODULE_11__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -118,6 +118,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.OutboundLink = exports.plugin = undefined;
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 exports.initialize = initialize;
@@ -180,7 +182,10 @@ var _debug = false;
 var _titleCase = true;
 
 var internalGa = function internalGa() {
-  (0, _warn2.default)('ReactGA.initialize must be called first');
+  var _window;
+
+  if (!window.ga) return (0, _warn2.default)('ReactGA.initialize must be called first');
+  return (_window = window).ga.apply(_window, arguments);
 };
 
 function _format(s) {
@@ -237,11 +242,6 @@ function initialize(configsOrTrackingId, options) {
   }
 
   (0, _loadGA2.default)(options);
-  internalGa = function internalGa() {
-    var _window;
-
-    return (_window = window).ga.apply(_window, arguments);
-  };
 
   if (Array.isArray(configsOrTrackingId)) {
     configsOrTrackingId.forEach(function (config) {
@@ -328,8 +328,9 @@ function send(fieldObject, trackerNames) {
  * Basic GA pageview tracking
  * @param  {String} path - the current page page e.g. '/about'
  * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
+ * @param {String} title - (optional) the page title e. g. 'My Website'
  */
-function pageview(rawPath, trackerNames) {
+function pageview(rawPath, trackerNames, title) {
   if (!rawPath) {
     (0, _warn2.default)('path is required in .pageview()');
     return;
@@ -341,12 +342,24 @@ function pageview(rawPath, trackerNames) {
     return;
   }
 
+  var extraFields = {};
+  if (title) {
+    extraFields.title = title;
+  }
+
   if (typeof ga === 'function') {
-    _gaCommand(trackerNames, 'send', 'pageview', path);
+    _gaCommand(trackerNames, 'send', _extends({
+      hitType: 'pageview',
+      page: path
+    }, extraFields));
 
     if (_debug) {
       (0, _log2.default)('called ga(\'send\', \'pageview\', path);');
-      (0, _log2.default)('with path: ' + path);
+      var extraLog = '';
+      if (title) {
+        extraLog = ' and title: ' + title;
+      }
+      (0, _log2.default)('with path: ' + path + extraLog);
     }
   }
 }
@@ -892,6 +905,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(10);
@@ -901,10 +916,6 @@ var _react2 = _interopRequireDefault(_react);
 var _propTypes = __webpack_require__(11);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _objectAssign = __webpack_require__(12);
-
-var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
 var _warn = __webpack_require__(0);
 
@@ -964,7 +975,7 @@ var OutboundLink = function (_Component) {
   _createClass(OutboundLink, [{
     key: 'render',
     value: function render() {
-      var props = (0, _objectAssign2.default)({}, this.props, {
+      var props = _extends({}, this.props, {
         href: this.props.to,
         onClick: this.handleClick
       });
@@ -1005,12 +1016,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_10__;
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_12__;
 
 /***/ })
 /******/ ]);
