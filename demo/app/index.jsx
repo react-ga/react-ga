@@ -26,7 +26,10 @@ function renderConfigString(config, indent = '') {
 
 const DEFAULT_CONFIG = {
   trackingId: '',
-  debug: true
+  debug: true,
+  gaOptions: {
+    cookieDomain: 'none'
+  }
 };
 
 export default class App extends PureComponent {
@@ -43,7 +46,8 @@ export default class App extends PureComponent {
     return this.state.configs.filter(({ trackingId: id }) => id);
   };
 
-  initReactGA = () => {
+  initReactGA = (event) => {
+    event.preventDefault();
     if (this.filteredConfigs().length === 0) {
       return;
     }
@@ -130,7 +134,7 @@ export default class App extends PureComponent {
             </div>
           </div>
         ))}
-        <button onClick={this.addConfig}>Add Config</button>
+        <button type="button" onClick={this.addConfig}>Add Config</button>
         <button type="submit" disabled={configs.length < 1}>
           {configs.length < 1 ? 'Add Configs first' : 'Run the initialize function as below'}
         </button>

@@ -21,8 +21,9 @@ import UnboundOutboundLink from './components/OutboundLink';
 let _debug = false;
 let _titleCase = true;
 
-let internalGa = () => {
-  warn('ReactGA.initialize must be called first');
+const internalGa = (...args) => {
+  if (!window.ga) return warn('ReactGA.initialize must be called first');
+  return window.ga(...args);
 };
 
 function _format(s) {
@@ -76,7 +77,6 @@ export function initialize(configsOrTrackingId, options) {
   }
 
   loadGA(options);
-  internalGa = (...args) => window.ga(...args);
 
   if (Array.isArray(configsOrTrackingId)) {
     configsOrTrackingId.forEach((config) => {
