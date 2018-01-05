@@ -35,7 +35,7 @@
   "homepage": "https://github.com/react-ga/react-ga",
   "optionalDependencies": {
     "prop-types": "^15.6.0",
-    "react": "^15.6.2"
+    "react": "^15.6.2 || ^16.0"
   },
   "nyc": {
     "include": [
