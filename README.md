@@ -95,6 +95,7 @@ ReactGA.initialize('UA-000000-01', {
 |options.debug| `Boolean`. Optional. If set to `true`, will output additional feedback to the console.|
 |options.titleCase| `Boolean`. Optional. Defaults to `true`. If set to `false`, strings will not be converted to title case before sending to GA.|
 |options.gaOptions| `Object`. Optional. [GA configurable create only fields.](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference)|
+|options.gaAddress| `String`. Optional. If you are self-hosting your `analytics.js`, you can specify the URL for it here.
 
 If you are having additional troubles and setting `debug = true` shows as working please try using the [Chrome GA Debugger Extension](https://chrome.google.com/webstore/detail/google-analytics-debugger/jnkmfdileelhofjcijamephohjechhna).
 This will help you figure out if your implementation is off or your GA Settings are not correct.
