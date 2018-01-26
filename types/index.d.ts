@@ -45,7 +45,7 @@ export interface TimingArgs {
 }
 
 export interface Plugin {
-    require(name: string, options: any): void;
+    require(name: string, options?: any): void;
     execute(pluginName: string, action: string, actionTypeOrPayload: string|any, payload?: any): void;
 }
 
