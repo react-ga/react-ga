@@ -29,6 +29,8 @@ export interface GaOptions {
 
 export interface InitializeOptions {
     debug?: boolean;
+    gaAddress?: string;
+    testMode?: boolean;
     titleCase?: boolean;
     gaOptions?: GaOptions;
 }
@@ -47,6 +49,11 @@ export interface TimingArgs {
 export interface Plugin {
     require(name: string, options?: any): void;
     execute(pluginName: string, action: string, actionTypeOrPayload: string|any, payload?: any): void;
+}
+
+export interface TestModeAPI {
+  calls: any[][];
+  ga: (...any) => any;
 }
 
 export interface OutboundLinkArgs {
@@ -70,5 +77,6 @@ export function timing(args: TimingArgs): void;
 export function event(args: EventArgs): void;
 export function exception(fieldsObject: FieldsObject): void;
 export const plugin: Plugin;
+export const testModeAPI: TestModeAPI;
 export function outboundLink(args: OutboundLinkArgs, hitCallback: () => void): void;
 export const OutboundLink : React.ComponentClass<OutboundLinkProps & React.HTMLProps<OutboundLinkProps>>;
