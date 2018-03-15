@@ -1,6 +1,6 @@
 // Type definitions for react-ga 2.1
 // Project: https://github.com/react-ga/react-ga
-// Definitions by: Tim Aldridge <https://github.com/telshin>
+// Definitions by: Tim Aldridge <https://github.com/telshin>, Philip Karpiak <https://github.com/eswat>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 export interface EventArgs {
@@ -9,6 +9,7 @@ export interface EventArgs {
     label?: string;
     value?: number;
     nonInteraction?: boolean;
+    transport?: string;
 }
 
 export interface GaOptions {
@@ -53,7 +54,7 @@ export interface Plugin {
 
 export interface TestModeAPI {
   calls: any[][];
-  ga: (...any) => any;
+  ga: (...any: any[]) => any;
 }
 
 export interface OutboundLinkArgs {
@@ -69,13 +70,13 @@ export interface OutboundLinkProps {
 
 export function initialize(trackingCode: string, options?: InitializeOptions): void;
 export function ga(): any;
-export function set(fieldsObject: FieldsObject): void;
-export function send(fieldsObject: FieldsObject): void;
-export function pageview(path: string): void;
-export function modalview(name: string): void;
+export function set(fieldsObject: FieldsObject, trackerNames?: string[]): void;
+export function send(fieldsObject: FieldsObject, trackerNames?: string[]): void;
+export function pageview(path: string, trackerNames?: string[], title?: string): void;
+export function modalview(name: string, trackerNames?: string[]): void;
 export function timing(args: TimingArgs): void;
-export function event(args: EventArgs): void;
-export function exception(fieldsObject: FieldsObject): void;
+export function event(args: EventArgs, trackerNames?: string[]): void;
+export function exception(fieldsObject: FieldsObject, trackerNames?: string[]): void;
 export const plugin: Plugin;
 export const testModeAPI: TestModeAPI;
 export function outboundLink(args: OutboundLinkArgs, hitCallback: () => void): void;
