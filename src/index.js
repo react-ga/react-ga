@@ -276,6 +276,7 @@ export function timing({ category, variable, value, label } = {}, trackerNames) 
  * @param args.label {String} optional
  * @param args.value {Int} optional
  * @param args.nonInteraction {boolean} optional
+ * @param args.transport {string} optional
  * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
  */
 export function event({ category, action, label, value, nonInteraction, transport, ...args } = {}, trackerNames) {
