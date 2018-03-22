@@ -123,6 +123,7 @@ ReactGA.pageview('/about/contact-us');
 |Value|Notes|
 |------|-----|
 |path|`String`. e.g. '/get-involved/other-ways-to-help'|
+|trackerNames|`Array`. Optional. A list of extra trackers to run the command on|
 |title|`String`. Optional. e.g. 'Other Ways to Help'|
 
 See example above for use with `react-router`.
