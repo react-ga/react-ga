@@ -1,7 +1,13 @@
-// Type definitions for react-ga 2.1
+// Type definitions for react-ga 2.4
 // Project: https://github.com/react-ga/react-ga
-// Definitions by: Tim Aldridge <https://github.com/telshin>, Philip Karpiak <https://github.com/eswat>
+// Definitions by: Tim Aldridge <https://github.com/telshin>
+//                 Philip Karpiak <https://github.com/eswat>
+//                 Jerry Reptak <https://github.com/jetfault>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+
+import React from 'react';
+
+/* tslint:disable no-any */
 
 export interface EventArgs {
     category: string;
@@ -36,6 +42,12 @@ export interface InitializeOptions {
     gaOptions?: GaOptions;
 }
 
+export type Tracker = {
+    trackingId: string,
+} & InitializeOptions;
+
+export type TrackerNames = string[];
+
 export interface FieldsObject {
     [i: string]: any;
 }
@@ -54,7 +66,7 @@ export interface Plugin {
 
 export interface TestModeAPI {
   calls: any[][];
-  ga: (...any: any[]) => any;
+  ga: (...args: any[]) => any;
 }
 
 export interface OutboundLinkArgs {
@@ -64,20 +76,20 @@ export interface OutboundLinkArgs {
 export interface OutboundLinkProps {
     eventLabel: string;
     to: string;
-    target?: string,
-    onClick?: Function
+    target?: string;
+    onClick?: Function;
 }
 
 export function initialize(trackingCode: string, options?: InitializeOptions): void;
+export function initialize(trackers: Tracker[]): void;
 export function ga(): any;
-export function set(fieldsObject: FieldsObject, trackerNames?: string[]): void;
-export function send(fieldsObject: FieldsObject, trackerNames?: string[]): void;
-export function pageview(path: string, trackerNames?: string[], title?: string): void;
-export function modalview(name: string, trackerNames?: string[]): void;
-export function timing(args: TimingArgs): void;
-export function event(args: EventArgs, trackerNames?: string[]): void;
-export function exception(fieldsObject: FieldsObject, trackerNames?: string[]): void;
+export function set(fieldsObject: FieldsObject, trackerNames?: TrackerNames): void;
+export function send(fieldsObject: FieldsObject, trackerNames?: TrackerNames): void;
+export function pageview(path: string, trackerNames?: TrackerNames, title?: string): void;
+export function modalview(name: string, trackerNames?: TrackerNames): void;
+export function timing(args: TimingArgs, trackerNames?: TrackerNames): void;
+export function event(args: EventArgs, trackerNames?: TrackerNames): void;
+export function exception(fieldsObject: FieldsObject, trackerNames?: TrackerNames): void;
 export const plugin: Plugin;
-export const testModeAPI: TestModeAPI;
-export function outboundLink(args: OutboundLinkArgs, hitCallback: () => void): void;
+export function outboundLink(args: OutboundLinkArgs, hitCallback: () => void, trackerNames?: TrackerNames): void;
 export const OutboundLink : React.ComponentClass<OutboundLinkProps & React.HTMLProps<OutboundLinkProps>>;
