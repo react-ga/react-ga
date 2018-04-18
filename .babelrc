@@ -1,8 +1,8 @@
 {
-  "presets": ["es2015", "stage-0", "react"],
+  "presets": [["env", { "modules": false }], "stage-0", "react"],
   "env": {
     "test": {
-      "plugins": ["istanbul", "rewire"]
+      "plugins": ["istanbul", "rewire", "transform-es2015-modules-commonjs"]
     }
   }
 }
