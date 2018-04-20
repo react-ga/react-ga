@@ -45,8 +45,7 @@ function _gaCommand(trackerNames, ...args) {
       trackerNames.forEach((name) => {
         internalGa(...[`${name}.${command}`].concat(args.slice(1)));
       });
-    }
-    else {
+    } else {
       internalGa(...args);
     }
   }
