@@ -44,6 +44,19 @@ export default function pageviewTests(spies) {
       ]);
     });
 
+    it('should record a pageview with multiple trackers, except default', function () {
+      ReactGA.initialize([
+        { trackingId: 'foo' },
+        { trackingId: 'bar', gaOptions: { name: 'baz' } }
+      ], { alwaysSendToDefaultTracker: false });
+      ReactGA.pageview('/valid', ['baz']);
+      spies.ga.args.should.eql([
+        ['create', 'foo', 'auto'],
+        ['create', 'bar', { name: 'baz' }],
+        ['baz.send', { hitType: 'pageview', page: '/valid' }]
+      ]);
+    });
+
     it('should abort, log warning if path is not provided', function () {
       ReactGA.initialize('foo');
       ReactGA.pageview();

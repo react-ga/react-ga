@@ -22,6 +22,7 @@ import UnboundOutboundLink from './components/OutboundLink';
 let _debug = false;
 let _titleCase = true;
 let _testMode = false;
+let _alwaysSendToDefaultTracker = true;
 
 const internalGa = (...args) => {
   if (_testMode) return TestModeAPI.ga(...args);
@@ -41,7 +42,7 @@ function _gaCommand(trackerNames, ...args) {
       return;
     }
 
-    internalGa(...args);
+    if (_alwaysSendToDefaultTracker || !Array.isArray(trackerNames)) internalGa(...args);
     if (Array.isArray(trackerNames)) {
       trackerNames.forEach((name) => {
         internalGa(...[`${name}.${command}`].concat(args.slice(1)));
@@ -84,6 +85,9 @@ export function initialize(configsOrTrackingId, options) {
 
     loadGA(options);
   }
+
+  _alwaysSendToDefaultTracker = (options && typeof options.alwaysSendToDefaultTracker === 'boolean')
+    ? options.alwaysSendToDefaultTracker : true;
 
   if (Array.isArray(configsOrTrackingId)) {
     configsOrTrackingId.forEach((config) => {
