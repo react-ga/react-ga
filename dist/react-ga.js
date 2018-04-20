@@ -210,11 +210,12 @@ function _gaCommand(trackerNames) {
       return;
     }
 
-    internalGa.apply(undefined, args);
     if (Array.isArray(trackerNames)) {
       trackerNames.forEach(function (name) {
         internalGa.apply(undefined, _toConsumableArray([name + '.' + command].concat(args.slice(1))));
       });
+    } else {
+      internalGa.apply(undefined, args);
     }
   }
 }
