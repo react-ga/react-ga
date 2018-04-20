@@ -453,6 +453,7 @@ function timing() {
  * @param args.label {String} optional
  * @param args.value {Int} optional
  * @param args.nonInteraction {boolean} optional
+ * @param args.transport {string} optional
  * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
  */
 function event() {
