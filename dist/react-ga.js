@@ -210,11 +210,12 @@ function _gaCommand(trackerNames) {
       return;
     }
 
-    internalGa.apply(undefined, args);
     if (Array.isArray(trackerNames)) {
       trackerNames.forEach(function (name) {
         internalGa.apply(undefined, _toConsumableArray([name + '.' + command].concat(args.slice(1))));
       });
+    } else {
+      internalGa.apply(undefined, args);
     }
   }
 }
@@ -453,6 +454,7 @@ function timing() {
  * @param args.label {String} optional
  * @param args.value {Int} optional
  * @param args.nonInteraction {boolean} optional
+ * @param args.transport {string} optional
  * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
  */
 function event() {

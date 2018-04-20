@@ -41,11 +41,13 @@ function _gaCommand(trackerNames, ...args) {
       return;
     }
 
-    internalGa(...args);
     if (Array.isArray(trackerNames)) {
       trackerNames.forEach((name) => {
         internalGa(...[`${name}.${command}`].concat(args.slice(1)));
       });
+    }
+    else {
+      internalGa(...args);
     }
   }
 }
