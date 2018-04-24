@@ -71,5 +71,53 @@ export default function sendTests(spies) {
         ]
       ]);
     });
+
+    it('should send to default ', function () {
+      ReactGA.initialize([
+        { trackingId: 'foo', gaOptions: { userId: 123 } },
+        { trackingId: 'bar', gaOptions: { name: 'baz' } }
+      ], { alwaysSendToDefaultTracker: false });
+      ReactGA.send({
+        hitType: 'event',
+        eventCategory: 'category',
+        eventAction: 'action'
+      }, ['baz']);
+      spies.ga.args.should.eql([
+        ['create', 'foo', { userId: 123 }],
+        ['create', 'bar', { name: 'baz' }],
+        [
+          'baz.send',
+          {
+            hitType: 'event',
+            eventCategory: 'category',
+            eventAction: 'action'
+          }
+        ]
+      ]);
+    });
+
+    it('should ignore the alwaysSendToDefaultTracker flag when no trackerNames are specified', function () {
+      ReactGA.initialize([
+        { trackingId: 'foo', gaOptions: { userId: 123 } },
+        { trackingId: 'bar', gaOptions: { name: 'baz' } }
+      ], { alwaysSendToDefaultTracker: false });
+      ReactGA.send({
+        hitType: 'event',
+        eventCategory: 'category',
+        eventAction: 'action'
+      });
+      spies.ga.args.should.eql([
+        ['create', 'foo', { userId: 123 }],
+        ['create', 'bar', { name: 'baz' }],
+        [
+          'send',
+          {
+            hitType: 'event',
+            eventCategory: 'category',
+            eventAction: 'action'
+          }
+        ]
+      ]);
+    });
   });
 }
