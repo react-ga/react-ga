@@ -5,7 +5,7 @@
 //                 Jerry Reptak <https://github.com/jetfault>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-import React from 'react';
+import * as React from 'react';
 
 /* tslint:disable no-any */
 
