@@ -5,7 +5,9 @@ const pkg = require('./package.json');
 module.exports = {
   entry: {
     'react-ga': './src/index.js',
-    'react-ga.min': './src/index.js'
+    'react-ga.min': './src/index.js',
+    'react-ga-noreact': './src/noreact.js',
+    'react-ga-noreact.min': './src/noreact.js'
   },
   output: {
     path: path.resolve('./dist'),
