@@ -10,7 +10,14 @@ export default function (options) {
       m = s.getElementsByTagName(o)[0];
     a.async = 1;
     a.src = g;
-    m.parentNode.insertBefore(a, m);
+    /**
+     * Check if there is no script tag found(possible with test framework such as Jest) then add the GA script to root element
+     */
+    if (m) {
+      m.parentNode.insertBefore(a, m);
+    } else {
+      s.documentElement.appendChild(a);
+    }
 })(window, document, 'script', options && options.gaAddress ? options.gaAddress : 'https://www.google-analytics.com/analytics.js', 'ga');
   /* eslint-enable */
 }
