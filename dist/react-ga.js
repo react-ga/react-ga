@@ -185,6 +185,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 var _debug = false;
 var _titleCase = true;
 var _testMode = false;
+var _alwaysSendToDefaultTracker = true;
 
 var internalGa = function internalGa() {
   var _window;
@@ -210,7 +211,7 @@ function _gaCommand(trackerNames) {
       return;
     }
 
-    internalGa.apply(undefined, args);
+    if (_alwaysSendToDefaultTracker || !Array.isArray(trackerNames)) internalGa.apply(undefined, args);
     if (Array.isArray(trackerNames)) {
       trackerNames.forEach(function (name) {
         internalGa.apply(undefined, _toConsumableArray([name + '.' + command].concat(args.slice(1))));
@@ -252,6 +253,8 @@ function initialize(configsOrTrackingId, options) {
 
     (0, _loadGA2.default)(options);
   }
+
+  _alwaysSendToDefaultTracker = options && typeof options.alwaysSendToDefaultTracker === 'boolean' ? options.alwaysSendToDefaultTracker : true;
 
   if (Array.isArray(configsOrTrackingId)) {
     configsOrTrackingId.forEach(function (config) {
