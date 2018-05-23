@@ -92,5 +92,6 @@ export function timing(args: TimingArgs, trackerNames?: TrackerNames): void;
 export function event(args: EventArgs, trackerNames?: TrackerNames): void;
 export function exception(fieldsObject: FieldsObject, trackerNames?: TrackerNames): void;
 export const plugin: Plugin;
+export const testModeAPI: TestModeAPI;
 export function outboundLink(args: OutboundLinkArgs, hitCallback: () => void, trackerNames?: TrackerNames): void;
 export const OutboundLink : React.ComponentClass<OutboundLinkProps & React.HTMLProps<OutboundLinkProps>>;
