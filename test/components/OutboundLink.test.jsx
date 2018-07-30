@@ -82,4 +82,10 @@ describe('<OutboundLink> React component', function () {
     renderedOutboundLink.simulate('click', { preventDefault: () => {} });
     onComponentClick.callCount.should.eql(1);
   });
+
+  it('should add rel=`noopener noreferrer` to a link if the target is _blank', function () {
+    const destinationUrl = 'http://example.com/';
+    renderedOutboundLink = shallow(<OutboundLink to={destinationUrl} eventLabel="" target="_blank" />);
+    renderedOutboundLink.prop('rel').should.eql('noopener noreferrer');
+  });
 });
