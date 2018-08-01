@@ -1,4 +1,11 @@
 export default function (options) {
+  var gaAddress = 'https://www.google-analytics.com/analytics.js'
+  if (options && options.gaAddress) {
+    gaAddress = options.gaAddress;
+  } else if (options && options.debug) {
+    gaAddress = 'https://www.google-analytics.com/analytics_debug.js'
+  }
+  
   // https://developers.google.com/analytics/devguides/collection/analyticsjs/
   /* eslint-disable */
   (function (i, s, o, g, r, a, m) {
@@ -11,6 +18,6 @@ export default function (options) {
     a.async = 1;
     a.src = g;
     m.parentNode.insertBefore(a, m);
-})(window, document, 'script', options && options.gaAddress ? options.gaAddress : 'https://www.google-analytics.com/analytics.js', 'ga');
+})(window, document, 'script', gaAddress, 'ga');
   /* eslint-enable */
 }
