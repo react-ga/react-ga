@@ -1,5 +1,5 @@
 export default function (options) {
-  var gaAddress = 'https://www.google-analytics.com/analytics.js'
+  let gaAddress = 'https://www.google-analytics.com/analytics.js'
   if (options && options.gaAddress) {
     gaAddress = options.gaAddress;
   } else if (options && options.debug) {
