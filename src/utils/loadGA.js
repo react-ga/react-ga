@@ -1,11 +1,11 @@
 export default function (options) {
-  let gaAddress = 'https://www.google-analytics.com/analytics.js'
+  let gaAddress = 'https://www.google-analytics.com/analytics.js';
   if (options && options.gaAddress) {
     gaAddress = options.gaAddress;
   } else if (options && options.debug) {
-    gaAddress = 'https://www.google-analytics.com/analytics_debug.js'
+    gaAddress = 'https://www.google-analytics.com/analytics_debug.js';
   }
-  
+
   // https://developers.google.com/analytics/devguides/collection/analyticsjs/
   /* eslint-disable */
   (function (i, s, o, g, r, a, m) {
