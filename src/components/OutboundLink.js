@@ -50,7 +50,10 @@ export default class OutboundLink extends Component {
       href: this.props.to,
       onClick: this.handleClick
     };
+
+    delete props.to;
     delete props.eventLabel;
+
     return React.createElement('a', props);
   }
 }
