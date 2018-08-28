@@ -77,6 +77,8 @@ A community curated list of these is available in the wiki: https://github.com/r
 
 GA must be initialized using this function before any of the other tracking functions will record any data. The values are checked and sent through to the `ga('create', ...` call.
 
+If you aren't getting any data back from Page Timings, you may have to add `siteSpeedSampleRate: 100` to the `gaOptions` object. This will send 100% of hits to Google Analytics. By default only 1% are sent.
+
 ###### Example
 
 ```js
