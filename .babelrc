@@ -1,8 +1,10 @@
 {
-  "presets": [["env", { "modules": false }], "stage-0", "react"],
+  "presets": [["@babel/env", { "modules": false }], "@babel/react"],
+  "plugins": ["@babel/plugin-proposal-class-properties"],
   "env": {
     "test": {
-      "plugins": ["istanbul", "rewire", "transform-es2015-modules-commonjs"]
+      "presets": [["@babel/env", { "modules": "commonjs" }]],
+      "plugins": ["istanbul", "rewire"]
     }
   }
 }
