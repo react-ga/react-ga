@@ -4,7 +4,7 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import ReactGA from 'react-ga';
-ReactGA.initialize(config.gaTrackingId);
+ReactGA.initialize('<GA_TRACKING_ID>);
 
 const gaTrackingMiddleware = store => next => action => {
   if (action.type === '@@router/LOCATION_CHANGE') {
