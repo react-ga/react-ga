@@ -127,9 +127,16 @@ This will help you figure out if your implementation is off or your GA Settings 
 ReactGA.set({ userId: 123 });
 ```
 
+Or with multiple trackers
+
+```js
+ReactGA.set({ userId: 123 }, ['tracker2']);
+```
+
 |Value|Notes|
 |------|-----|
 |fieldsObject|`Object`. e.g. `{ userId: 123 }`|
+|trackerNames|`Array`. Optional. A list of extra trackers to run the command on|
 
 #### ReactGA.pageview(path)
 
@@ -138,6 +145,13 @@ ReactGA.set({ userId: 123 });
 ```js
 ReactGA.pageview('/about/contact-us');
 ```
+
+Or with multiple trackers
+
+```js
+ReactGA.pageview('/about/contact-us', ['tracker2']);
+```
+This will send all the named trackers listed in the array parameter. The default tracker will or will not send according to the `initialize()` setting `alwaysSendToDefaultTracker` (defaults to `true` if not provided).
 
 |Value|Notes|
 |------|-----|
