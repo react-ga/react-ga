@@ -272,7 +272,7 @@ ga('send', 'pageview', '/mypage');
 
 #### ReactGA.outboundLink(args, hitCallback)
 
-Tracking links out to external URLs (including id.webmaker.org for OAuth 2.0 login flow). A non-programmatic approach is found in the next section, by using an `<OutboundLink>` component.
+Tracking links out to external URLs (including id.webmaker.org for OAuth 2.0 login flow). A declarative approach is found in the next section, by using an `<OutboundLink>` component.
 
 ###### Example
 
