@@ -10,7 +10,8 @@ module.exports = {
   output: {
     path: path.resolve('./dist'),
     filename: '[name].js',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    globalObject: 'typeof self !== \'undefined\' ? self : this' // temporary fix for https://github.com/webpack/webpack/issues/6525
   },
   externals: []
     .concat(Object.keys(pkg.peerDependencies))
