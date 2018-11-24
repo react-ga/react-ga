@@ -13,7 +13,7 @@ module.exports = {
     libraryTarget: 'umd'
   },
   externals: []
-    .concat(Object.keys(pkg.optionalDependencies))
+    .concat(Object.keys(pkg.peerDependencies))
     .concat(Object.keys(pkg.dependencies)),
   module: {
     rules: [
