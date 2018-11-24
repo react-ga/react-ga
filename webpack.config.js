@@ -1,6 +1,6 @@
-const webpack = require('webpack');
 const path = require('path');
 const pkg = require('./package.json');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -16,14 +16,15 @@ module.exports = {
     .concat(Object.keys(pkg.optionalDependencies))
     .concat(Object.keys(pkg.dependencies)),
   module: {
-    loaders: [
+    rules: [
       { test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/ }
     ]
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      include: /\.min\.js$/,
-      minimize: true
-    })
-  ]
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        include: /\.min\.js$/
+      })
+    ]
+  }
 };

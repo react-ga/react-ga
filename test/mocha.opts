@@ -1,5 +1,5 @@
- --compilers js:babel-core/register
- --compilers jsx:babel-core/register
+ --compilers js:@babel/register
+ --compilers jsx:@babel/register
  --require test/setup.js
  --require jsdom-global/register
  test/*.test.js
