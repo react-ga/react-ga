@@ -1018,6 +1018,11 @@ var OutboundLink = function (_Component) {
         href: this.props.to,
         onClick: this.handleClick
       });
+
+      if (this.props.target === NEWTAB) {
+        props.rel = 'noopener noreferrer';
+      }
+
       delete props.eventLabel;
       return _react2.default.createElement('a', props);
     }
@@ -1025,6 +1030,10 @@ var OutboundLink = function (_Component) {
 
   return OutboundLink;
 }(_react.Component);
+
+OutboundLink.trackLink = function () {
+  (0, _warn2.default)('ga tracking not enabled');
+};
 
 OutboundLink.propTypes = {
   eventLabel: _propTypes2.default.string.isRequired,
@@ -1037,11 +1046,6 @@ OutboundLink.defaultProps = {
   to: null,
   onClick: null
 };
-
-OutboundLink.trackLink = function () {
-  (0, _warn2.default)('ga tracking not enabled');
-};
-
 exports.default = OutboundLink;
 
 /***/ }),
