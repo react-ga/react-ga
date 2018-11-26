@@ -10,7 +10,7 @@
     "test-only": "BABEL_ENV=test nyc mocha",
     "build": "npm run build:umd && npm run build:esm",
     "build:esm": "BABEL_ENV=esm babel src --out-dir dist/esm",
-    "build:umd": "webpack --mode=production",
+    "build:umd": "BABEL_ENV=umd webpack --mode=production",
     "lint": "eslint src webpack.config.js test --ext .js,.jsx",
     "preversion": "npm test && npm run lint",
     "version": "node ./version-bower.js && npm run build && git add -A dist bower.json",

@@ -2,6 +2,9 @@
   "presets": [["@babel/env", { "modules": false }], "@babel/react"],
   "plugins": ["@babel/plugin-proposal-class-properties"],
   "env": {
+    "umd": {
+      "presets": [["@babel/env", { "modules": "commonjs" }]],
+    },
     "test": {
       "presets": [["@babel/env", { "modules": "commonjs" }]],
       "plugins": ["istanbul", "rewire"]
