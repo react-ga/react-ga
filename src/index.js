@@ -84,7 +84,7 @@ export function initialize(configsOrTrackingId, options) {
       return false;
     }
 
-    loadGA(options);
+    if (!options || options.standardImplementation !== true) loadGA(options);
   }
 
   _alwaysSendToDefaultTracker = (options && typeof options.alwaysSendToDefaultTracker === 'boolean')

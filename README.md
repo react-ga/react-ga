@@ -116,6 +116,7 @@ ReactGA.initialize([{
 |options.gaAddress| `String`. Optional. If you are self-hosting your `analytics.js`, you can specify the URL for it here.
 |options.alwaysSendToDefaultTracker| `Boolean`. Optional. Defaults to `true`. If set to `false` _and_ using multiple trackers, the event wll not be send to the default tracker.|
 |options.testMode| `Boolean`. Optional. Defaults to `false`. Enables test mode. See [here](https://github.com/react-ga/react-ga#test-mode) for more information.|
+|options.standardImplementation| `Boolean`. Optional. Defaults to `false`. Enables loading GA as google expects it. See [here](https://github.com/react-ga/react-ga#standard-implementation) for more information.|
 
 If you are having additional troubles and setting `debug = true` shows as working please try using the [Chrome GA Debugger Extension](https://chrome.google.com/webstore/detail/google-analytics-debugger/jnkmfdileelhofjcijamephohjechhna).
 This will help you figure out if your implementation is off or your GA Settings are not correct.
@@ -392,6 +393,32 @@ ReactGA.testModeAPI.calls.should.eql([
   ['create', 'foo', 'auto'],
   ['send', 'pageview', '/mypage']
 ]);
+```
+
+### Standard Implementation
+
+To enable standard implemention of google analytics.
+
+Add this script to your html
+```html
+<!-- Google Analytics -->
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '<%=htmlWebpackPlugin.options.analyticsURL%>', 'ga');
+    ga('create', 'UA-XXX-X', 'auto');
+    ga('send', 'pageview');
+  </script>
+<!-- End Google Analytics -->
+```
+
+Initialize ReactGA with `standardImplementation: true` option.
+```js
+// This should be part of your setup
+ReactGA.initialize('UA-XXX-X', { standardImplementation: true });
 ```
 
 ---
