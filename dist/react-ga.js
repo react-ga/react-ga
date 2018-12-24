@@ -258,7 +258,7 @@ function initialize(configsOrTrackingId, options) {
       return false;
     }
 
-    (0, _loadGA.default)(options);
+    if (!options || options.standardImplementation !== true) (0, _loadGA.default)(options);
   }
 
   _alwaysSendToDefaultTracker = options && typeof options.alwaysSendToDefaultTracker === 'boolean' ? options.alwaysSendToDefaultTracker : true;
@@ -963,6 +963,9 @@ var _default = {
     }
 
     gaCalls.push(args.concat());
+  },
+  resetCalls: function resetCalls() {
+    gaCalls.length = 0;
   }
 };
 exports.default = _default;
