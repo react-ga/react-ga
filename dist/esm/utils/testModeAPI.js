@@ -7,5 +7,8 @@ export default {
     }
 
     gaCalls.push(args.concat());
+  },
+  resetCalls: function resetCalls() {
+    gaCalls.length = 0;
   }
 };
