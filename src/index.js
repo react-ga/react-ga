@@ -83,6 +83,9 @@ export function initialize(configsOrTrackingId, options) {
     if (typeof window === 'undefined') {
       return false;
     }
+    if (typeof document === 'undefined') {
+      return false;
+    }
 
     if (!options || options.standardImplementation !== true) loadGA(options);
   }
