@@ -27,6 +27,7 @@ let _alwaysSendToDefaultTracker = true;
 const internalGa = (...args) => {
   if (_testMode) return TestModeAPI.ga(...args);
   if (typeof window === 'undefined') return false;
+  if (typeof document === 'undefined') return false;
   if (!window.ga) return warn('ReactGA.initialize must be called first or GoogleAnalytics should be loaded manually');
   return window.ga(...args);
 };
