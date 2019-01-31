@@ -41,6 +41,7 @@ export interface InitializeOptions {
     titleCase?: boolean;
     gaOptions?: GaOptions;
     alwaysSendToDefaultTracker?: boolean;
+    standardImplementation?: boolean;
 }
 
 export type Tracker = {
