@@ -7,6 +7,10 @@ const NEWTAB = '_blank';
 const MIDDLECLICK = 1;
 
 export default class OutboundLink extends Component {
+  static trackLink = () => {
+    warn('ga tracking not enabled');
+  };
+
   static propTypes = {
     eventLabel: PropTypes.string.isRequired,
     target: PropTypes.string,
@@ -18,10 +22,6 @@ export default class OutboundLink extends Component {
     target: null,
     to: null,
     onClick: null
-  };
-
-  static trackLink = () => {
-    warn('ga tracking not enabled');
   };
 
   handleClick = (event) => {
@@ -45,11 +45,17 @@ export default class OutboundLink extends Component {
   };
 
   render() {
+    const { to: href, ...oldProps } = this.props;
     const props = {
-      ...this.props,
-      href: this.props.to,
+      ...oldProps,
+      href,
       onClick: this.handleClick
     };
+
+    if (this.props.target === NEWTAB) {
+      props.rel = 'noopener noreferrer';
+    }
+
     delete props.eventLabel;
     return React.createElement('a', props);
   }

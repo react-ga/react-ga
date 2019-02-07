@@ -1,6 +1,6 @@
-const webpack = require('webpack');
 const path = require('path');
 const pkg = require('./package.json');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -12,20 +12,22 @@ module.exports = {
   output: {
     path: path.resolve('./dist'),
     filename: '[name].js',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    globalObject: 'typeof self !== \'undefined\' ? self : this' // temporary fix for https://github.com/webpack/webpack/issues/6525
   },
   externals: []
-    .concat(Object.keys(pkg.optionalDependencies))
+    .concat(Object.keys(pkg.peerDependencies))
     .concat(Object.keys(pkg.dependencies)),
   module: {
-    loaders: [
+    rules: [
       { test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/ }
     ]
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      include: /\.min\.js$/,
-      minimize: true
-    })
-  ]
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        include: /\.min\.js$/
+      })
+    ]
+  }
 };

@@ -77,6 +77,8 @@ A community curated list of these is available in the wiki: https://github.com/r
 
 GA must be initialized using this function before any of the other tracking functions will record any data. The values are checked and sent through to the `ga('create', ...` call.
 
+If you aren't getting any data back from Page Timings, you may have to add `siteSpeedSampleRate: 100` to the `gaOptions` object. This will send 100% of hits to Google Analytics. By default only 1% are sent.
+
 ###### Example
 
 ```js
@@ -112,7 +114,9 @@ ReactGA.initialize([{
 |options.titleCase| `Boolean`. Optional. Defaults to `true`. If set to `false`, strings will not be converted to title case before sending to GA.|
 |options.gaOptions| `Object`. Optional. [GA configurable create only fields.](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference)|
 |options.gaAddress| `String`. Optional. If you are self-hosting your `analytics.js`, you can specify the URL for it here.
-|options.alwaysSendToDefaultTracker| `Boolean`. Optional. Defaults to `true`. If set to `false` _and_ using multiple trackers, the event wll not be send to the default tracker|
+|options.alwaysSendToDefaultTracker| `Boolean`. Optional. Defaults to `true`. If set to `false` _and_ using multiple trackers, the event will not be send to the default tracker.|
+|options.testMode| `Boolean`. Optional. Defaults to `false`. Enables test mode. See [here](https://github.com/react-ga/react-ga#test-mode) for more information.|
+|options.standardImplementation| `Boolean`. Optional. Defaults to `false`. Enables loading GA as google expects it. See [here](https://github.com/react-ga/react-ga#standard-implementation) for more information.|
 
 If you are having additional troubles and setting `debug = true` shows as working please try using the [Chrome GA Debugger Extension](https://chrome.google.com/webstore/detail/google-analytics-debugger/jnkmfdileelhofjcijamephohjechhna).
 This will help you figure out if your implementation is off or your GA Settings are not correct.
@@ -125,9 +129,16 @@ This will help you figure out if your implementation is off or your GA Settings 
 ReactGA.set({ userId: 123 });
 ```
 
+Or with multiple trackers
+
+```js
+ReactGA.set({ userId: 123 }, ['tracker2']);
+```
+
 |Value|Notes|
 |------|-----|
 |fieldsObject|`Object`. e.g. `{ userId: 123 }`|
+|trackerNames|`Array`. Optional. A list of extra trackers to run the command on|
 
 #### ReactGA.pageview(path)
 
@@ -136,6 +147,13 @@ ReactGA.set({ userId: 123 });
 ```js
 ReactGA.pageview('/about/contact-us');
 ```
+
+Or with multiple trackers
+
+```js
+ReactGA.pageview('/about/contact-us', ['tracker2']);
+```
+This will send all the named trackers listed in the array parameter. The default tracker will or will not send according to the `initialize()` setting `alwaysSendToDefaultTracker` (defaults to `true` if not provided).
 
 |Value|Notes|
 |------|-----|
@@ -228,7 +246,7 @@ ga('send', 'timing', 'JS Libraries', 'load', 20, 'CDN libs');
 |args.category|`String`. Required. A string for categorizing all user timing variables into logical groups.|
 |args.variable|`String`. Required. Name of the variable being recorded.|
 |args.value|`Int`. Required. Number of milliseconds elapsed time to report.|
-|args.label|`String`. Optional. It can improved visibility in user timing reports.|
+|args.label|`String`. Optional. It can be used to add flexibility in visualizing user timings in the reports.|
 
 #### ReactGA.ga()
 
@@ -255,7 +273,7 @@ ga('send', 'pageview', '/mypage');
 
 #### ReactGA.outboundLink(args, hitCallback)
 
-Tracking links out to external URLs (including id.webmaker.org for OAuth 2.0 login flow). A non-programmatic approach is found in the next section, by using an `<OutboundLink>` component.
+Tracking links out to external URLs (including id.webmaker.org for OAuth 2.0 login flow). A declarative approach is found in the next section, by using an `<OutboundLink>` component.
 
 ###### Example
 
@@ -375,6 +393,32 @@ ReactGA.testModeAPI.calls.should.eql([
   ['create', 'foo', 'auto'],
   ['send', 'pageview', '/mypage']
 ]);
+```
+
+### Standard Implementation
+
+To enable standard implemention of google analytics.
+
+Add this script to your html
+```html
+<!-- Google Analytics -->
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '<%=htmlWebpackPlugin.options.analyticsURL%>', 'ga');
+    ga('create', 'UA-XXX-X', 'auto');
+    ga('send', 'pageview');
+  </script>
+<!-- End Google Analytics -->
+```
+
+Initialize ReactGA with `standardImplementation: true` option.
+```js
+// This should be part of your setup
+ReactGA.initialize('UA-XXX-X', { standardImplementation: true });
 ```
 
 ---
