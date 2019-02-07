@@ -7,7 +7,7 @@ import DefaultReactGA from '../src/index';
 // eslint-disable-next-line import/no-duplicates
 import * as ReactGA from '../src/index';
 // eslint-disable-next-line import/no-duplicates
-import { __RewireAPI__ as RewireAPI } from '../src/noreact';
+import { __RewireAPI__ as RewireAPI } from '../src/core';
 import initializeTests from './functionality/initialize';
 import gaTests from './functionality/ga';
 import setTests from './functionality/set';

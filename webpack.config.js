@@ -6,8 +6,8 @@ module.exports = {
   entry: {
     'react-ga': './src/index.js',
     'react-ga.min': './src/index.js',
-    'react-ga-noreact': './src/noreact.js',
-    'react-ga-noreact.min': './src/noreact.js'
+    'react-ga-core': './src/core.js',
+    'react-ga-core.min': './src/core.js'
   },
   output: {
     path: path.resolve('./dist'),

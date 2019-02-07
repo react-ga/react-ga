@@ -25,6 +25,7 @@ let _alwaysSendToDefaultTracker = true;
 
 const internalGa = (...args) => {
   if (_testMode) return TestModeAPI.ga(...args);
+  if (typeof window === 'undefined') return false;
   if (!window.ga) return warn('ReactGA.initialize must be called first or GoogleAnalytics should be loaded manually');
   return window.ga(...args);
 };
@@ -82,11 +83,11 @@ export function initialize(configsOrTrackingId, options) {
       return false;
     }
 
-    loadGA(options);
+    if (!options || options.standardImplementation !== true) loadGA(options);
   }
 
-  _alwaysSendToDefaultTracker = (options && typeof options.alwaysSendToDefaultTracker === 'boolean')
-    ? options.alwaysSendToDefaultTracker : true;
+  _alwaysSendToDefaultTracker = (options && typeof options.alwaysSendToDefaultTracker === 'boolean') ?
+    options.alwaysSendToDefaultTracker : true;
 
   if (Array.isArray(configsOrTrackingId)) {
     configsOrTrackingId.forEach((config) => {
@@ -246,12 +247,17 @@ export function modalview(rawModalName, trackerNames) {
  * @param args.label  {String} required
  * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
  */
-export function timing({ category, variable, value, label } = {}, trackerNames) {
+export function timing({
+  category,
+  variable,
+  value,
+  label
+} = {}, trackerNames) {
   if (typeof ga === 'function') {
     if (!category || !variable || !value || typeof value !== 'number') {
       warn('args.category, args.variable ' +
-            'AND args.value are required in timing() ' +
-            'AND args.value has to be a number');
+        'AND args.value are required in timing() ' +
+        'AND args.value has to be a number');
       return;
     }
 
@@ -282,7 +288,15 @@ export function timing({ category, variable, value, label } = {}, trackerNames) 
  * @param args.transport {string} optional
  * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
  */
-export function event({ category, action, label, value, nonInteraction, transport, ...args } = {}, trackerNames) {
+export function event({
+  category,
+  action,
+  label,
+  value,
+  nonInteraction,
+  transport,
+  ...args
+} = {}, trackerNames) {
   if (typeof ga === 'function') {
     // Simple Validation
     if (!category || !action) {
@@ -354,7 +368,10 @@ export function event({ category, action, label, value, nonInteraction, transpor
  * @param args.fatal {boolean} optional
  * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
  */
-export function exception({ description, fatal }, trackerNames) {
+export function exception({
+  description,
+  fatal
+}, trackerNames) {
   if (typeof ga === 'function') {
     // Required Fields
     const fieldObject = {

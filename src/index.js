@@ -1,5 +1,5 @@
 import UnboundOutboundLink from './components/OutboundLink';
-import * as Defaults from './noreact';
+import * as Defaults from './core';
 
 export const initialize = Defaults.initialize;
 export const ga = Defaults.ga;
