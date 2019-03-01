@@ -282,13 +282,14 @@ ReactGA.outboundLink({
   label: 'Clicked Create an Account'
 }, function () {
   console.log('redirect here');
-});
+}, ['tracker2']);
 ```
 
 |Value|Notes|
 |------|-----|
 |args.label|`String`. Required. Description of where the outbound link points to. Either as a URL, or a string.|
 |hitCallback|`function`. The react-ga implementation accounts for the possibility that GA servers are down, or GA is blocked, by using a fallback 250ms timeout. See [notes in GA Dev Guide](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#hitCallback)|
+|trackerNames|`Array<String>` Optional. A list of extra trackers to run the command on.
 
 ### `<OutboundLink>` Component
 
@@ -305,7 +306,9 @@ render() {
       <ReactGA.OutboundLink
         eventLabel="myLabel"
         to="http://www.example.com"
-        target="_blank">
+        target="_blank"
+        trackerNames={['tracker2']}
+      >
         My Link
       </ReactGA.OutboundLink>
     </div>
@@ -318,6 +321,7 @@ render() {
 |eventLabel|`String`. Required. Description of where the outbound link points to. Either as a URL, or a string.|
 |to|`String`. Required. URL the link leads to.|
 |target|`String`. Optional. To open the link in a new tab, use a value of `_blank`.|
+|trackerNames|`Array<String>` Optional. A list of extra trackers to run the command on.
 
 For bower, use the `<ReactGA.OutboundLink>` component.
 

@@ -15,17 +15,19 @@ export default class OutboundLink extends Component {
     eventLabel: PropTypes.string.isRequired,
     target: PropTypes.string,
     to: PropTypes.string,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    trackerNames: PropTypes.arrayOf(PropTypes.string)
   };
 
   static defaultProps = {
     target: null,
     to: null,
-    onClick: null
+    onClick: null,
+    trackerNames: null
   };
 
   handleClick = (event) => {
-    const { target, eventLabel, to, onClick } = this.props;
+    const { target, eventLabel, to, onClick, trackerNames } = this.props;
     const eventMeta = { label: eventLabel };
     const sameTarget = target !== NEWTAB;
     const normalClick = !(event.ctrlKey || event.shiftKey || event.metaKey || event.button === MIDDLECLICK);
@@ -34,9 +36,9 @@ export default class OutboundLink extends Component {
       event.preventDefault();
       OutboundLink.trackLink(eventMeta, () => {
         window.location.href = to;
-      });
+      }, trackerNames);
     } else {
-      OutboundLink.trackLink(eventMeta, () => {});
+      OutboundLink.trackLink(eventMeta, () => {}, trackerNames);
     }
 
     if (onClick) {

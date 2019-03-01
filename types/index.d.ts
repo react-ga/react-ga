@@ -80,6 +80,7 @@ export interface OutboundLinkProps {
     to: string;
     target?: string;
     onClick?: Function;
+    trackerNames?: TrackerNames
 }
 
 export function initialize(trackingCode: string, options?: InitializeOptions): void;
