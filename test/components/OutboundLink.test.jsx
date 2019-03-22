@@ -75,6 +75,17 @@ describe('<OutboundLink> React component', function () {
     fakeOutboundLinkFunc.getCall(0).args[0].label.should.eql('helloworld');
   });
 
+  it('should pass trackerNames prop to ga.outboundLink', function () {
+    const fakeOutboundLinkFunc = sinon.spy();
+    const fakeGA = { outboundLink: fakeOutboundLinkFunc };
+    const props = { eventLabel: 'helloworld', trackerNames: ['tracker2'] };
+    const OutboundLinkComponent = React.createElement(OutboundLink, props);
+    OutboundLinkComponent.type.trackLink = fakeGA.outboundLink;
+    renderedOutboundLink = shallow(OutboundLinkComponent);
+    renderedOutboundLink.simulate('click', { preventDefault: () => {} });
+    fakeOutboundLinkFunc.getCall(0).args[2].should.eql(['tracker2']);
+  });
+
   it('should call preserve onClick prop in onClick event handler', function () {
     const onComponentClick = sinon.spy();
     renderedOutboundLink = shallow(<OutboundLink eventLabel="" onClick={onComponentClick} />);
