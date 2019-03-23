@@ -7,7 +7,7 @@ import DefaultReactGA from '../src/index';
 // eslint-disable-next-line import/no-duplicates
 import * as ReactGA from '../src/index';
 // eslint-disable-next-line import/no-duplicates
-import { __RewireAPI__ as RewireAPI } from '../src/index';
+import { __RewireAPI__ as RewireAPI } from '../src/core';
 import initializeTests from './functionality/initialize';
 import gaTests from './functionality/ga';
 import setTests from './functionality/set';
@@ -42,7 +42,7 @@ describe('react-ga', function () {
   });
 
   it('should import as both default and * syntax', function () {
-    should.deepEqual(Object.keys(DefaultReactGA).concat(['default']).sort(), Object.keys(ReactGA).sort());
+    should.deepEqual(Object.keys(DefaultReactGA).sort(), Object.keys(ReactGA).sort());
   });
 
   initializeTests(spies);

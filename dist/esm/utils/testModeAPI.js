@@ -6,7 +6,7 @@ export default {
       args[_key] = arguments[_key];
     }
 
-    gaCalls.push(args.concat());
+    gaCalls.push([].concat(args));
   },
   resetCalls: function resetCalls() {
     gaCalls.length = 0;
