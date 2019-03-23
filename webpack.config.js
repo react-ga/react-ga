@@ -5,7 +5,9 @@ const TerserPlugin = require('terser-webpack-plugin');
 module.exports = {
   entry: {
     'react-ga': './src/index.js',
-    'react-ga.min': './src/index.js'
+    'react-ga.min': './src/index.js',
+    'react-ga-core': './src/core.js',
+    'react-ga-core.min': './src/core.js'
   },
   output: {
     path: path.resolve('./dist'),
