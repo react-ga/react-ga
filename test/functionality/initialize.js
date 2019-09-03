@@ -7,7 +7,7 @@ export default function initializeTests(spies) {
       (typeof window.ga).should.eql('function');
     });
 
-    it('should call window.ga()', function () {
+    it('should call window.ga() if no options given', function () {
       ReactGA.initialize('foo');
       spies.ga.args.should.eql([
         ['create', 'foo', 'auto']
@@ -19,6 +19,11 @@ export default function initializeTests(spies) {
       spies.ga.args.should.eql([
         ['create', 'foo', { userId: 123 }]
       ]);
+    });
+
+    it('should not call window.ga() if options.useExistingGa is set', function () {
+      ReactGA.initialize('foo', { useExistingGa: true });
+      spies.ga.callCount.should.eql(0);
     });
 
     it('should initialize multiple trackers if they are given', function () {

@@ -67,6 +67,10 @@ function _initialize(gaTrackingID, options) {
     if (options.titleCase === false) {
       _titleCase = false;
     }
+
+    if (options.useExistingGa) {
+      return;
+    }
   }
 
   if (options && options.gaOptions) {
