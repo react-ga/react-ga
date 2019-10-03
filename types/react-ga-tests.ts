@@ -134,6 +134,7 @@ describe("Testing react-ga v2.1.2", () => {
 
         execute("name", "action", payload);
         execute("name", "action", "type", payload);
+        require("name", {});
         require("name", {}, 'trackerName');
     });
     it("Able to make outboundLink calls", () => {

@@ -59,6 +59,7 @@ export default class OutboundLink extends Component {
     }
 
     delete props.eventLabel;
+    delete props.trackerNames;
     return React.createElement('a', props);
   }
 }

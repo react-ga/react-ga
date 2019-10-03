@@ -67,6 +67,10 @@ function _initialize(gaTrackingID, options) {
     if (options.titleCase === false) {
       _titleCase = false;
     }
+
+    if (options.useExistingGa) {
+      return;
+    }
   }
 
   if (options && options.gaOptions) {
@@ -404,6 +408,8 @@ export const plugin = {
    * GA requires a plugin
    * @param name {String} e.g. 'ecommerce' or 'myplugin'
    * @param options {Object} optional e.g {path: '/log', debug: true}
+   * @param trackerName {String} optional e.g 'trackerName'
+   *  
    */
   require: (rawName, options, trackerName) => {
     if (typeof ga === 'function') {

@@ -32,6 +32,8 @@ export interface GaOptions {
     legacyHistoryImport?: boolean;
     allowLinker?: boolean;
     userId?: string;
+    storage?: string;
+    storeGac?: boolean;
 }
 
 export interface InitializeOptions {
@@ -86,8 +88,9 @@ export interface OutboundLinkProps {
 
 export function initialize(trackingCode: string, options?: InitializeOptions): void;
 export function initialize(trackers: Tracker[], options?: InitializeOptions): void;
-export function ga(...args: any[]): any;
-export function resetCalls(): void;
+export function ga(): (...args: any[]) => void;
+export function ga(...args: any[]): void;
+export function resetCalls() : void;
 export function set(fieldsObject: FieldsObject, trackerNames?: TrackerNames): void;
 export function send(fieldsObject: FieldsObject, trackerNames?: TrackerNames): void;
 export function pageview(path: string, trackerNames?: TrackerNames, title?: string): void;
