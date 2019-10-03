@@ -62,14 +62,14 @@ export interface TimingArgs {
 }
 
 export interface Plugin {
-    require(name: string, options?: any, trackerName?: string): void;
-    execute(pluginName: string, action: string, actionTypeOrPayload: string | any, payload?: any): void;
+    require(name: string, options?: any): void;
+    execute(pluginName: string, action: string, actionTypeOrPayload: string|any, payload?: any): void;
 }
 
 export interface TestModeAPI {
-    calls: any[][];
-    ga: (...args: any[]) => any;
-    resetCalls: Function;
+  calls: any[][];
+  ga: (...args: any[]) => any;
+  resetCalls: Function;
 }
 
 export interface OutboundLinkArgs {
@@ -86,8 +86,8 @@ export interface OutboundLinkProps {
 
 export function initialize(trackingCode: string, options?: InitializeOptions): void;
 export function initialize(trackers: Tracker[], options?: InitializeOptions): void;
-export function ga(...args: any[]): any;
-export function resetCalls(): void;
+export function ga(...args: any[]) : any;
+export function resetCalls() : void;
 export function set(fieldsObject: FieldsObject, trackerNames?: TrackerNames): void;
 export function send(fieldsObject: FieldsObject, trackerNames?: TrackerNames): void;
 export function pageview(path: string, trackerNames?: TrackerNames, title?: string): void;
@@ -98,4 +98,4 @@ export function exception(fieldsObject: FieldsObject, trackerNames?: TrackerName
 export const plugin: Plugin;
 export const testModeAPI: TestModeAPI;
 export function outboundLink(args: OutboundLinkArgs, hitCallback: () => void, trackerNames?: TrackerNames): void;
-export const OutboundLink: React.ComponentClass<OutboundLinkProps & React.HTMLProps<HTMLAnchorElement>>;
+export const OutboundLink : React.ComponentClass<OutboundLinkProps & React.HTMLProps<HTMLAnchorElement>>;
