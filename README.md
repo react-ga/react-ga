@@ -123,10 +123,12 @@ This will help you figure out if your implementation is off or your GA Settings 
 
 #### ReactGA.set(fieldsObject)
 
+This will set the values of [custom dimensions](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#dimension) in Google Analytics.
+
 ###### Example
 
 ```js
-ReactGA.set({ userId: 123 });
+ReactGA.set({ dimension14: "Sports" });
 ```
 
 Or with multiple trackers
