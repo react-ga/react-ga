@@ -117,6 +117,7 @@ ReactGA.initialize([{
 |options.alwaysSendToDefaultTracker| `Boolean`. Optional. Defaults to `true`. If set to `false` _and_ using multiple trackers, the event will not be send to the default tracker.|
 |options.testMode| `Boolean`. Optional. Defaults to `false`. Enables test mode. See [here](https://github.com/react-ga/react-ga#test-mode) for more information.|
 |options.standardImplementation| `Boolean`. Optional. Defaults to `false`. Enables loading GA as google expects it. See [here](https://github.com/react-ga/react-ga#standard-implementation) for more information.|
+|options.useExistingGa| `Boolean`. Optional. Skips call to `window.ga()`, assuming you have manually run it.
 
 If you are having additional troubles and setting `debug = true` shows as working please try using the [Chrome GA Debugger Extension](https://chrome.google.com/webstore/detail/google-analytics-debugger/jnkmfdileelhofjcijamephohjechhna).
 This will help you figure out if your implementation is off or your GA Settings are not correct.
