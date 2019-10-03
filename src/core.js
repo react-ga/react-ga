@@ -409,7 +409,6 @@ export const plugin = {
    * @param name {String} e.g. 'ecommerce' or 'myplugin'
    * @param options {Object} optional e.g {path: '/log', debug: true}
    * @param trackerName {String} optional e.g 'trackerName'
-   *  
    */
   require: (rawName, options, trackerName) => {
     if (typeof ga === 'function') {
@@ -424,7 +423,7 @@ export const plugin = {
         warn('`name` cannot be an empty string in .require()');
         return;
       }
-      let requireString = trackerName ? trackerName + '.require' : 'require'
+      const requireString = trackerName ? `${trackerName}.require` : 'require';
       // Optional Fields
       if (options) {
         if (typeof options !== 'object') {
