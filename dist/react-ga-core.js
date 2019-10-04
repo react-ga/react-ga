@@ -104,7 +104,7 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = warn;
+exports["default"] = warn;
 
 function warn(s) {
   console.warn('[react-ga]', s);
@@ -120,7 +120,7 @@ function warn(s) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = trim;
+exports["default"] = trim;
 
 // GA strings need to have leading/trailing whitespace trimmed, and not all
 // browsers have String.prototoype.trim().
@@ -148,7 +148,7 @@ exports.timing = timing;
 exports.event = event;
 exports.exception = exception;
 exports.outboundLink = outboundLink;
-exports.default = exports.testModeAPI = exports.plugin = void 0;
+exports["default"] = exports.testModeAPI = exports.plugin = void 0;
 
 var _format2 = _interopRequireDefault(__webpack_require__(3));
 
@@ -164,13 +164,15 @@ var _log = _interopRequireDefault(__webpack_require__(8));
 
 var _testModeAPI = _interopRequireDefault(__webpack_require__(9));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -194,14 +196,14 @@ var _alwaysSendToDefaultTracker = true;
 var internalGa = function internalGa() {
   var _window;
 
-  if (_testMode) return _testModeAPI.default.ga.apply(_testModeAPI.default, arguments);
+  if (_testMode) return _testModeAPI["default"].ga.apply(_testModeAPI["default"], arguments);
   if (_isNotBrowser) return false;
-  if (!window.ga) return (0, _warn.default)('ReactGA.initialize must be called first or GoogleAnalytics should be loaded manually');
+  if (!window.ga) return (0, _warn["default"])('ReactGA.initialize must be called first or GoogleAnalytics should be loaded manually');
   return (_window = window).ga.apply(_window, arguments);
 };
 
 function _format(s) {
-  return (0, _format2.default)(s, _titleCase);
+  return (0, _format2["default"])(s, _titleCase);
 }
 
 function _gaCommand(trackerNames) {
@@ -213,7 +215,7 @@ function _gaCommand(trackerNames) {
 
   if (typeof internalGa === 'function') {
     if (typeof command !== 'string') {
-      (0, _warn.default)('ga command must be a string');
+      (0, _warn["default"])('ga command must be a string');
       return;
     }
 
@@ -229,7 +231,7 @@ function _gaCommand(trackerNames) {
 
 function _initialize(gaTrackingID, options) {
   if (!gaTrackingID) {
-    (0, _warn.default)('gaTrackingID is required in initialize()');
+    (0, _warn["default"])('gaTrackingID is required in initialize()');
     return;
   }
 
@@ -240,6 +242,10 @@ function _initialize(gaTrackingID, options) {
 
     if (options.titleCase === false) {
       _titleCase = false;
+    }
+
+    if (options.useExistingGa) {
+      return;
     }
   }
 
@@ -258,7 +264,7 @@ function initialize(configsOrTrackingId, options) {
       return false;
     }
 
-    if (!options || options.standardImplementation !== true) (0, _loadGA.default)(options);
+    if (!options || options.standardImplementation !== true) (0, _loadGA["default"])(options);
   }
 
   _alwaysSendToDefaultTracker = options && typeof options.alwaysSendToDefaultTracker === 'boolean' ? options.alwaysSendToDefaultTracker : true;
@@ -266,7 +272,7 @@ function initialize(configsOrTrackingId, options) {
   if (Array.isArray(configsOrTrackingId)) {
     configsOrTrackingId.forEach(function (config) {
       if (_typeof(config) !== 'object') {
-        (0, _warn.default)('All configs must be an object');
+        (0, _warn["default"])('All configs must be an object');
         return;
       }
 
@@ -293,8 +299,8 @@ function ga() {
     internalGa.apply(void 0, args);
 
     if (_debug) {
-      (0, _log.default)('called ga(\'arguments\');');
-      (0, _log.default)("with arguments: ".concat(JSON.stringify(args)));
+      (0, _log["default"])('called ga(\'arguments\');');
+      (0, _log["default"])("with arguments: ".concat(JSON.stringify(args)));
     }
   }
 
@@ -310,24 +316,24 @@ function ga() {
 
 function set(fieldsObject, trackerNames) {
   if (!fieldsObject) {
-    (0, _warn.default)('`fieldsObject` is required in .set()');
+    (0, _warn["default"])('`fieldsObject` is required in .set()');
     return;
   }
 
   if (_typeof(fieldsObject) !== 'object') {
-    (0, _warn.default)('Expected `fieldsObject` arg to be an Object');
+    (0, _warn["default"])('Expected `fieldsObject` arg to be an Object');
     return;
   }
 
   if (Object.keys(fieldsObject).length === 0) {
-    (0, _warn.default)('empty `fieldsObject` given to .set()');
+    (0, _warn["default"])('empty `fieldsObject` given to .set()');
   }
 
   _gaCommand(trackerNames, 'set', fieldsObject);
 
   if (_debug) {
-    (0, _log.default)('called ga(\'set\', fieldsObject);');
-    (0, _log.default)("with fieldsObject: ".concat(JSON.stringify(fieldsObject)));
+    (0, _log["default"])('called ga(\'set\', fieldsObject);');
+    (0, _log["default"])("with fieldsObject: ".concat(JSON.stringify(fieldsObject)));
   }
 }
 /**
@@ -344,9 +350,9 @@ function send(fieldObject, trackerNames) {
   _gaCommand(trackerNames, 'send', fieldObject);
 
   if (_debug) {
-    (0, _log.default)('called ga(\'send\', fieldObject);');
-    (0, _log.default)("with fieldObject: ".concat(JSON.stringify(fieldObject)));
-    (0, _log.default)("with trackers: ".concat(JSON.stringify(trackerNames)));
+    (0, _log["default"])('called ga(\'send\', fieldObject);');
+    (0, _log["default"])("with fieldObject: ".concat(JSON.stringify(fieldObject)));
+    (0, _log["default"])("with trackers: ".concat(JSON.stringify(trackerNames)));
   }
 }
 /**
@@ -360,14 +366,14 @@ function send(fieldObject, trackerNames) {
 
 function pageview(rawPath, trackerNames, title) {
   if (!rawPath) {
-    (0, _warn.default)('path is required in .pageview()');
+    (0, _warn["default"])('path is required in .pageview()');
     return;
   }
 
-  var path = (0, _trim.default)(rawPath);
+  var path = (0, _trim["default"])(rawPath);
 
   if (path === '') {
-    (0, _warn.default)('path cannot be an empty string in .pageview()');
+    (0, _warn["default"])('path cannot be an empty string in .pageview()');
     return;
   }
 
@@ -384,14 +390,14 @@ function pageview(rawPath, trackerNames, title) {
     }, extraFields));
 
     if (_debug) {
-      (0, _log.default)('called ga(\'send\', \'pageview\', path);');
+      (0, _log["default"])('called ga(\'send\', \'pageview\', path);');
       var extraLog = '';
 
       if (title) {
         extraLog = " and title: ".concat(title);
       }
 
-      (0, _log.default)("with path: ".concat(path).concat(extraLog));
+      (0, _log["default"])("with path: ".concat(path).concat(extraLog));
     }
   }
 }
@@ -406,14 +412,14 @@ function pageview(rawPath, trackerNames, title) {
 
 function modalview(rawModalName, trackerNames) {
   if (!rawModalName) {
-    (0, _warn.default)('modalName is required in .modalview(modalName)');
+    (0, _warn["default"])('modalName is required in .modalview(modalName)');
     return;
   }
 
-  var modalName = (0, _removeLeadingSlash.default)((0, _trim.default)(rawModalName));
+  var modalName = (0, _removeLeadingSlash["default"])((0, _trim["default"])(rawModalName));
 
   if (modalName === '') {
-    (0, _warn.default)('modalName cannot be an empty string or a single / in .modalview()');
+    (0, _warn["default"])('modalName cannot be an empty string or a single / in .modalview()');
     return;
   }
 
@@ -423,8 +429,8 @@ function modalview(rawModalName, trackerNames) {
     _gaCommand(trackerNames, 'send', 'pageview', path);
 
     if (_debug) {
-      (0, _log.default)('called ga(\'send\', \'pageview\', path);');
-      (0, _log.default)("with path: ".concat(path));
+      (0, _log["default"])('called ga(\'send\', \'pageview\', path);');
+      (0, _log["default"])("with path: ".concat(path));
     }
   }
 }
@@ -450,7 +456,7 @@ function timing() {
 
   if (typeof ga === 'function') {
     if (!category || !variable || !value || typeof value !== 'number') {
-      (0, _warn.default)('args.category, args.variable ' + 'AND args.value are required in timing() ' + 'AND args.value has to be a number');
+      (0, _warn["default"])('args.category, args.variable ' + 'AND args.value are required in timing() ' + 'AND args.value has to be a number');
       return;
     } // Required Fields
 
@@ -497,7 +503,7 @@ function event() {
   if (typeof ga === 'function') {
     // Simple Validation
     if (!category || !action) {
-      (0, _warn.default)('args.category AND args.action are required in event()');
+      (0, _warn["default"])('args.category AND args.action are required in event()');
       return;
     } // Required Fields
 
@@ -514,7 +520,7 @@ function event() {
 
     if (typeof value !== 'undefined') {
       if (typeof value !== 'number') {
-        (0, _warn.default)('Expected `args.value` arg to be a Number.');
+        (0, _warn["default"])('Expected `args.value` arg to be a Number.');
       } else {
         fieldObject.eventValue = value;
       }
@@ -522,7 +528,7 @@ function event() {
 
     if (typeof nonInteraction !== 'undefined') {
       if (typeof nonInteraction !== 'boolean') {
-        (0, _warn.default)('`args.nonInteraction` must be a boolean.');
+        (0, _warn["default"])('`args.nonInteraction` must be a boolean.');
       } else {
         fieldObject.nonInteraction = nonInteraction;
       }
@@ -530,10 +536,10 @@ function event() {
 
     if (typeof transport !== 'undefined') {
       if (typeof transport !== 'string') {
-        (0, _warn.default)('`args.transport` must be a string.');
+        (0, _warn["default"])('`args.transport` must be a string.');
       } else {
         if (['beacon', 'xhr', 'image'].indexOf(transport) === -1) {
-          (0, _warn.default)('`args.transport` must be either one of these values: `beacon`, `xhr` or `image`');
+          (0, _warn["default"])('`args.transport` must be either one of these values: `beacon`, `xhr` or `image`');
         }
 
         fieldObject.transport = transport;
@@ -579,7 +585,7 @@ function exception(_ref3, trackerNames) {
 
     if (typeof fatal !== 'undefined') {
       if (typeof fatal !== 'boolean') {
-        (0, _warn.default)('`args.fatal` must be a boolean.');
+        (0, _warn["default"])('`args.fatal` must be a boolean.');
       } else {
         fieldObject.exFatal = fatal;
       }
@@ -596,43 +602,45 @@ var plugin = {
    * GA requires a plugin
    * @param name {String} e.g. 'ecommerce' or 'myplugin'
    * @param options {Object} optional e.g {path: '/log', debug: true}
+   * @param trackerName {String} optional e.g 'trackerName'
    */
-  require: function require(rawName, options) {
+  require: function require(rawName, options, trackerName) {
     if (typeof ga === 'function') {
       // Required Fields
       if (!rawName) {
-        (0, _warn.default)('`name` is required in .require()');
+        (0, _warn["default"])('`name` is required in .require()');
         return;
       }
 
-      var name = (0, _trim.default)(rawName);
+      var name = (0, _trim["default"])(rawName);
 
       if (name === '') {
-        (0, _warn.default)('`name` cannot be an empty string in .require()');
+        (0, _warn["default"])('`name` cannot be an empty string in .require()');
         return;
-      } // Optional Fields
+      }
 
+      var requireString = trackerName ? "".concat(trackerName, ".require") : 'require'; // Optional Fields
 
       if (options) {
         if (_typeof(options) !== 'object') {
-          (0, _warn.default)('Expected `options` arg to be an Object');
+          (0, _warn["default"])('Expected `options` arg to be an Object');
           return;
         }
 
         if (Object.keys(options).length === 0) {
-          (0, _warn.default)('Empty `options` given to .require()');
+          (0, _warn["default"])('Empty `options` given to .require()');
         }
 
-        ga('require', name, options);
+        ga(requireString, name, options);
 
         if (_debug) {
-          (0, _log.default)("called ga('require', '".concat(name, "', ").concat(JSON.stringify(options)));
+          (0, _log["default"])("called ga('require', '".concat(name, "', ").concat(JSON.stringify(options)));
         }
       } else {
-        ga('require', name);
+        ga(requireString, name);
 
         if (_debug) {
-          (0, _log.default)("called ga('require', '".concat(name, "');"));
+          (0, _log["default"])("called ga('require', '".concat(name, "');"));
         }
       }
     }
@@ -660,9 +668,9 @@ var plugin = {
 
     if (typeof ga === 'function') {
       if (typeof pluginName !== 'string') {
-        (0, _warn.default)('Expected `pluginName` arg to be a String.');
+        (0, _warn["default"])('Expected `pluginName` arg to be a String.');
       } else if (typeof action !== 'string') {
-        (0, _warn.default)('Expected `action` arg to be a String.');
+        (0, _warn["default"])('Expected `action` arg to be a String.');
       } else {
         var command = "".concat(pluginName, ":").concat(action);
         payload = payload || null;
@@ -671,21 +679,21 @@ var plugin = {
           ga(command, actionType, payload);
 
           if (_debug) {
-            (0, _log.default)("called ga('".concat(command, "');"));
-            (0, _log.default)("actionType: \"".concat(actionType, "\" with payload: ").concat(JSON.stringify(payload)));
+            (0, _log["default"])("called ga('".concat(command, "');"));
+            (0, _log["default"])("actionType: \"".concat(actionType, "\" with payload: ").concat(JSON.stringify(payload)));
           }
         } else if (payload) {
           ga(command, payload);
 
           if (_debug) {
-            (0, _log.default)("called ga('".concat(command, "');"));
-            (0, _log.default)("with payload: ".concat(JSON.stringify(payload)));
+            (0, _log["default"])("called ga('".concat(command, "');"));
+            (0, _log["default"])("with payload: ".concat(JSON.stringify(payload)));
           }
         } else {
           ga(command);
 
           if (_debug) {
-            (0, _log.default)("called ga('".concat(command, "');"));
+            (0, _log["default"])("called ga('".concat(command, "');"));
           }
         }
       }
@@ -703,14 +711,14 @@ exports.plugin = plugin;
 
 function outboundLink(args, hitCallback, trackerNames) {
   if (typeof hitCallback !== 'function') {
-    (0, _warn.default)('hitCallback function is required');
+    (0, _warn["default"])('hitCallback function is required');
     return;
   }
 
   if (typeof ga === 'function') {
     // Simple Validation
     if (!args || !args.label) {
-      (0, _warn.default)('args.label is required in outboundLink()');
+      (0, _warn["default"])('args.label is required in outboundLink()');
       return;
     } // Required Fields
 
@@ -754,7 +762,7 @@ function outboundLink(args, hitCallback, trackerNames) {
   }
 }
 
-var testModeAPI = _testModeAPI.default;
+var testModeAPI = _testModeAPI["default"];
 exports.testModeAPI = testModeAPI;
 var _default = {
   initialize: initialize,
@@ -768,9 +776,9 @@ var _default = {
   exception: exception,
   plugin: plugin,
   outboundLink: outboundLink,
-  testModeAPI: _testModeAPI.default
+  testModeAPI: _testModeAPI["default"]
 };
-exports.default = _default;
+exports["default"] = _default;
 
 /***/ }),
 /* 3 */
@@ -782,7 +790,7 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = format;
+exports["default"] = format;
 
 var _mightBeEmail = _interopRequireDefault(__webpack_require__(4));
 
@@ -790,18 +798,18 @@ var _toTitleCase = _interopRequireDefault(__webpack_require__(5));
 
 var _warn = _interopRequireDefault(__webpack_require__(0));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var redacted = 'REDACTED (Potential Email Address)';
 
 function format(s, titleCase) {
-  if ((0, _mightBeEmail.default)(s)) {
-    (0, _warn.default)('This arg looks like an email address, redacting.');
+  if ((0, _mightBeEmail["default"])(s)) {
+    (0, _warn["default"])('This arg looks like an email address, redacting.');
     return redacted;
   }
 
   if (titleCase) {
-    return (0, _toTitleCase.default)(s);
+    return (0, _toTitleCase["default"])(s);
   }
 
   return s;
@@ -817,13 +825,13 @@ function format(s, titleCase) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = mightBeEmail;
+exports["default"] = mightBeEmail;
 
 // See if s could be an email address. We don't want to send personal data like email.
 // https://support.google.com/analytics/answer/2795983?hl=en
 function mightBeEmail(s) {
   // There's no point trying to validate rfc822 fully, just look for ...@...
-  return /[^@]+@[^@]+/.test(s);
+  return typeof s === 'string' && s.indexOf('@') !== -1;
 }
 
 /***/ }),
@@ -836,11 +844,11 @@ function mightBeEmail(s) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = toTitleCase;
+exports["default"] = toTitleCase;
 
 var _trim = _interopRequireDefault(__webpack_require__(1));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 /**
  * To Title Case 2.1 - http://individed.com/code/to-title-case/
@@ -850,7 +858,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
 
 function toTitleCase(string) {
-  return (0, _trim.default)(string).replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function (match, index, title) {
+  return (0, _trim["default"])(string).replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function (match, index, title) {
     if (index > 0 && index + match.length !== title.length && match.search(smallWords) > -1 && title.charAt(index - 2) !== ':' && (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') && title.charAt(index - 1).search(/[^\s-]/) < 0) {
       return match.toLowerCase();
     }
@@ -873,7 +881,7 @@ function toTitleCase(string) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = removeLeadingSlash;
+exports["default"] = removeLeadingSlash;
 
 function removeLeadingSlash(string) {
   if (string.substring(0, 1) === '/') {
@@ -893,7 +901,7 @@ function removeLeadingSlash(string) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = _default;
+exports["default"] = _default;
 
 function _default(options) {
   var gaAddress = 'https://www.google-analytics.com/analytics.js';
@@ -931,7 +939,7 @@ function _default(options) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = log;
+exports["default"] = log;
 
 function log(s) {
   console.info('[react-ga]', s);
@@ -947,7 +955,7 @@ function log(s) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = exports.gaCalls = void 0;
+exports["default"] = exports.gaCalls = void 0;
 var gaCalls = [];
 exports.gaCalls = gaCalls;
 var _default = {
@@ -963,7 +971,7 @@ var _default = {
     gaCalls.length = 0;
   }
 };
-exports.default = _default;
+exports["default"] = _default;
 
 /***/ })
 /******/ ]);
