@@ -6,21 +6,22 @@
  *          Atul Varma <atul@mozillafoundation.org>
  */
 
+import { useState } from 'react';
+
 /**
  * Utilities
  */
-import format from "./utils/format";
-import removeLeadingSlash from "./utils/removeLeadingSlash";
-import trim from "./utils/trim";
-import loadGA from "./utils/loadGA";
+import format from './utils/format';
+import removeLeadingSlash from './utils/removeLeadingSlash';
+import trim from './utils/trim';
+import loadGA from './utils/loadGA';
 
-import warn from "./utils/console/warn";
-import log from "./utils/console/log";
-import TestModeAPI from "./utils/testModeAPI";
-import { useState } from "react";
+import warn from './utils/console/warn';
+import log from './utils/console/log';
+import TestModeAPI from './utils/testModeAPI';
 
 const _isNotBrowser =
-  typeof window === "undefined" || typeof document === "undefined";
+  typeof window === 'undefined' || typeof document === 'undefined';
 
 let _debug = false;
 let _titleCase = true;
@@ -30,10 +31,12 @@ let _alwaysSendToDefaultTracker = true;
 const internalGa = (...args) => {
   if (_testMode) return TestModeAPI.ga(...args);
   if (_isNotBrowser) return false;
-  if (!window.ga)
+  if (!window.ga) {
     return warn(
-      "ReactGA.initialize must be called first or GoogleAnalytics should be loaded manually"
+      'ReactGA.initialize must be called first or GoogleAnalytics should be loaded manually'
     );
+  }
+
   return window.ga(...args);
 };
 
@@ -43,16 +46,18 @@ function _format(s) {
 
 function _gaCommand(trackerNames, ...args) {
   const command = args[0];
-  if (typeof internalGa === "function") {
-    if (typeof command !== "string") {
-      warn("ga command must be a string");
+  if (typeof internalGa === 'function') {
+    if (typeof command !== 'string') {
+      warn('ga command must be a string');
       return;
     }
 
-    if (_alwaysSendToDefaultTracker || !Array.isArray(trackerNames))
+    if (_alwaysSendToDefaultTracker || !Array.isArray(trackerNames)) {
       internalGa(...args);
+    }
+
     if (Array.isArray(trackerNames)) {
-      trackerNames.forEach(name => {
+      trackerNames.forEach((name) => {
         internalGa(...[`${name}.${command}`].concat(args.slice(1)));
       });
     }
@@ -61,7 +66,7 @@ function _gaCommand(trackerNames, ...args) {
 
 function _initialize(gaTrackingID, options) {
   if (!gaTrackingID) {
-    warn("gaTrackingID is required in initialize()");
+    warn('gaTrackingID is required in initialize()');
     return;
   }
 
@@ -80,9 +85,9 @@ function _initialize(gaTrackingID, options) {
   }
 
   if (options && options.gaOptions) {
-    internalGa("create", gaTrackingID, options.gaOptions);
+    internalGa('create', gaTrackingID, options.gaOptions);
   } else {
-    internalGa("create", gaTrackingID, "auto");
+    internalGa('create', gaTrackingID, 'auto');
   }
 }
 
@@ -98,14 +103,14 @@ export function initialize(configsOrTrackingId, options) {
   }
 
   _alwaysSendToDefaultTracker =
-    options && typeof options.alwaysSendToDefaultTracker === "boolean"
+    options && typeof options.alwaysSendToDefaultTracker === 'boolean'
       ? options.alwaysSendToDefaultTracker
       : true;
 
   if (Array.isArray(configsOrTrackingId)) {
-    configsOrTrackingId.forEach(config => {
-      if (typeof config !== "object") {
-        warn("All configs must be an object");
+    configsOrTrackingId.forEach((config) => {
+      if (typeof config !== 'object') {
+        warn('All configs must be an object');
         return;
       }
       _initialize(config.trackingId, config);
@@ -140,20 +145,20 @@ export function ga(...args) {
  */
 export function set(fieldsObject, trackerNames) {
   if (!fieldsObject) {
-    warn("`fieldsObject` is required in .set()");
+    warn('`fieldsObject` is required in .set()');
     return;
   }
 
-  if (typeof fieldsObject !== "object") {
-    warn("Expected `fieldsObject` arg to be an Object");
+  if (typeof fieldsObject !== 'object') {
+    warn('Expected `fieldsObject` arg to be an Object');
     return;
   }
 
   if (Object.keys(fieldsObject).length === 0) {
-    warn("empty `fieldsObject` given to .set()");
+    warn('empty `fieldsObject` given to .set()');
   }
 
-  _gaCommand(trackerNames, "set", fieldsObject);
+  _gaCommand(trackerNames, 'set', fieldsObject);
 
   if (_debug) {
     log("called ga('set', fieldsObject);");
@@ -170,7 +175,7 @@ export function set(fieldsObject, trackerNames) {
  * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
  */
 export function send(fieldObject, trackerNames) {
-  _gaCommand(trackerNames, "send", fieldObject);
+  _gaCommand(trackerNames, 'send', fieldObject);
   if (_debug) {
     log("called ga('send', fieldObject);");
     log(`with fieldObject: ${JSON.stringify(fieldObject)}`);
@@ -187,13 +192,13 @@ export function send(fieldObject, trackerNames) {
  */
 export function pageview(rawPath, trackerNames, title) {
   if (!rawPath) {
-    warn("path is required in .pageview()");
+    warn('path is required in .pageview()');
     return;
   }
 
   const path = trim(rawPath);
-  if (path === "") {
-    warn("path cannot be an empty string in .pageview()");
+  if (path === '') {
+    warn('path cannot be an empty string in .pageview()');
     return;
   }
 
@@ -202,16 +207,16 @@ export function pageview(rawPath, trackerNames, title) {
     extraFields.title = title;
   }
 
-  if (typeof ga === "function") {
-    _gaCommand(trackerNames, "send", {
-      hitType: "pageview",
+  if (typeof ga === 'function') {
+    _gaCommand(trackerNames, 'send', {
+      hitType: 'pageview',
       page: path,
       ...extraFields
     });
 
     if (_debug) {
       log("called ga('send', 'pageview', path);");
-      let extraLog = "";
+      let extraLog = '';
       if (title) {
         extraLog = ` and title: ${title}`;
       }
@@ -229,20 +234,20 @@ export function pageview(rawPath, trackerNames, title) {
  */
 export function modalview(rawModalName, trackerNames) {
   if (!rawModalName) {
-    warn("modalName is required in .modalview(modalName)");
+    warn('modalName is required in .modalview(modalName)');
     return;
   }
 
   const modalName = removeLeadingSlash(trim(rawModalName));
 
-  if (modalName === "") {
-    warn("modalName cannot be an empty string or a single / in .modalview()");
+  if (modalName === '') {
+    warn('modalName cannot be an empty string or a single / in .modalview()');
     return;
   }
 
-  if (typeof ga === "function") {
+  if (typeof ga === 'function') {
     const path = `/modal/${modalName}`;
-    _gaCommand(trackerNames, "send", "pageview", path);
+    _gaCommand(trackerNames, 'send', 'pageview', path);
 
     if (_debug) {
       log("called ga('send', 'pageview', path);");
@@ -264,19 +269,19 @@ export function timing(
   { category, variable, value, label } = {},
   trackerNames
 ) {
-  if (typeof ga === "function") {
-    if (!category || !variable || !value || typeof value !== "number") {
+  if (typeof ga === 'function') {
+    if (!category || !variable || !value || typeof value !== 'number') {
       warn(
-        "args.category, args.variable " +
-          "AND args.value are required in timing() " +
-          "AND args.value has to be a number"
+        'args.category, args.variable ' +
+          'AND args.value are required in timing() ' +
+          'AND args.value has to be a number'
       );
       return;
     }
 
     // Required Fields
     const fieldObject = {
-      hitType: "timing",
+      hitType: 'timing',
       timingCategory: _format(category),
       timingVar: _format(variable),
       timingValue: value
@@ -305,16 +310,16 @@ export function event(
   { category, action, label, value, nonInteraction, transport, ...args } = {},
   trackerNames
 ) {
-  if (typeof ga === "function") {
+  if (typeof ga === 'function') {
     // Simple Validation
     if (!category || !action) {
-      warn("args.category AND args.action are required in event()");
+      warn('args.category AND args.action are required in event()');
       return;
     }
 
     // Required Fields
     const fieldObject = {
-      hitType: "event",
+      hitType: 'event',
       eventCategory: _format(category),
       eventAction: _format(action)
     };
@@ -324,29 +329,29 @@ export function event(
       fieldObject.eventLabel = _format(label);
     }
 
-    if (typeof value !== "undefined") {
-      if (typeof value !== "number") {
-        warn("Expected `args.value` arg to be a Number.");
+    if (typeof value !== 'undefined') {
+      if (typeof value !== 'number') {
+        warn('Expected `args.value` arg to be a Number.');
       } else {
         fieldObject.eventValue = value;
       }
     }
 
-    if (typeof nonInteraction !== "undefined") {
-      if (typeof nonInteraction !== "boolean") {
-        warn("`args.nonInteraction` must be a boolean.");
+    if (typeof nonInteraction !== 'undefined') {
+      if (typeof nonInteraction !== 'boolean') {
+        warn('`args.nonInteraction` must be a boolean.');
       } else {
         fieldObject.nonInteraction = nonInteraction;
       }
     }
 
-    if (typeof transport !== "undefined") {
-      if (typeof transport !== "string") {
-        warn("`args.transport` must be a string.");
+    if (typeof transport !== 'undefined') {
+      if (typeof transport !== 'string') {
+        warn('`args.transport` must be a string.');
       } else {
-        if (["beacon", "xhr", "image"].indexOf(transport) === -1) {
+        if (['beacon', 'xhr', 'image'].indexOf(transport) === -1) {
           warn(
-            "`args.transport` must be either one of these values: `beacon`, `xhr` or `image`"
+            '`args.transport` must be either one of these values: `beacon`, `xhr` or `image`'
           );
         }
 
@@ -355,14 +360,14 @@ export function event(
     }
 
     Object.keys(args)
-      .filter(key => key.substr(0, "dimension".length) === "dimension")
-      .forEach(key => {
+      .filter((key) => key.substr(0, 'dimension'.length) === 'dimension')
+      .forEach((key) => {
         fieldObject[key] = args[key];
       });
 
     Object.keys(args)
-      .filter(key => key.substr(0, "metric".length) === "metric")
-      .forEach(key => {
+      .filter((key) => key.substr(0, 'metric'.length) === 'metric')
+      .forEach((key) => {
         fieldObject[key] = args[key];
       });
 
@@ -379,10 +384,10 @@ export function event(
  * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
  */
 export function exception({ description, fatal }, trackerNames) {
-  if (typeof ga === "function") {
+  if (typeof ga === 'function') {
     // Required Fields
     const fieldObject = {
-      hitType: "exception"
+      hitType: 'exception'
     };
 
     // Optional Fields
@@ -390,9 +395,9 @@ export function exception({ description, fatal }, trackerNames) {
       fieldObject.exDescription = _format(description);
     }
 
-    if (typeof fatal !== "undefined") {
-      if (typeof fatal !== "boolean") {
-        warn("`args.fatal` must be a boolean.");
+    if (typeof fatal !== 'undefined') {
+      if (typeof fatal !== 'boolean') {
+        warn('`args.fatal` must be a boolean.');
       } else {
         fieldObject.exFatal = fatal;
       }
@@ -412,28 +417,28 @@ export const plugin = {
    * @param trackerName {String} optional e.g 'trackerName'
    */
   require: (rawName, options, trackerName) => {
-    if (typeof ga === "function") {
+    if (typeof ga === 'function') {
       // Required Fields
       if (!rawName) {
-        warn("`name` is required in .require()");
+        warn('`name` is required in .require()');
         return;
       }
 
       const name = trim(rawName);
-      if (name === "") {
-        warn("`name` cannot be an empty string in .require()");
+      if (name === '') {
+        warn('`name` cannot be an empty string in .require()');
         return;
       }
-      const requireString = trackerName ? `${trackerName}.require` : "require";
+      const requireString = trackerName ? `${trackerName}.require` : 'require';
       // Optional Fields
       if (options) {
-        if (typeof options !== "object") {
-          warn("Expected `options` arg to be an Object");
+        if (typeof options !== 'object') {
+          warn('Expected `options` arg to be an Object');
           return;
         }
 
         if (Object.keys(options).length === 0) {
-          warn("Empty `options` given to .require()");
+          warn('Empty `options` given to .require()');
         }
 
         ga(requireString, name, options);
@@ -471,11 +476,11 @@ export const plugin = {
       payload = args[1];
     }
 
-    if (typeof ga === "function") {
-      if (typeof pluginName !== "string") {
-        warn("Expected `pluginName` arg to be a String.");
-      } else if (typeof action !== "string") {
-        warn("Expected `action` arg to be a String.");
+    if (typeof ga === 'function') {
+      if (typeof pluginName !== 'string') {
+        warn('Expected `pluginName` arg to be a String.');
+      } else if (typeof action !== 'string') {
+        warn('Expected `action` arg to be a String.');
       } else {
         const command = `${pluginName}:${action}`;
         payload = payload || null;
@@ -513,23 +518,23 @@ export const plugin = {
  * @param {function} hitCallback - Called after processing a hit.
  */
 export function outboundLink(args, hitCallback, trackerNames) {
-  if (typeof hitCallback !== "function") {
-    warn("hitCallback function is required");
+  if (typeof hitCallback !== 'function') {
+    warn('hitCallback function is required');
     return;
   }
 
-  if (typeof ga === "function") {
+  if (typeof ga === 'function') {
     // Simple Validation
     if (!args || !args.label) {
-      warn("args.label is required in outboundLink()");
+      warn('args.label is required in outboundLink()');
       return;
     }
 
     // Required Fields
     const fieldObject = {
-      hitType: "event",
-      eventCategory: "Outbound",
-      eventAction: "Click",
+      hitType: 'event',
+      eventCategory: 'Outbound',
+      eventAction: 'Click',
       eventLabel: _format(args.label)
     };
 
@@ -576,7 +581,20 @@ export const useReactGA = (configsOrTrackingId, options) => {
     setInitialized(initialize(configsOrTrackingId, options));
   }
 
-  return ReactGA;
+  return {
+    initialize,
+    ga,
+    set,
+    send,
+    pageview,
+    modalview,
+    timing,
+    event,
+    exception,
+    plugin,
+    outboundLink,
+    testModeAPI: TestModeAPI
+  };
 };
 
 export default {
