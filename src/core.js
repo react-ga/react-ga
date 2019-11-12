@@ -591,5 +591,6 @@ export default {
   exception,
   plugin,
   outboundLink,
-  testModeAPI: TestModeAPI
+  testModeAPI: TestModeAPI,
+  useReactGA
 };
