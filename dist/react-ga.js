@@ -7,7 +7,7 @@
 		var a = typeof exports === 'object' ? factory(require("react"), require("prop-types")) : factory(root["react"], root["prop-types"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE__12__, __WEBPACK_EXTERNAL_MODULE__13__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE__13__, __WEBPACK_EXTERNAL_MODULE__14__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -152,17 +152,17 @@ exports["default"] = exports.testModeAPI = exports.plugin = void 0;
 
 var _format2 = _interopRequireDefault(__webpack_require__(3));
 
-var _removeLeadingSlash = _interopRequireDefault(__webpack_require__(6));
+var _removeLeadingSlash = _interopRequireDefault(__webpack_require__(7));
 
 var _trim = _interopRequireDefault(__webpack_require__(1));
 
-var _loadGA = _interopRequireDefault(__webpack_require__(7));
+var _loadGA = _interopRequireDefault(__webpack_require__(8));
 
 var _warn = _interopRequireDefault(__webpack_require__(0));
 
-var _log = _interopRequireDefault(__webpack_require__(8));
+var _log = _interopRequireDefault(__webpack_require__(9));
 
-var _testModeAPI = _interopRequireDefault(__webpack_require__(9));
+var _testModeAPI = _interopRequireDefault(__webpack_require__(10));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -192,6 +192,7 @@ var _debug = false;
 var _titleCase = true;
 var _testMode = false;
 var _alwaysSendToDefaultTracker = true;
+var _redactEmail = true;
 
 var internalGa = function internalGa() {
   var _window;
@@ -203,7 +204,7 @@ var internalGa = function internalGa() {
 };
 
 function _format(s) {
-  return (0, _format2["default"])(s, _titleCase);
+  return (0, _format2["default"])(s, _titleCase, _redactEmail);
 }
 
 function _gaCommand(trackerNames) {
@@ -242,6 +243,10 @@ function _initialize(gaTrackingID, options) {
 
     if (options.titleCase === false) {
       _titleCase = false;
+    }
+
+    if (options.redactEmail === false) {
+      _redactEmail = false;
     }
 
     if (options.useExistingGa) {
@@ -792,31 +797,61 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = format;
 
-var _mightBeEmail = _interopRequireDefault(__webpack_require__(4));
+var _redactEmail = _interopRequireDefault(__webpack_require__(4));
 
-var _toTitleCase = _interopRequireDefault(__webpack_require__(5));
+var _toTitleCase = _interopRequireDefault(__webpack_require__(6));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function format() {
+  var s = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  var titleCase = arguments.length > 1 ? arguments[1] : undefined;
+  var redactingEmail = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
+  var _str = s || '';
+
+  if (titleCase) {
+    _str = (0, _toTitleCase["default"])(s);
+  }
+
+  if (redactingEmail) {
+    _str = (0, _redactEmail["default"])(_str);
+  }
+
+  return _str;
+}
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = redactEmail;
 
 var _warn = _interopRequireDefault(__webpack_require__(0));
+
+var _mightBeEmail = _interopRequireDefault(__webpack_require__(5));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var redacted = 'REDACTED (Potential Email Address)';
 
-function format(s, titleCase) {
-  if ((0, _mightBeEmail["default"])(s)) {
+function redactEmail(string) {
+  if ((0, _mightBeEmail["default"])(string)) {
     (0, _warn["default"])('This arg looks like an email address, redacting.');
     return redacted;
   }
 
-  if (titleCase) {
-    return (0, _toTitleCase["default"])(s);
-  }
-
-  return s;
+  return string;
 }
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -835,7 +870,7 @@ function mightBeEmail(s) {
 }
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -872,7 +907,7 @@ function toTitleCase(string) {
 }
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -892,7 +927,7 @@ function removeLeadingSlash(string) {
 }
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -930,7 +965,7 @@ function _default(options) {
 }
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -946,7 +981,7 @@ function log(s) {
 }
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -974,7 +1009,7 @@ var _default = {
 exports["default"] = _default;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -985,7 +1020,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = exports.OutboundLink = exports.testModeAPI = exports.outboundLink = exports.plugin = exports.exception = exports.event = exports.timing = exports.modalview = exports.pageview = exports.send = exports.set = exports.ga = exports.initialize = void 0;
 
-var _OutboundLink = _interopRequireDefault(__webpack_require__(11));
+var _OutboundLink = _interopRequireDefault(__webpack_require__(12));
 
 var Defaults = _interopRequireWildcard(__webpack_require__(2));
 
@@ -1037,7 +1072,7 @@ var _default = _objectSpread({}, Defaults, {
 exports["default"] = _default;
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1048,9 +1083,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _react = _interopRequireWildcard(__webpack_require__(12));
+var _react = _interopRequireWildcard(__webpack_require__(13));
 
-var _propTypes = _interopRequireDefault(__webpack_require__(13));
+var _propTypes = _interopRequireDefault(__webpack_require__(14));
 
 var _warn = _interopRequireDefault(__webpack_require__(0));
 
@@ -1186,16 +1221,16 @@ _defineProperty(OutboundLink, "defaultProps", {
 });
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__12__;
-
-/***/ }),
 /* 13 */
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE__13__;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__14__;
 
 /***/ })
 /******/ ]);

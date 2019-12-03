@@ -43,6 +43,7 @@ var _debug = false;
 var _titleCase = true;
 var _testMode = false;
 var _alwaysSendToDefaultTracker = true;
+var _redactEmail = true;
 
 var internalGa = function internalGa() {
   var _window;
@@ -54,7 +55,7 @@ var internalGa = function internalGa() {
 };
 
 function _format(s) {
-  return format(s, _titleCase);
+  return format(s, _titleCase, _redactEmail);
 }
 
 function _gaCommand(trackerNames) {
@@ -93,6 +94,10 @@ function _initialize(gaTrackingID, options) {
 
     if (options.titleCase === false) {
       _titleCase = false;
+    }
+
+    if (options.redactEmail === false) {
+      _redactEmail = false;
     }
 
     if (options.useExistingGa) {
