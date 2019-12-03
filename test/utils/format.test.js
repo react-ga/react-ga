@@ -4,6 +4,14 @@ import sinon from 'sinon';
 import format from '../../src/utils/format';
 
 describe('format()', function () {
+  it('should not format when redactingEmail is false', function () {
+    const titleCase = false;
+    const redactingEmail = false;
+    format('hi@example.com', titleCase, redactingEmail).should.eql('hi@example.com');
+    format('hey.ho@letsgo.com', titleCase, redactingEmail).should.eql('hey.ho@letsgo.com');
+    format('abc@xyz.com.uk', titleCase, redactingEmail).should.eql('abc@xyz.com.uk');
+  });
+
   it('should not format email addresses', function () {
     sinon.stub(console, 'warn');
     console.warn.callCount.should.eql(0);
