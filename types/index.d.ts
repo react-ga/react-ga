@@ -88,6 +88,8 @@ export interface OutboundLinkProps {
 
 export function initialize(trackingCode: string, options?: InitializeOptions): void;
 export function initialize(trackers: Tracker[], options?: InitializeOptions): void;
+export function addTrackers(trackingCode: string): void;
+export function addTrackers(trackers: Tracker[]): void;
 export function ga(): (...args: any[]) => void;
 export function ga(...args: any[]): void;
 export function resetCalls() : void;
