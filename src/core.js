@@ -110,10 +110,7 @@ export function initialize(configsOrTrackingId, options) {
     options.alwaysSendToDefaultTracker : true;
 
   addTrackers(configsOrTrackingId);
-  
 }
-
-
 
 /**
  * ga:
