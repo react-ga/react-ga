@@ -437,7 +437,7 @@ ReactGA.initialize('UA-XXX-X', { standardImplementation: true });
 * node.js
 * npm
 * `npm install`
-* `npm install react@^15.6.1 prop-types@^15.5.10` - This is for the optionalDependancies.
+* `npm install react@^15.6.1 prop-types@^15.5.10` - This is for the optional dependencies.
 
 ### To Test
 ```bash
