@@ -80,6 +80,20 @@ function _initialize(gaTrackingID, options) {
   }
 }
 
+export function addTrackers(configsOrTrackingId) {
+  if (Array.isArray(configsOrTrackingId)) {
+    configsOrTrackingId.forEach((config) => {
+      if (typeof config !== 'object') {
+        warn('All configs must be an object');
+        return;
+      }
+      _initialize(config.trackingId, config);
+    });
+  } else {
+    _initialize(configsOrTrackingId, options);
+  }
+  return true;
+} 
 
 export function initialize(configsOrTrackingId, options) {
   if (options && options.testMode === true) {
@@ -95,18 +109,7 @@ export function initialize(configsOrTrackingId, options) {
   _alwaysSendToDefaultTracker = (options && typeof options.alwaysSendToDefaultTracker === 'boolean') ?
     options.alwaysSendToDefaultTracker : true;
 
-  if (Array.isArray(configsOrTrackingId)) {
-    configsOrTrackingId.forEach((config) => {
-      if (typeof config !== 'object') {
-        warn('All configs must be an object');
-        return;
-      }
-      _initialize(config.trackingId, config);
-    });
-  } else {
-    _initialize(configsOrTrackingId, options);
-  }
-  return true;
+  addTrackers(configsOrTrackingId);
 }
 
 /**
