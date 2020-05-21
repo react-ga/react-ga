@@ -65,6 +65,7 @@ export interface InitializeOptions {
     gaOptions?: GaOptions;
     alwaysSendToDefaultTracker?: boolean;
     standardImplementation?: boolean;
+    useExistingGa?: boolean;
 }
 
 export type Tracker = {
