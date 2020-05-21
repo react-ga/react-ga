@@ -34,6 +34,7 @@ export interface GaOptions {
     userId?: string;
     storage?: string;
     storeGac?: boolean;
+    cookieFlags?: string;
 }
 
 export interface InitializeOptions {
