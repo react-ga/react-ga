@@ -1,19 +1,16 @@
-import redactEmail from './redactEmail';
+import mightBeEmail from './mightBeEmail';
 import toTitleCase from './toTitleCase';
-export default function format() {
-  var s = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  var titleCase = arguments.length > 1 ? arguments[1] : undefined;
-  var redactingEmail = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-
-  var _str = s || '';
+import warn from './console/warn';
+var redacted = 'REDACTED (Potential Email Address)';
+export default function format(s, titleCase) {
+  if (mightBeEmail(s)) {
+    warn('This arg looks like an email address, redacting.');
+    return redacted;
+  }
 
   if (titleCase) {
-    _str = toTitleCase(s);
+    return toTitleCase(s);
   }
 
-  if (redactingEmail) {
-    _str = redactEmail(_str);
-  }
-
-  return _str;
+  return s;
 }
