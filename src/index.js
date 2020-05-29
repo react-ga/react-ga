@@ -2,6 +2,7 @@ import UnboundOutboundLink from './components/OutboundLink';
 import * as Defaults from './core';
 
 export const initialize = Defaults.initialize;
+export const addTrackers = Defaults.addTrackers;
 export const ga = Defaults.ga;
 export const set = Defaults.set;
 export const send = Defaults.send;

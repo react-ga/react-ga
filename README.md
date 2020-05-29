@@ -123,6 +123,33 @@ ReactGA.initialize([{
 If you are having additional troubles and setting `debug = true` shows as working please try using the [Chrome GA Debugger Extension](https://chrome.google.com/webstore/detail/google-analytics-debugger/jnkmfdileelhofjcijamephohjechhna).
 This will help you figure out if your implementation is off or your GA Settings are not correct.
 
+#### ReactGA.initialize(gaTrackingID, options)
+
+GA must be initialized before using this function. The values are checked and sent through to the `ga('create', ...` call.
+
+###### Example
+
+```js
+ReactGA.initialize('UA-000000-01', {
+  debug: true,
+  titleCase: false,
+  gaOptions: {
+    userId: 123
+  }
+});
+
+ReactGA.addTrackers([{
+  trackingId: 'UA-000000-01',
+  gaOptions: {
+    name: 'tracker1',
+    userId: 123
+  }
+}, {
+ trackingId: 'UA-000000-02',
+ gaOptions: { name: 'tracker2' }
+}], { debug: true, alwaysSendToDefaultTracker: false });
+```
+
 #### ReactGA.set(fieldsObject)
 
 This will set the values of [custom dimensions](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference#dimension) in Google Analytics.
@@ -438,7 +465,7 @@ ReactGA.initialize('UA-XXX-X', { standardImplementation: true });
 * node.js
 * npm
 * `npm install`
-* `npm install react@^15.6.1 prop-types@^15.5.10` - This is for the optionalDependancies.
+* `npm install react@^15.6.1 prop-types@^15.5.10` - This is for the optional dependencies.
 
 ### To Test
 ```bash

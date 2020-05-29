@@ -3,19 +3,39 @@
 // Definitions by: Tim Aldridge <https://github.com/telshin>
 //                 Philip Karpiak <https://github.com/eswat>
 //                 Jerry Reptak <https://github.com/jetfault>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// Definitions: https://github.com/react-ga/react-ga
 
 import * as React from 'react';
 
 /* tslint:disable no-any */
 
+/**
+ * Events are user interactions with content that can be measured independently from
+ * a web page or a screen load. Downloads, mobile ad clicks, gadgets, Flash elements,
+ * AJAX embedded elements, and video plays are all examples of actions you might want
+ * to measure as Events.
+ * @see https://developers.google.com/analytics/devguides/collection/analyticsjs/events
+ */
 export interface EventArgs {
+    /** Typically the object that was interacted with (e.g. 'Video') */
     category: string;
+    /** The type of interaction (e.g. 'play') */
     action: string;
+    /** Useful for categorizing events (e.g. 'Fall Campaign') */
     label?: string;
+    /** A numeric value associated with the event (e.g. 42) */
     value?: number;
+    /** Specifies that a hit be considered non-interactive. */
     nonInteraction?: boolean;
-    transport?: string;
+    /**
+     * This specifies the transport mechanism with which hits will be sent.
+     * The options are 'beacon', 'xhr', or 'image'. By default, analytics.js
+     * will try to figure out the best method based on the hit size and browser
+     * capabilities. If you specify 'beacon' and the user's browser does not support
+     * the `navigator.sendBeacon` method, it will fall back to 'image' or 'xhr'
+     * depending on hit size.
+     */
+    transport?: 'beacon' | 'xhr' | 'image';
 }
 
 export interface GaOptions {
@@ -34,6 +54,7 @@ export interface GaOptions {
     userId?: string;
     storage?: string;
     storeGac?: boolean;
+    cookieFlags?: string;
 }
 
 export interface InitializeOptions {
@@ -46,6 +67,7 @@ export interface InitializeOptions {
     standardImplementation?: boolean;
     /** Optional. Defaults to `true`. Enables redacting a email as the string that in "Event Category" and "Event Action". */
     redactEmail?: boolean;
+    useExistingGa?: boolean;
 }
 
 export type Tracker = {
@@ -90,6 +112,8 @@ export interface OutboundLinkProps {
 
 export function initialize(trackingCode: string, options?: InitializeOptions): void;
 export function initialize(trackers: Tracker[], options?: InitializeOptions): void;
+export function addTrackers(trackingCode: string): void;
+export function addTrackers(trackers: Tracker[]): void;
 export function ga(): (...args: any[]) => void;
 export function ga(...args: any[]): void;
 export function resetCalls() : void;
