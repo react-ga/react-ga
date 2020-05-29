@@ -1,18 +1,16 @@
-import mightBeEmail from './mightBeEmail';
+import redactEmail from './redactEmail';
 import toTitleCase from './toTitleCase';
-import warn from './console/warn';
 
-const redacted = 'REDACTED (Potential Email Address)';
-
-export default function format(s, titleCase) {
-  if (mightBeEmail(s)) {
-    warn('This arg looks like an email address, redacting.');
-    return redacted;
-  }
+export default function format(s = '', titleCase, redactingEmail = true) {
+  let _str = s || '';
 
   if (titleCase) {
-    return toTitleCase(s);
+    _str = toTitleCase(s);
   }
 
-  return s;
+  if (redactingEmail) {
+    _str = redactEmail(_str);
+  }
+
+  return _str;
 }

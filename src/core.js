@@ -24,6 +24,7 @@ let _debug = false;
 let _titleCase = true;
 let _testMode = false;
 let _alwaysSendToDefaultTracker = true;
+let _redactEmail = true;
 
 const internalGa = (...args) => {
   if (_testMode) return TestModeAPI.ga(...args);
@@ -33,7 +34,7 @@ const internalGa = (...args) => {
 };
 
 function _format(s) {
-  return format(s, _titleCase);
+  return format(s, _titleCase, _redactEmail);
 }
 
 function _gaCommand(trackerNames, ...args) {
@@ -66,6 +67,10 @@ function _initialize(gaTrackingID, options) {
 
     if (options.titleCase === false) {
       _titleCase = false;
+    }
+
+    if (options.redactEmail === false) {
+      _redactEmail = false;
     }
 
     if (options.useExistingGa) {

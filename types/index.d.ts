@@ -65,6 +65,8 @@ export interface InitializeOptions {
     gaOptions?: GaOptions;
     alwaysSendToDefaultTracker?: boolean;
     standardImplementation?: boolean;
+    /** Optional. Defaults to `true`. Enables redacting a email as the string that in "Event Category" and "Event Action". */
+    redactEmail?: boolean;
     useExistingGa?: boolean;
 }
 
