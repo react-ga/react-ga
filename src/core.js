@@ -18,7 +18,8 @@ import warn from './utils/console/warn';
 import log from './utils/console/log';
 import TestModeAPI from './utils/testModeAPI';
 
-const _isNotBrowser = typeof window === 'undefined' || typeof document === 'undefined';
+const _isNotBrowser =
+  typeof window === 'undefined' || typeof document === 'undefined';
 
 let _debug = false;
 let _titleCase = true;
@@ -29,7 +30,10 @@ let _redactEmail = true;
 const internalGa = (...args) => {
   if (_testMode) return TestModeAPI.ga(...args);
   if (_isNotBrowser) return false;
-  if (!window.ga) return warn('ReactGA.initialize must be called first or GoogleAnalytics should be loaded manually');
+  if (!window.ga)
+    return warn(
+      'ReactGA.initialize must be called first or GoogleAnalytics should be loaded manually'
+    );
   return window.ga(...args);
 };
 
@@ -45,7 +49,8 @@ function _gaCommand(trackerNames, ...args) {
       return;
     }
 
-    if (_alwaysSendToDefaultTracker || !Array.isArray(trackerNames)) internalGa(...args);
+    if (_alwaysSendToDefaultTracker || !Array.isArray(trackerNames))
+      internalGa(...args);
     if (Array.isArray(trackerNames)) {
       trackerNames.forEach((name) => {
         internalGa(...[`${name}.${command}`].concat(args.slice(1)));
@@ -59,7 +64,6 @@ function _initialize(gaTrackingID, options) {
     warn('gaTrackingID is required in initialize()');
     return;
   }
-
   if (options) {
     if (options.debug && options.debug === true) {
       _debug = true;
@@ -85,7 +89,7 @@ function _initialize(gaTrackingID, options) {
   }
 }
 
-export function addTrackers(configsOrTrackingId) {
+export function addTrackers(configsOrTrackingId, options) {
   if (Array.isArray(configsOrTrackingId)) {
     configsOrTrackingId.forEach((config) => {
       if (typeof config !== 'object') {
@@ -98,23 +102,25 @@ export function addTrackers(configsOrTrackingId) {
     _initialize(configsOrTrackingId, options);
   }
   return true;
-} 
+}
 
 export function initialize(configsOrTrackingId, options) {
   if (options && options.testMode === true) {
     _testMode = true;
   } else {
     if (_isNotBrowser) {
-      return false;
+      return;
     }
 
     if (!options || options.standardImplementation !== true) loadGA(options);
   }
 
-  _alwaysSendToDefaultTracker = (options && typeof options.alwaysSendToDefaultTracker === 'boolean') ?
-    options.alwaysSendToDefaultTracker : true;
+  _alwaysSendToDefaultTracker =
+    options && typeof options.alwaysSendToDefaultTracker === 'boolean'
+      ? options.alwaysSendToDefaultTracker
+      : true;
 
-  addTrackers(configsOrTrackingId);
+  addTrackers(configsOrTrackingId, options);
 }
 
 /**
@@ -125,7 +131,7 @@ export function ga(...args) {
   if (args.length > 0) {
     internalGa(...args);
     if (_debug) {
-      log('called ga(\'arguments\');');
+      log("called ga('arguments');");
       log(`with arguments: ${JSON.stringify(args)}`);
     }
   }
@@ -157,7 +163,7 @@ export function set(fieldsObject, trackerNames) {
   _gaCommand(trackerNames, 'set', fieldsObject);
 
   if (_debug) {
-    log('called ga(\'set\', fieldsObject);');
+    log("called ga('set', fieldsObject);");
     log(`with fieldsObject: ${JSON.stringify(fieldsObject)}`);
   }
 }
@@ -173,7 +179,7 @@ export function set(fieldsObject, trackerNames) {
 export function send(fieldObject, trackerNames) {
   _gaCommand(trackerNames, 'send', fieldObject);
   if (_debug) {
-    log('called ga(\'send\', fieldObject);');
+    log("called ga('send', fieldObject);");
     log(`with fieldObject: ${JSON.stringify(fieldObject)}`);
     log(`with trackers: ${JSON.stringify(trackerNames)}`);
   }
@@ -211,7 +217,7 @@ export function pageview(rawPath, trackerNames, title) {
     });
 
     if (_debug) {
-      log('called ga(\'send\', \'pageview\', path);');
+      log("called ga('send', 'pageview', path);");
       let extraLog = '';
       if (title) {
         extraLog = ` and title: ${title}`;
@@ -246,7 +252,7 @@ export function modalview(rawModalName, trackerNames) {
     _gaCommand(trackerNames, 'send', 'pageview', path);
 
     if (_debug) {
-      log('called ga(\'send\', \'pageview\', path);');
+      log("called ga('send', 'pageview', path);");
       log(`with path: ${path}`);
     }
   }
@@ -261,17 +267,17 @@ export function modalview(rawModalName, trackerNames) {
  * @param args.label  {String} required
  * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
  */
-export function timing({
-  category,
-  variable,
-  value,
-  label
-} = {}, trackerNames) {
+export function timing(
+  { category, variable, value, label } = {},
+  trackerNames
+) {
   if (typeof ga === 'function') {
     if (!category || !variable || !value || typeof value !== 'number') {
-      warn('args.category, args.variable ' +
-        'AND args.value are required in timing() ' +
-        'AND args.value has to be a number');
+      warn(
+        'args.category, args.variable ' +
+          'AND args.value are required in timing() ' +
+          'AND args.value has to be a number'
+      );
       return;
     }
 
@@ -300,17 +306,12 @@ export function timing({
  * @param args.value {Int} optional
  * @param args.nonInteraction {boolean} optional
  * @param args.transport {string} optional
- * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
+ * @param {{action: string, category: string}} trackerNames - (optional) a list of extra trackers to run the command on
  */
-export function event({
-  category,
-  action,
-  label,
-  value,
-  nonInteraction,
-  transport,
-  ...args
-} = {}, trackerNames) {
+export function event(
+  { category, action, label, value, nonInteraction, transport, ...args } = {},
+  trackerNames
+) {
   if (typeof ga === 'function') {
     // Simple Validation
     if (!category || !action) {
@@ -351,7 +352,9 @@ export function event({
         warn('`args.transport` must be a string.');
       } else {
         if (['beacon', 'xhr', 'image'].indexOf(transport) === -1) {
-          warn('`args.transport` must be either one of these values: `beacon`, `xhr` or `image`');
+          warn(
+            '`args.transport` must be either one of these values: `beacon`, `xhr` or `image`'
+          );
         }
 
         fieldObject.transport = transport;
@@ -359,13 +362,13 @@ export function event({
     }
 
     Object.keys(args)
-      .filter(key => key.substr(0, 'dimension'.length) === 'dimension')
+      .filter((key) => key.substr(0, 'dimension'.length) === 'dimension')
       .forEach((key) => {
         fieldObject[key] = args[key];
       });
 
     Object.keys(args)
-      .filter(key => key.substr(0, 'metric'.length) === 'metric')
+      .filter((key) => key.substr(0, 'metric'.length) === 'metric')
       .forEach((key) => {
         fieldObject[key] = args[key];
       });
@@ -382,10 +385,7 @@ export function event({
  * @param args.fatal {boolean} optional
  * @param {Array} trackerNames - (optional) a list of extra trackers to run the command on
  */
-export function exception({
-  description,
-  fatal
-}, trackerNames) {
+export function exception({ description, fatal }, trackerNames) {
   if (typeof ga === 'function') {
     // Required Fields
     const fieldObject = {
@@ -472,10 +472,9 @@ export const plugin = {
     let actionType;
 
     if (args.length === 1) {
-      payload = args[0];
+      [payload] = args;
     } else {
-      actionType = args[0];
-      payload = args[1];
+      [actionType, payload] = args;
     }
 
     if (typeof ga === 'function') {
@@ -490,7 +489,11 @@ export const plugin = {
           ga(command, actionType, payload);
           if (_debug) {
             log(`called ga('${command}');`);
-            log(`actionType: "${actionType}" with payload: ${JSON.stringify(payload)}`);
+            log(
+              `actionType: "${actionType}" with payload: ${JSON.stringify(
+                payload
+              )}`
+            );
           }
         } else if (payload) {
           ga(command, payload);
