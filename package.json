@@ -14,7 +14,7 @@
     "lint": "eslint src/**/*.js src/*.js *.js test/**/*.{js,jsx} test/*.js demo/**/*.{js,jsx} demo/*.{js,jsx} --ext .js,.jsx",
     "prettier": "prettier --write demo/**/* src/**/* test/**/* types/**/* *.js *.ts",
     "preversion": "npm test && npm run lint",
-    "version": "node ./version-bower.js && npm run build && git add -A dist bower.json"
+    "version": "node ./version-bower.js && npm run build && git add -A bower.json"
   },
   "types": "./types/index.d.ts",
   "repository": {
