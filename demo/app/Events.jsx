@@ -34,17 +34,21 @@ export default class Events extends PureComponent {
         <h2>Events</h2>
         <p>Enter in details below to trigger an ReactGA.event call</p>
         <div>
-          category <input value={category} onChange={this.setValue.bind(this, 'category')} />
+          category{' '}
+          <input
+            value={category}
+            onChange={this.setValue.bind(this, 'category')}
+          />
         </div>
         <div>
-          action <input value={action} onChange={this.setValue.bind(this, 'action')} />
+          action{' '}
+          <input value={action} onChange={this.setValue.bind(this, 'action')} />
         </div>
         <div>
-          label <input value={label} onChange={this.setValue.bind(this, 'label')} />
+          label{' '}
+          <input value={label} onChange={this.setValue.bind(this, 'label')} />
         </div>
-        <button type="submit">
-          Send Event.
-        </button>
+        <button type="submit">Send Event.</button>
       </form>
     );
   }

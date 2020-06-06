@@ -1,2 +1,2 @@
-export { default as default } from "./types/index";
-export * from "./types/index";
+export { default } from './types/index';
+export * from './types/index';

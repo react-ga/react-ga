@@ -1,43 +1,54 @@
-import should from 'should';
-import sinon from 'sinon';
-
 import format from '../../src/utils/format';
 
-describe('format()', function () {
-  it('should not format when redactingEmail is false', function () {
+describe('format()', () => {
+  it('should not format when redactingEmail is false', () => {
     const titleCase = false;
     const redactingEmail = false;
-    format('hi@example.com', titleCase, redactingEmail).should.eql('hi@example.com');
-    format('hey.ho@letsgo.com', titleCase, redactingEmail).should.eql('hey.ho@letsgo.com');
-    format('abc@xyz.com.uk', titleCase, redactingEmail).should.eql('abc@xyz.com.uk');
+    expect(format('hi@example.com', titleCase, redactingEmail)).toEqual(
+      'hi@example.com'
+    );
+    expect(format('hey.ho@letsgo.com', titleCase, redactingEmail)).toEqual(
+      'hey.ho@letsgo.com'
+    );
+    expect(format('abc@xyz.com.uk', titleCase, redactingEmail)).toEqual(
+      'abc@xyz.com.uk'
+    );
   });
 
-  it('should not format email addresses', function () {
-    sinon.stub(console, 'warn');
-    console.warn.callCount.should.eql(0);
-    format('hi@example.com').should.eql('REDACTED (Potential Email Address)');
-    console.warn.callCount.should.eql(1);
-    format('hey.ho@letsgo.com').should.eql('REDACTED (Potential Email Address)');
-    console.warn.callCount.should.eql(2);
-    format('abc@xyz.com.uk').should.eql('REDACTED (Potential Email Address)');
-    console.warn.callCount.should.eql(3);
-    console.warn.restore();
+  it('should not format email addresses', () => {
+    const warnSpy = jest
+      .spyOn(global.console, 'warn')
+      .mockImplementation(() => {});
+    expect(warnSpy).toHaveBeenCalledTimes(0);
+    expect(format('hi@example.com')).toEqual(
+      'REDACTED (Potential Email Address)'
+    );
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(format('hey.ho@letsgo.com')).toEqual(
+      'REDACTED (Potential Email Address)'
+    );
+    expect(warnSpy).toHaveBeenCalledTimes(2);
+    expect(format('abc@xyz.com.uk')).toEqual(
+      'REDACTED (Potential Email Address)'
+    );
+    expect(warnSpy).toHaveBeenCalledTimes(3);
+    jest.restoreAllMocks();
   });
 
-  it('should format non-email addresses', function () {
-    format('mystring').should.eql('mystring');
-    format('mystring', true).should.eql('Mystring');
-    format('foo bar').should.eql('foo bar');
-    format('foo bar', true).should.eql('Foo Bar');
-    format('foo_bar').should.eql('foo_bar');
-    format('foo_bar', true).should.eql('Foo_bar');
-    format('foo.bar').should.eql('foo.bar');
-    format('foo.bar', true).should.eql('foo.bar');
-    format('FOO_BAR').should.eql('FOO_BAR');
-    format('FOO_BAR', true).should.eql('FOO_BAR');
-    format('123456789').should.eql('123456789');
-    format('123456789', true).should.eql('123456789');
-    format('the quick brown fox').should.eql('the quick brown fox');
-    format('the quick brown fox', true).should.eql('The Quick Brown Fox');
+  it('should format non-email addresses', () => {
+    expect(format('mystring')).toEqual('mystring');
+    expect(format('mystring', true)).toEqual('Mystring');
+    expect(format('foo bar')).toEqual('foo bar');
+    expect(format('foo bar', true)).toEqual('Foo Bar');
+    expect(format('foo_bar')).toEqual('foo_bar');
+    expect(format('foo_bar', true)).toEqual('Foo_bar');
+    expect(format('foo.bar')).toEqual('foo.bar');
+    expect(format('foo.bar', true)).toEqual('foo.bar');
+    expect(format('FOO_BAR')).toEqual('FOO_BAR');
+    expect(format('FOO_BAR', true)).toEqual('FOO_BAR');
+    expect(format('123456789')).toEqual('123456789');
+    expect(format('123456789', true)).toEqual('123456789');
+    expect(format('the quick brown fox')).toEqual('the quick brown fox');
+    expect(format('the quick brown fox', true)).toEqual('The Quick Brown Fox');
   });
 });

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 const fs = require('fs-extra');
 
 const mainPackage = require('./package.json');

@@ -1,18 +1,18 @@
-import should from 'should';
-
 import mightBeEmail from '../../src/utils/mightBeEmail';
 
-describe('mightBeEmail()', function () {
-  it('should return `true` for possible emails', function () {
-    mightBeEmail('email@example.com').should.eql(true);
-    mightBeEmail('hey.ho@letsgo.com').should.eql(true);
-    mightBeEmail('abc@xyz.com.uk').should.eql(true);
+describe('mightBeEmail()', () => {
+  it('should return `true` for possible emails', () => {
+    expect(mightBeEmail('email@example.com')).toEqual(true);
+    expect(mightBeEmail('hey.ho@letsgo.com')).toEqual(true);
+    expect(mightBeEmail('abc@xyz.com.uk')).toEqual(true);
   });
 
-  it('should return `false` for non-emails', function () {
-    mightBeEmail('John Doe').should.eql(false);
-    mightBeEmail('123456789').should.eql(false);
-    mightBeEmail('foo').should.eql(false);
-    mightBeEmail('The quick brown fox jumps over the lazy dog.').should.eql(false);
+  it('should return `false` for non-emails', () => {
+    expect(mightBeEmail('John Doe')).toEqual(false);
+    expect(mightBeEmail('123456789')).toEqual(false);
+    expect(mightBeEmail('foo')).toEqual(false);
+    expect(
+      mightBeEmail('The quick brown fox jumps over the lazy dog.')
+    ).toEqual(false);
   });
 });

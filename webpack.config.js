@@ -1,6 +1,6 @@
 const path = require('path');
-const pkg = require('./package.json');
 const TerserPlugin = require('terser-webpack-plugin');
+const pkg = require('./package.json');
 
 module.exports = {
   entry: {
@@ -13,7 +13,7 @@ module.exports = {
     path: path.resolve('./dist'),
     filename: '[name].js',
     libraryTarget: 'umd',
-    globalObject: 'typeof self !== \'undefined\' ? self : this' // temporary fix for https://github.com/webpack/webpack/issues/6525
+    globalObject: "typeof self !== 'undefined' ? self : this" // temporary fix for https://github.com/webpack/webpack/issues/6525
   },
   externals: []
     .concat(Object.keys(pkg.peerDependencies))
