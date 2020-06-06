@@ -1,102 +1,116 @@
-import should from 'should';
-import sinon from 'sinon';
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import OutboundLink, { __RewireAPI__ as RewireAPI } from '../../src/components/OutboundLink';
-import { __RewireAPI__ as GARewireAPI } from '../../src/index';
+import OutboundLink from '../../src/components/OutboundLink';
+
+jest.mock('../../src/utils/loadGA');
 
 /**
  * <OutboundLink> React components
  */
 
-describe('<OutboundLink> React component', function () {
+describe('<OutboundLink> React component', () => {
   let renderedOutboundLink;
   let warnSpy;
 
-  beforeEach(function () {
-    warnSpy = sinon.spy();
-    RewireAPI.__Rewire__('warn', warnSpy);
-    GARewireAPI.__Rewire__('warn', warnSpy);
+  beforeEach(() => {
+    warnSpy = jest.spyOn(global.console, 'warn').mockImplementation(() => {});
     renderedOutboundLink = shallow(<OutboundLink eventLabel="" />);
   });
 
-  afterEach(function () {
+  afterEach(() => {
     renderedOutboundLink = null;
-    RewireAPI.__ResetDependency__('warn');
-    GARewireAPI.__ResetDependency__('warn');
+    jest.restoreAllMocks();
   });
 
-  it('should create an <a> DOM node', function () {
-    renderedOutboundLink.type().should.eql('a');
+  it('should create an <a> DOM node', () => {
+    expect(renderedOutboundLink.type()).toEqual('a');
   });
 
-  it('should have `href` set in the underlying <a> DOM node', function () {
+  it('should have `href` set in the underlying <a> DOM node', () => {
     const destinationUrl = 'http://example.com/';
-    renderedOutboundLink = shallow(<OutboundLink to={destinationUrl} eventLabel="" />);
-    renderedOutboundLink.prop('href').should.eql(destinationUrl);
+    renderedOutboundLink = shallow(
+      <OutboundLink to={destinationUrl} eventLabel="" />
+    );
+    expect(renderedOutboundLink.prop('href')).toEqual(destinationUrl);
   });
 
-  it('should raise warning if ga module is not available', function () {
-    const OutboundLinkComponent = React.createElement(OutboundLink, { eventLabel: '' });
-    warnSpy.callCount.should.eql(0);
+  it('should raise warning if ga module is not available', () => {
+    const OutboundLinkComponent = React.createElement(OutboundLink, {
+      eventLabel: ''
+    });
+    expect(warnSpy).toHaveBeenCalledTimes(0);
     if (OutboundLink.origTrackLink) {
       // OutboundLink.trackLink has already been replaced in react-ga
       OutboundLinkComponent.type.trackLink = OutboundLink.origTrackLink;
     }
 
-    OutboundLinkComponent.type.trackLink({}, function () {
-    });
+    OutboundLinkComponent.type.trackLink({}, () => {});
 
-    warnSpy.callCount.should.eql(1);
-    warnSpy.getCall(0).args.should.eql([
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(warnSpy).toHaveBeenCalledWith(
+      '[react-ga]',
       'ga tracking not enabled'
-    ]);
+    );
   });
 
-  it('should call ga.outboundLink in its onClick event handler', function () {
-    const fakeOutboundLinkFunc = sinon.spy();
+  it('should call ga.outboundLink in its onClick event handler', () => {
+    const fakeOutboundLinkFunc = jest.fn();
     const fakeGA = { outboundLink: fakeOutboundLinkFunc };
-    const OutboundLinkComponent = React.createElement(OutboundLink, { eventLabel: '' });
+    const OutboundLinkComponent = React.createElement(OutboundLink, {
+      eventLabel: ''
+    });
     OutboundLinkComponent.type.trackLink = fakeGA.outboundLink;
     renderedOutboundLink = shallow(OutboundLinkComponent);
-    fakeOutboundLinkFunc.callCount.should.eql(0);
+    expect(fakeOutboundLinkFunc).toHaveBeenCalledTimes(0);
     renderedOutboundLink.simulate('click', { preventDefault: () => {} });
-    fakeOutboundLinkFunc.callCount.should.eql(1);
+    expect(fakeOutboundLinkFunc).toHaveBeenCalledTimes(1);
   });
 
-  it('should pass eventLabel prop to ga.outboundLink', function () {
-    const fakeOutboundLinkFunc = sinon.spy();
-    const fakeGA = { outboundLink: fakeOutboundLinkFunc };
-    const OutboundLinkComponent = React.createElement(OutboundLink, { eventLabel: 'helloworld' });
-    OutboundLinkComponent.type.trackLink = fakeGA.outboundLink;
+  it('should pass eventLabel prop to ga.outboundLink', () => {
+    const fakeOutboundLinkFunc = jest.fn();
+    const OutboundLinkComponent = React.createElement(OutboundLink, {
+      eventLabel: 'helloworld'
+    });
+    OutboundLinkComponent.type.trackLink = fakeOutboundLinkFunc;
     renderedOutboundLink = shallow(OutboundLinkComponent);
     renderedOutboundLink.simulate('click', { preventDefault: () => {} });
-    fakeOutboundLinkFunc.getCall(0).args[0].label.should.eql('helloworld');
+    expect(fakeOutboundLinkFunc).toHaveBeenCalledWith(
+      { label: 'helloworld' },
+      expect.anything(),
+      null
+    );
   });
 
-  it('should pass trackerNames prop to ga.outboundLink', function () {
-    const fakeOutboundLinkFunc = sinon.spy();
-    const fakeGA = { outboundLink: fakeOutboundLinkFunc };
+  it('should pass trackerNames prop to ga.outboundLink', () => {
+    const fakeOutboundLinkFunc = jest.fn();
     const props = { eventLabel: 'helloworld', trackerNames: ['tracker2'] };
     const OutboundLinkComponent = React.createElement(OutboundLink, props);
-    OutboundLinkComponent.type.trackLink = fakeGA.outboundLink;
+    OutboundLinkComponent.type.trackLink = fakeOutboundLinkFunc;
     renderedOutboundLink = shallow(OutboundLinkComponent);
     renderedOutboundLink.simulate('click', { preventDefault: () => {} });
-    fakeOutboundLinkFunc.getCall(0).args[2].should.eql(['tracker2']);
+    expect(fakeOutboundLinkFunc).toHaveBeenCalledWith(
+      { label: 'helloworld' },
+      expect.anything(),
+      ['tracker2']
+    );
   });
 
-  it('should call preserve onClick prop in onClick event handler', function () {
-    const onComponentClick = sinon.spy();
-    renderedOutboundLink = shallow(<OutboundLink eventLabel="" onClick={onComponentClick} />);
-    onComponentClick.callCount.should.eql(0);
+  it('should call preserve onClick prop in onClick event handler', () => {
+    const onComponentClick = jest.fn();
+    renderedOutboundLink = shallow(
+      <OutboundLink eventLabel="" onClick={onComponentClick} />
+    );
+    expect(onComponentClick).toHaveBeenCalledTimes(0);
     renderedOutboundLink.simulate('click', { preventDefault: () => {} });
-    onComponentClick.callCount.should.eql(1);
+    expect(onComponentClick).toHaveBeenCalledTimes(1);
   });
 
-  it('should add rel=`noopener noreferrer` to a link if the target is _blank', function () {
+  it('should add rel=`noopener noreferrer` to a link if the target is _blank', () => {
     const destinationUrl = 'http://example.com/';
-    renderedOutboundLink = shallow(<OutboundLink to={destinationUrl} eventLabel="" target="_blank" />);
-    renderedOutboundLink.prop('rel').should.eql('noopener noreferrer');
+    renderedOutboundLink = shallow(
+      <OutboundLink to={destinationUrl} eventLabel="" target="_blank" />
+    );
+    expect(renderedOutboundLink.prop('rel')).toEqual('noopener noreferrer');
   });
 });

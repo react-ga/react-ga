@@ -16,12 +16,17 @@ export default function withTracker(WrappedComponent, options = {}) {
 
   const HOC = class extends Component {
     componentDidMount() {
-      const page = this.props.location.pathname;
+      const {
+        location: { pathname: page }
+      } = this.props;
       trackPage(page);
     }
 
-    componentWillReceiveProps(nextProps) {
-      const currentPage = this.props.location.pathname;
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillReceiveProps(nextProps) {
+      const {
+        location: { pathname: currentPage }
+      } = this.props;
       const nextPage = nextProps.location.pathname;
 
       if (currentPage !== nextPage) {

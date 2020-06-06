@@ -3,11 +3,15 @@
   "plugins": ["@babel/plugin-proposal-class-properties"],
   "env": {
     "umd": {
-      "presets": [["@babel/env", { "modules": "commonjs" }]],
+      "presets": [["@babel/env", { "modules": "commonjs" }]]
     },
     "test": {
-      "presets": [["@babel/env", { "modules": "commonjs" }]],
-      "plugins": ["istanbul", "rewire"]
+      "presets": [
+        [
+          "@babel/env",
+          { "modules": "commonjs", "targets": { "node": "current" } }
+        ]
+      ]
     }
   }
 }

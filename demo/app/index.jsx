@@ -11,17 +11,18 @@ function asDisplayString(value) {
 function renderConfigString(config, indent = '') {
   return [
     '{',
-    ...Object.keys(config).map((key) => {
-      if (config[key] === undefined || config[key] === null) return '';
-      return `\t${key}: ${asDisplayString(config[key])}`;
-    }).filter(value => value),
+    ...Object.keys(config)
+      .map((key) => {
+        if (config[key] === undefined || config[key] === null) return '';
+        return `\t${key}: ${asDisplayString(config[key])}`;
+      })
+      .filter((value) => value),
     '}'
-  ].reduce(
-    (result, element, index, array) => {
-      return `${result}${indent}${element}${index < array.length - 1 ? '\n' : ''}`;
-    },
-    ''
-  );
+  ].reduce((result, element, index, array) => {
+    return `${result}${indent}${element}${
+      index < array.length - 1 ? '\n' : ''
+    }`;
+  }, '');
 }
 
 const DEFAULT_CONFIG = {
@@ -43,7 +44,8 @@ export default class App extends PureComponent {
   }
 
   filteredConfigs = () => {
-    return this.state.configs.filter(({ trackingId: id }) => id);
+    const { configs } = this.state;
+    return configs.filter(({ trackingId: id }) => id);
   };
 
   initReactGA = (event) => {
@@ -51,20 +53,23 @@ export default class App extends PureComponent {
     if (this.filteredConfigs().length === 0) {
       return;
     }
-    ReactGA.initialize(this.state.configs);
+    const { configs } = this.state;
+    ReactGA.initialize(configs);
     // Send initial test view
     ReactGA.pageview('test-init-pageview');
     this.setState({ reactGaInitialised: true });
   };
 
   addConfig = () => {
+    const { configs } = this.state;
     this.setState({
-      configs: [...this.state.configs, DEFAULT_CONFIG]
+      configs: [configs, DEFAULT_CONFIG]
     });
   };
 
   updateConfig = (configIndex, key, type, event) => {
-    const config = this.state.configs[configIndex];
+    const { configs } = this.state;
+    const config = configs[configIndex];
     let value;
     if (type === 'checkbox') {
       value = !config[key];
@@ -77,9 +82,9 @@ export default class App extends PureComponent {
     };
     this.setState({
       configs: [
-        ...this.state.configs.slice(0, configIndex),
+        ...configs.slice(0, configIndex),
         newConfig,
-        ...this.state.configs.slice(configIndex + 1)
+        ...configs.slice(configIndex + 1)
       ]
     });
   };
@@ -89,14 +94,18 @@ export default class App extends PureComponent {
     if (configs.length === 0) return '';
     if (configs.length === 1) {
       const { trackingId, ...options } = configs[0];
-      return `'${trackingId}'${Object.values(options).filter(val => val).length ? `, ${JSON.stringify(options)}` : ''}`;
+      return `'${trackingId}'${
+        Object.values(options).filter((val) => val).length
+          ? `, ${JSON.stringify(options)}`
+          : ''
+      }`;
     }
-    return `[\n${
-      configs.reduce((result, config, index, array) => {
-        const configString = renderConfigString(config, '\t');
-        return `${result}${result ? '\n' : ''}${configString}${index < array.length - 1 ? ',' : ''}`;
-      }, '')
-    }\n]`;
+    return `[\n${configs.reduce((result, config, index, array) => {
+      const configString = renderConfigString(config, '\t');
+      return `${result}${result ? '\n' : ''}${configString}${
+        index < array.length - 1 ? ',' : ''
+      }`;
+    }, '')}\n]`;
   };
 
   render() {
@@ -111,7 +120,9 @@ export default class App extends PureComponent {
     }
     let initializationDebug = (
       <pre>
-        ReactGA.initialize({this.renderConfigs()});
+        ReactGA.initialize(
+        {this.renderConfigs()}
+        );
       </pre>
     );
     if (this.filteredConfigs().length === 0) {
@@ -124,19 +135,36 @@ export default class App extends PureComponent {
           <div key={index}>
             <div>
               TrackingID:&nbsp;
-              <input value={trackingId} onChange={this.updateConfig.bind(this, index, 'trackingId', 'text')} />
+              <input
+                value={trackingId}
+                onChange={this.updateConfig.bind(
+                  this,
+                  index,
+                  'trackingId',
+                  'text'
+                )}
+              />
               &nbsp;Debug&nbsp;
               <input
                 type="checkbox"
                 checked={debug || false}
-                onChange={this.updateConfig.bind(this, index, 'debug', 'checkbox')}
+                onChange={this.updateConfig.bind(
+                  this,
+                  index,
+                  'debug',
+                  'checkbox'
+                )}
               />
             </div>
           </div>
         ))}
-        <button type="button" onClick={this.addConfig}>Add Config</button>
+        <button type="button" onClick={this.addConfig}>
+          Add Config
+        </button>
         <button type="submit" disabled={configs.length < 1}>
-          {configs.length < 1 ? 'Add Configs first' : 'Run the initialize function as below'}
+          {configs.length < 1
+            ? 'Add Configs first'
+            : 'Run the initialize function as below'}
         </button>
         {initializationDebug}
       </form>

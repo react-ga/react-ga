@@ -1,15 +1,14 @@
-import should from 'should';
-import sinon from 'sinon';
-
 import log from '../../../src/utils/console/log';
 
-describe('log()', function () {
-  it('should append [react-ga] to log messages', function () {
-    sinon.stub(console, 'info');
-    console.info.callCount.should.eql(0);
+describe('log()', () => {
+  it('should append [react-ga] to log messages', () => {
+    const logSpy = jest
+      .spyOn(global.console, 'info')
+      .mockImplementation(() => {});
+    expect(logSpy).toHaveBeenCalledTimes(0);
     log('foo bar');
-    console.info.callCount.should.eql(1);
-    console.info.getCall(0).args.should.eql(['[react-ga]', 'foo bar']);
-    console.info.restore();
+    expect(logSpy).toHaveBeenCalledTimes(1);
+    expect(logSpy).toHaveBeenCalledWith('[react-ga]', 'foo bar');
+    jest.restoreAllMocks();
   });
 });
