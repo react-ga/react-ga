@@ -79,6 +79,20 @@ describe('timing()', () => {
     );
   });
 
+  it('should not warn if value arg is 0, a falsy number', () => {
+    ReactGA.initialize('foo');
+    ReactGA.timing({
+      category: 'Test',
+      variable: 'Timing test',
+      value: 0
+    });
+    expect(spies.warn).not.toHaveBeenCalledWith(
+      '[react-ga]',
+      'args.category, args.variable AND args.value are required in timing() ' +
+        'AND args.value has to be a number'
+    );
+  });
+
   it('should warn if value arg is not a number', () => {
     ReactGA.initialize('foo');
     ReactGA.timing({

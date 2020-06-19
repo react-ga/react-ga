@@ -272,7 +272,7 @@ export function timing(
   trackerNames
 ) {
   if (typeof ga === 'function') {
-    if (!category || !variable || !value || typeof value !== 'number') {
+    if (!category || !variable || typeof value !== 'number') {
       warn(
         'args.category, args.variable ' +
           'AND args.value are required in timing() ' +
