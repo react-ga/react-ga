@@ -6,6 +6,8 @@ export default function (options) {
     gaAddress = 'https://www.google-analytics.com/analytics_debug.js';
   }
 
+  const onerror = options && options.onerror;
+
   // https://developers.google.com/analytics/devguides/collection/analyticsjs/
   /* eslint-disable */
   (function (i, s, o, g, r, a, m) {
@@ -19,6 +21,7 @@ export default function (options) {
     (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
     a.async = 1;
     a.src = g;
+    a.onerror = onerror;
     m.parentNode.insertBefore(a, m);
   })(window, document, 'script', gaAddress, 'ga');
   /* eslint-enable */
