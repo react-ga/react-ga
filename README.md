@@ -506,30 +506,9 @@ ReactGA.initialize('UA-XXX-X', { standardImplementation: true });
 npm test
 ```
 
-### Submitting a PR
+### Submitting changes/fixes
 
-- Always work on a new branch
-- Submit Pull Requests against `master`
-
-1. Open a PR
-1. Request code review
-1. Complete code review with fixes
-1. Merge the PR
-1. Then, bump the version as below
-
-The regenerated `dist` files should not be committed until the review has been R+'d and merged, since it's much easier to do the code review without the `dist` clutter getting in the way.
-
-### To Ship (i.e bump the version number)
-
-```bash
-git pull...
-gulp build
-mversion patch
-git add .
-git commit...
-git push...
-npm publish
-```
+Follow instructions inside [CONTRIBUTING.md](https://github.com/react-ga/react-ga/blob/master/CONTRIBUTING.md)
 
 ---
 
