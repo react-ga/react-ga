@@ -48,6 +48,7 @@ export interface GaOptions {
   cookieName?: string;
   cookieDomain?: string;
   cookieExpires?: number;
+  cookieUpdate?: boolean;
   legacyCookieDomain?: string;
   legacyHistoryImport?: boolean;
   allowLinker?: boolean;
