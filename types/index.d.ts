@@ -36,6 +36,48 @@ export interface EventArgs {
    * depending on hit size.
    */
   transport?: 'beacon' | 'xhr' | 'image';
+  /** Custom dimensions */
+  dimension1?: string;
+  dimension2?: string;
+  dimension3?: string;
+  dimension4?: string;
+  dimension5?: string;
+  dimension6?: string;
+  dimension7?: string;
+  dimension8?: string;
+  dimension9?: string;
+  dimension10?: string;
+  dimension11?: string;
+  dimension12?: string;
+  dimension13?: string;
+  dimension14?: string;
+  dimension15?: string;
+  dimension16?: string;
+  dimension17?: string;
+  dimension18?: string;
+  dimension19?: string;
+  dimension20?: string;
+  /** Custom metrics */
+  metric1?: number;
+  metric2?: number;
+  metric3?: number;
+  metric4?: number;
+  metric5?: number;
+  metric6?: number;
+  metric7?: number;
+  metric8?: number;
+  metric9?: number;
+  metric10?: number;
+  metric11?: number;
+  metric12?: number;
+  metric13?: number;
+  metric14?: number;
+  metric15?: number;
+  metric16?: number;
+  metric17?: number;
+  metric18?: number;
+  metric19?: number;
+  metric20?: number;
 }
 
 export interface GaOptions {
