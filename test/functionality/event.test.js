@@ -282,4 +282,40 @@ describe('event()', () => {
       hitType: 'event'
     });
   });
+
+  it('should send custom dimensions with the event payload', () => {
+    ReactGA.initialize('foo');
+    ReactGA.event({
+      category: 'Test',
+      action: 'Send Test',
+      dimension1: 'foo',
+      dimension20: 'bar'
+    });
+
+    expect(spies.ga).toHaveBeenCalledWith('send', {
+      eventAction: 'Send Test',
+      eventCategory: 'Test',
+      hitType: 'event',
+      dimension1: 'foo',
+      dimension20: 'bar'
+    });
+  });
+
+  it('should send custom metrics with the event payload', () => {
+    ReactGA.initialize('foo');
+    ReactGA.event({
+      category: 'Test',
+      action: 'Send Test',
+      metric1: 1,
+      metric20: 2.6
+    });
+
+    expect(spies.ga).toHaveBeenCalledWith('send', {
+      eventAction: 'Send Test',
+      eventCategory: 'Test',
+      hitType: 'event',
+      metric1: 1,
+      metric20: 2.6
+    });
+  });
 });
