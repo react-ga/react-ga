@@ -80,6 +80,27 @@ describe('Testing react-ga event calls', () => {
 
     ga.event(options, ['blah']);
   });
+
+  it('Able to pass custom dimensions with events', () => {
+    const payloadWithDimensions: ga.EventArgs = {
+      dimension1: 'foo',
+      dimension20: 'bar',
+      ...options
+    }
+    ga.initialize('UA-65432-1');
+
+    ga.event(payloadWithDimensions);
+  });
+
+  it('Able to pass custom metrics with events', () => {
+    const payloadWithmetrics: ga.EventArgs = {
+      metric1: 1,
+      metric20: 2.99,
+      ...options
+    }
+    ga.initialize('UA-65432-1');
+
+    ga.event(payloadWithmetrics);
 });
 
 describe('Testing react-ga set calls', () => {
