@@ -145,7 +145,7 @@ describe('event()', () => {
     });
   });
 
-  it('should record a value value', () => {
+  it('should record a value', () => {
     ReactGA.initialize('foo');
     ReactGA.event({ category: 'Test', action: 'Send Test', value: 10 });
     expect(spies.ga).toHaveBeenCalledTimes(2);
@@ -158,7 +158,7 @@ describe('event()', () => {
     });
   });
 
-  it('should record a value value of zero', () => {
+  it('should record a value of zero', () => {
     ReactGA.initialize('foo');
     ReactGA.event({ category: 'Test', action: 'Send Test', value: 0 });
     expect(spies.ga).toHaveBeenCalledTimes(2);
