@@ -113,4 +113,19 @@ describe('<OutboundLink> React component', () => {
     );
     expect(renderedOutboundLink.prop('rel')).toEqual('noopener noreferrer');
   });
+
+  it('should add custom rel tags if the target is _blank', () => {
+    const destinationUrl = 'http://example.com/';
+    renderedOutboundLink = shallow(
+      <OutboundLink
+        to={destinationUrl}
+        eventLabel=""
+        target="_blank"
+        rel="nofollow"
+      />
+    );
+    expect(renderedOutboundLink.prop('rel')).toEqual(
+      'nofollow noopener noreferrer'
+    );
+  });
 });
