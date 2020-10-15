@@ -50,7 +50,7 @@ export default class OutboundLink extends Component {
     };
 
     if (target === NEWTAB) {
-      props.rel = 'noopener noreferrer';
+      props.rel = `${props.rel ? props.rel : ''} noopener noreferrer`.trim();
     }
 
     delete props.eventLabel;
