@@ -1,4 +1,4 @@
-let isLoaded = false
+let isLoaded = false;
 export default function (options) {
   if (isLoaded) return;
   isLoaded = true;
