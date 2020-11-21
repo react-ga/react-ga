@@ -1,4 +1,7 @@
+let isLoaded = false
 export default function (options) {
+  if (isLoaded) return;
+  isLoaded = true;
   let gaAddress = 'https://www.google-analytics.com/analytics.js';
   if (options && options.gaAddress) {
     gaAddress = options.gaAddress;
