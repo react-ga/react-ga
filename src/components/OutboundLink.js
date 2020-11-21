@@ -11,32 +11,26 @@ export default class OutboundLink extends Component {
     warn('ga tracking not enabled');
   };
 
-  static propTypes = {
-    eventLabel: PropTypes.string.isRequired,
-    target: PropTypes.string,
-    to: PropTypes.string,
-    onClick: PropTypes.func,
-    trackerNames: PropTypes.arrayOf(PropTypes.string)
-  };
-
-  static defaultProps = {
-    target: null,
-    to: null,
-    onClick: null,
-    trackerNames: null
-  };
-
   handleClick = (event) => {
     const { target, eventLabel, to, onClick, trackerNames } = this.props;
     const eventMeta = { label: eventLabel };
     const sameTarget = target !== NEWTAB;
-    const normalClick = !(event.ctrlKey || event.shiftKey || event.metaKey || event.button === MIDDLECLICK);
+    const normalClick = !(
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.metaKey ||
+      event.button === MIDDLECLICK
+    );
 
     if (sameTarget && normalClick) {
       event.preventDefault();
-      OutboundLink.trackLink(eventMeta, () => {
-        window.location.href = to;
-      }, trackerNames);
+      OutboundLink.trackLink(
+        eventMeta,
+        () => {
+          window.location.href = to;
+        },
+        trackerNames
+      );
     } else {
       OutboundLink.trackLink(eventMeta, () => {}, trackerNames);
     }
@@ -47,15 +41,16 @@ export default class OutboundLink extends Component {
   };
 
   render() {
-    const { to: href, ...oldProps } = this.props;
+    const { to: href, target, ...oldProps } = this.props;
     const props = {
       ...oldProps,
+      target,
       href,
       onClick: this.handleClick
     };
 
-    if (this.props.target === NEWTAB) {
-      props.rel = 'noopener noreferrer';
+    if (target === NEWTAB) {
+      props.rel = `${props.rel ? props.rel : ''} noopener noreferrer`.trim();
     }
 
     delete props.eventLabel;
@@ -63,3 +58,18 @@ export default class OutboundLink extends Component {
     return React.createElement('a', props);
   }
 }
+
+OutboundLink.propTypes = {
+  eventLabel: PropTypes.string.isRequired,
+  target: PropTypes.string,
+  to: PropTypes.string,
+  onClick: PropTypes.func,
+  trackerNames: PropTypes.arrayOf(PropTypes.string)
+};
+
+OutboundLink.defaultProps = {
+  target: null,
+  to: null,
+  onClick: null,
+  trackerNames: null
+};

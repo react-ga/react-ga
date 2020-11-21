@@ -1,6 +1,6 @@
 const path = require('path');
-const baseConfig = require('../webpack.config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const baseConfig = require('../webpack.config');
 
 module.exports = {
   entry: './demo/index.jsx',
@@ -12,7 +12,5 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   module: baseConfig.module,
-  plugins: [
-    new HtmlWebpackPlugin()
-  ]
+  plugins: [new HtmlWebpackPlugin()]
 };

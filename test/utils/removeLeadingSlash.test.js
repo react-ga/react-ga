@@ -1,15 +1,17 @@
-import should from 'should';
-
 import removeLeadingSlash from '../../src/utils/removeLeadingSlash';
 
-describe('removeLeadingSlash()', function () {
-  it('should remove leading slashes', function () {
-    removeLeadingSlash('/mymodal').should.eql('mymodal');
-    removeLeadingSlash('/mymodal/is/awesome').should.eql('mymodal/is/awesome');
+describe('removeLeadingSlash()', () => {
+  it('should remove leading slashes', () => {
+    expect(removeLeadingSlash('/mymodal')).toEqual('mymodal');
+    expect(removeLeadingSlash('/mymodal/is/awesome')).toEqual(
+      'mymodal/is/awesome'
+    );
   });
 
-  it('should not modify the string if there is no leading slash', function () {
-    removeLeadingSlash('mymodal').should.eql('mymodal');
-    removeLeadingSlash('mymodal/is/awesome').should.eql('mymodal/is/awesome');
+  it('should not modify the string if there is no leading slash', () => {
+    expect(removeLeadingSlash('mymodal')).toEqual('mymodal');
+    expect(removeLeadingSlash('mymodal/is/awesome')).toEqual(
+      'mymodal/is/awesome'
+    );
   });
 });

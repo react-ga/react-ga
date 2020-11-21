@@ -2,5 +2,5 @@
 // browsers have String.prototoype.trim().
 
 export default function trim(s) {
-  return s.replace(/^\s+|\s+$/g, '');
+  return s && s.toString().replace(/^\s+|\s+$/g, '');
 }

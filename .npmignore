@@ -13,3 +13,4 @@ webpack.config.js
 /coverage
 /.nyc_output
 .babelrc
+/build

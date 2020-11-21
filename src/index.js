@@ -1,18 +1,19 @@
 import UnboundOutboundLink from './components/OutboundLink';
 import * as Defaults from './core';
 
-export const initialize = Defaults.initialize;
-export const ga = Defaults.ga;
-export const set = Defaults.set;
-export const send = Defaults.send;
-export const pageview = Defaults.pageview;
-export const modalview = Defaults.modalview;
-export const timing = Defaults.timing;
-export const event = Defaults.event;
-export const exception = Defaults.exception;
-export const plugin = Defaults.plugin;
-export const outboundLink = Defaults.outboundLink;
-export const testModeAPI = Defaults.testModeAPI;
+export const { initialize } = Defaults;
+export const { addTrackers } = Defaults;
+export const { ga } = Defaults;
+export const { set } = Defaults;
+export const { send } = Defaults;
+export const { pageview } = Defaults;
+export const { modalview } = Defaults;
+export const { timing } = Defaults;
+export const { event } = Defaults;
+export const { exception } = Defaults;
+export const { plugin } = Defaults;
+export const { outboundLink } = Defaults;
+export const { testModeAPI } = Defaults;
 
 UnboundOutboundLink.origTrackLink = UnboundOutboundLink.trackLink;
 UnboundOutboundLink.trackLink = Defaults.outboundLink;

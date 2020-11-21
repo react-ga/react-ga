@@ -1,10 +1,10 @@
 import * as ReactGA from '../../src/index';
 
-describe('test mode', function () {
-  it('should send the correct arguments to window.ga when arguments are passed', function () {
+describe('test mode', () => {
+  it('should send the correct arguments to window.ga when arguments are passed', () => {
     ReactGA.initialize('foo', { testMode: true });
     ReactGA.ga('send', 'pageview', '/mypage');
-    ReactGA.testModeAPI.calls.should.eql([
+    expect(ReactGA.testModeAPI.calls).toStrictEqual([
       ['create', 'foo', 'auto'],
       ['send', 'pageview', '/mypage']
     ]);
