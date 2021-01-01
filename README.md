@@ -391,7 +391,7 @@ ReactGA.exception({
 | Value            | Notes                                                          |
 | ---------------- | -------------------------------------------------------------- |
 | args.description | `String`. Optional. Description of what happened.              |
-| args.fatal       | `String`. Optional. Set to `true` if it was a fatal exception. |
+| args.fatal       | `boolean`. Optional. Set to `true` if it was a fatal exception. |
 
 #### ReactGA.plugin.require(name, [options])
 
