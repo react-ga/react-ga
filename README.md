@@ -4,7 +4,7 @@
 
 [![Build Status](https://img.shields.io/travis/react-ga/react-ga/master.svg?style=flat-square)](https://travis-ci.org/react-ga/react-ga)
 [![npm version](https://img.shields.io/npm/v/react-ga.svg?style=flat-square)](https://www.npmjs.com/package/react-ga)
-[![npm downloads](https://img.shields.io/npm/dm/react-ga.svg?style=flat-square)](https://www.npmjs.com/package/react-ga)
+[![npm downloads](https://img.shields.io/npm/dm/react-ga.svg?style=flat-square)](https://www.npmjs.com/package/react-ga) [![Meercode CI Score](https://meercode.io/badge/react-ga/react-ga?type=ci-score&branch=master)](https://meercode.io/react-ga/react-ga)
 
 This is a JavaScript module that can be used to include Google Analytics tracking code in a website or app that uses [React](https://facebook.github.io/react/) for its front-end codebase. It does not currently use any React code internally, but has been written for use with a number of Mozilla Foundation websites that are using React, as a way to standardize our GA Instrumentation across projects.
 
