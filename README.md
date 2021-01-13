@@ -228,7 +228,7 @@ ReactGA.event({
 | args.action         | `String`. Required. A description of the behaviour. E.g. 'Clicked Delete', 'Added a component', 'Deleted account', etc.                                                                                      |
 | args.label          | `String`. Optional. More precise labelling of the related action. E.g. alongside the 'Added a component' action, we could add the name of a component as the label. E.g. 'Survey', 'Heading', 'Button', etc. |
 | args.value          | `Int`. Optional. A means of recording a numerical value against an event. E.g. a rating, a score, etc.                                                                                                       |
-| args.nonInteraction | `Boolean`. Optional. If an event is not triggered by a user interaction, but instead by our code (e.g. on page load, it should be flagged as a `nonInteraction` event to avoid skewing bounce rate data.     |
+| args.nonInteraction | `Boolean`. Optional. If an event is not triggered by a user interaction, but instead by our code (e.g. on page load), it should be flagged as a `nonInteraction` event to avoid skewing bounce rate data.     |
 | args.transport      | `String`. Optional. This specifies the transport mechanism with which hits will be sent. Valid values include 'beacon', 'xhr', or 'image'.                                                                   |
 
 #### ReactGA.timing(args)
