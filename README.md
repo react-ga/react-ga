@@ -350,7 +350,7 @@ For bower, use the `<ReactGA.OutboundLink>` component.
 
 ```js
 ReactGA.exception({
-  description: 'An error ocurred',
+  description: 'An error occurred',
   fatal: true
 });
 ```
