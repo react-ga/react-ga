@@ -46,8 +46,7 @@ ReactGA.pageview(window.location.pathname + window.location.search);
 
 When included as a script tag, a variable `ReactGA` is exposed in the global scope.
 
-```js
-
+```html
 <!-- The core React library -->
 <script src="https://unpkg.com/react@15.5.0/dist/react.min.js"></script>
 <!-- The ReactDOM Library -->
