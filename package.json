@@ -38,7 +38,7 @@
   "homepage": "https://github.com/react-ga/react-ga",
   "peerDependencies": {
     "prop-types": "^15.6.0",
-    "react": "^15.6.2 || ^16.0 || ^17"
+    "react": "^15.6.2 || ^16.0 || ^17 || ^18"
   },
   "devDependencies": {
     "@babel/cli": "7.6.2",
