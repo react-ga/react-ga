@@ -6,7 +6,8 @@
 
 import trim from './trim';
 
-const smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
+const smallWords =
+  /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
 // test
 export default function toTitleCase(string) {
   return trim(string).replace(
