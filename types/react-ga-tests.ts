@@ -39,7 +39,7 @@ describe('Testing react-ga pageview calls', () => {
 
   it('Able to make pageview calls with custom title', () => {
     ga.initialize('UA-65432-1');
-    ga.pageview('http://telshin.com', null, 'custom title');
+    ga.pageview('http://telshin.com', undefined, 'custom title');
   });
 });
 
@@ -86,7 +86,7 @@ describe('Testing react-ga event calls', () => {
       dimension1: 'foo',
       dimension20: 'bar',
       ...options
-    }
+    };
     ga.initialize('UA-65432-1');
 
     ga.event(payloadWithDimensions);
@@ -97,10 +97,11 @@ describe('Testing react-ga event calls', () => {
       metric1: 1,
       metric20: 2.99,
       ...options
-    }
+    };
     ga.initialize('UA-65432-1');
 
     ga.event(payloadWithmetrics);
+  });
 });
 
 describe('Testing react-ga set calls', () => {

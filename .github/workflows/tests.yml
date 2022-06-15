@@ -18,10 +18,11 @@ jobs:
       - name: Use Node.js 12
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 16
       - run: npm ci
       - run: npm install react prop-types
       - run: npm run build
       - run: npm run lint
       - run: npm test
+      - run: npm test:types
       - uses: wagoid/commitlint-github-action@v1
