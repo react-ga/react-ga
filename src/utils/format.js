@@ -1,7 +1,11 @@
 import redactEmail from './redactEmail';
 import toTitleCase from './toTitleCase';
 
-export default function format(s = '', titleCase, redactingEmail = true) {
+export default function format(
+  s = '',
+  titleCase = false,
+  redactingEmail = true
+) {
   let _str = s || '';
 
   if (titleCase) {

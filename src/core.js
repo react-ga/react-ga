@@ -269,7 +269,7 @@ export function modalview(rawModalName, trackerNames) {
  */
 export function timing(
   { category, variable, value, label } = {},
-  trackerNames
+  trackerNames = undefined
 ) {
   if (typeof ga === 'function') {
     if (!category || !variable || typeof value !== 'number') {
@@ -310,7 +310,7 @@ export function timing(
  */
 export function event(
   { category, action, label, value, nonInteraction, transport, ...args } = {},
-  trackerNames
+  trackerNames = undefined
 ) {
   if (typeof ga === 'function') {
     // Simple Validation

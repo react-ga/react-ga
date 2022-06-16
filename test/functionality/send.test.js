@@ -81,7 +81,7 @@ describe('send()', () => {
     });
   });
 
-  it('should send to default ', () => {
+  it('should send to default', () => {
     ReactGA.initialize(
       [
         { trackingId: 'foo', gaOptions: { userId: 123 } },
