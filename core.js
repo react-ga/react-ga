@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-unresolved
-const index = require('./dist/react-ga-core');
+// eslint-disable-next-line
+const index = require('./dist/react-ga-core.js');
 
 module.exports = index.default;

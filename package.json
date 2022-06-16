@@ -12,7 +12,7 @@
     "build": "npm run build:umd && npm run build:esm",
     "build:esm": "cross-env BABEL_ENV=esm babel src --out-dir dist/esm",
     "build:umd": "cross-env BABEL_ENV=umd webpack --mode=production",
-    "lint": "eslint src/**/*.js src/*.js *.js test/**/*.{js,jsx} test/*.js demo/**/*.{js,jsx} demo/*.{js,jsx} --ext .js,.jsx",
+    "lint": "eslint ./src/**/*.js ./src/*.js ./*.js ./test/**/*.{js,jsx} ./test/*.js ./demo/**/*.{js,jsx} ./demo/*.{js,jsx} --ext .js,.jsx",
     "prepare": "husky install",
     "prettier": "prettier --write demo/**/* src/**/* test/**/* types/**/* *.js *.ts",
     "preversion": "npm test && npm run lint",
