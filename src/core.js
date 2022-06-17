@@ -471,7 +471,7 @@ export const plugin = {
     let payload;
     let actionType;
 
-    if (args.length === 1) {
+    if (args.filter(Boolean).length === 1) {
       [payload] = args;
     } else {
       [actionType, payload] = args;
