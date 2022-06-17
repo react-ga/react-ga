@@ -84,5 +84,12 @@
     "webpack": "4.46.0",
     "webpack-cli": "3.3.9",
     "webpack-dev-server": "3.8.2"
-  }
+  },
+  "files": [
+    "dist/**/*",
+    "types/index.d.ts",
+    "core.js",
+    "core.d.ts",
+    "README.md"
+  ]
 }
